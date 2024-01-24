@@ -1,0 +1,48 @@
+---
+title: "Implementation Study Analysis"
+output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    theme: flatly
+---
+
+# Background
+
+The overall goal of this project is to reduce morbidity and mortality of sick children attending primary care facilities while supporting the rational and efficient use of diagnostics and medicines by healthcare providers. This study is focused on understanding the operational feasibility of multimodal pulse ox use in standard care. The results presented in this document describe several weeks of use of the Masimo pulse oximeter in primary care settings.
+
+```{r setup, include=FALSE}
+rm(list=ls())
+
+knitr::opts_chunk$set(echo = FALSE)
+
+# install these packages if not already on your computer
+library(plyr)
+library(dplyr)
+library(tableone)
+library(kableExtra)
+
+# Read in (cleaned) data
+# Create a text file from within R with the name ".Renviron", then define the variables as below
+# filename = "<current-file-name>.csv"
+# COUNTRY = "<your-country>"
+# After adding the file and content restart R session and you are good to go
+# The Renviron will be ingored when pushing changes to Github
+
+filename <- Sys.getenv("filename")
+df_og <- read.csv(filename)
+
+# Define country and subset
+COUNTRY <- Sys.getenv("COUNTRY")
+df_og <- subset(df_og, df_og$country==COUNTRY)
+```
+
+# Table 1: Patient demographic and household characteristics.
+
+# Table 2: Patient clinical and care seeking characteristics.
+
+# Table 3: Use of PO device across facilities.
+
+# Table 4: Clinical outcomes following implementation of PO device.
