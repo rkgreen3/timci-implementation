@@ -29,7 +29,7 @@ library(kableExtra)
 # filename = "<current-file-name>.csv"
 # COUNTRY = "<your-country>"
 # After adding the file and content restart R session and you are good to go
-# The Renviron will be ingored when pushing changes to Github
+# The Renviron will be ignored when pushing changes to Github
 
 filename <- Sys.getenv("filename")
 df_og <- read.csv(filename)
@@ -40,8 +40,10 @@ df_og <- subset(df_og, df_og$country==COUNTRY)
 ```
 
 # Table 1: Patient demographic and household characteristics.
+Leila
 
 # Table 2: Patient clinical and care seeking characteristics.
+Samwel
 
 # Table 3: Use of PO device across facilities.
 
