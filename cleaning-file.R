@@ -4,6 +4,7 @@
 library(plyr)
 library(dplyr)
 library(lubridate)
+library(zscorer)
 `%!in%` = Negate(`%in%`)
 
 # Read in REDCap data for Kenya and Tanzania (saved in Box)
@@ -76,6 +77,46 @@ df$po_start <- strptime(df$po_start, format = '%H:%M:%S')
 df$po_stop <- paste(df$po_stop, ":00", sep = "")
 df$po_stop <- strptime(df$po_stop, format = '%H:%M:%S')
 df$po_duration <- difftime(df$po_start, df$po_stop, units = "secs")
+
+# Create other variables
+df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "Tanzania",
+                        df$facility_name=="SEN01"|df$facility_name=="SEN02" ~ "Senegal",
+                        df$facility_name=="KYA01"|df$facility_name=="KYA02" ~ "Kenya")
+df$bmi <- (df$weight/(df$height^2))*10000
+
+# Calculate z-scores for nutrition metrics; use to create indicator variables
+df$sex_z <- ifelse(df$sex==0, 1, 2)
+df$age_days <- ifelse(df$age_months<6, df$age_months * (365.25 / 12), df$age_months * 30.42)
+df$height_z <- round(df$height, 0)
+df <- addWGSR(data=df, sex="sex_z", firstPart = "weight", secondPart = "height_z", index = "wfh") #weight-for-height
+df <- addWGSR(data=df, sex="sex_z", firstPart = "height_z", secondPart = "age_days", index = "hfa") #height/length-for-age
+df <- addWGSR(data=df, sex="sex_z", firstPart = "muac", secondPart = "age_days", index = "mfa") #muac-for-age
+df <- df %>% mutate(
+  stunted = case_when(hfaz <=-3 ~ "severe",
+                      hfaz <=-2 & hfaz >-3 ~ "moderate",
+                      hfaz >-2 ~ "normal"),
+  wasted_overweight = case_when(wfhz <= -3 ~ "severely wasted",
+                                wfhz <=-2 & wfhz >-3 ~ "moderately wasted",
+                                wfhz <=2 & wfhz >-2 ~ "normal",
+                                wfhz >2 ~ "overweight")
+)
+
+# Create anemia status variable (based on WHO guidelines: WHO/NMH/NHD/MNM/11.1)
+df$anemia_status <- case_when(df$hemocue_hb<7.0 ~ "severe",
+                              df$hemocue_hb<10 & df$hemocue_hb>=7.0 ~ "moderate",
+                              df$hemocue_hb<11 & df$hemocue_hb>=10.0 ~ "mild",
+                              df$hemocue_hb>=11.0 ~ "none")
+df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
+
+# Replace all 999 with NA
+df$spo2 <- ifelse(df$spo2>=999, NA, df$spo2)
+df$pr <- ifelse(df$pr>=999, NA, df$pr)
+df$rr <- ifelse(df$rr>=999, NA, df$rr)
+df$temp_po <- ifelse(df$temp_po>=999, NA, df$temp_po)
+df$weight <- ifelse(df$weight>=999, NA, df$weight)
+df$height <- ifelse(df$height>=999, NA, df$height)
+df$muac <- ifelse(df$muac>=999, NA, df$muac)
+df$hb <- ifelse(df$hb>=999, NA, df$hb)
 
 # Basic cleaning (exclude ineligible records)
 df <- subset(df, exclude_data_rsn!=2) # remove duplicates, N = 25
