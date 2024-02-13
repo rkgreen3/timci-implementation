@@ -37,6 +37,21 @@ df2$redcap_data_access_group <- ifelse(df2$facility_name=="SEN02", "senegal_mbor
 # Join df's together
 df <- rbind(df1, df2)
 
+# Basic cleaning (exclude ineligible records)
+df <- subset(df, is.na(exclude_data_rsn) | exclude_data_rsn!=2) # remove duplicates, N = 25
+df <- subset(df, cg_consent_yn==1) # remove non-consented, N = 1
+df <- subset(df, is.na(exclude_data_rsn) | exclude_data_rsn!=3) # remove records w/insufficient data, N = 42
+
+# Replace all 999 with NA
+df$spo2 <- ifelse(df$spo2>=999, NA, df$spo2)
+df$pr <- ifelse(df$pr>=999, NA, df$pr)
+df$rr <- ifelse(df$rr>=999, NA, df$rr)
+df$temp_po <- ifelse(df$temp_po>=999, NA, df$temp_po)
+df$weight <- ifelse(df$weight>=999, NA, df$weight)
+df$height <- ifelse(df$height>=999, NA, df$height)
+df$muac <- ifelse(df$muac>=999, NA, df$muac)
+df$hb <- ifelse(df$hb>=999, NA, df$hb)
+
 # Calculate age
 df$bdate <- paste(df$birth_year, df$birth_month, "15", sep = "-")
 df$month_diff <- interval(as.Date(df$bdate), as.Date(df$visit_date)) %/% days(1) / (365/12)
@@ -90,7 +105,7 @@ df$age_days <- ifelse(df$age_months<6, df$age_months * (365.25 / 12), df$age_mon
 df$height_z <- round(df$height, 0)
 df <- addWGSR(data=df, sex="sex_z", firstPart = "weight", secondPart = "height_z", index = "wfh") #weight-for-height
 df <- addWGSR(data=df, sex="sex_z", firstPart = "height_z", secondPart = "age_days", index = "hfa") #height/length-for-age
-df <- addWGSR(data=df, sex="sex_z", firstPart = "muac", secondPart = "age_days", index = "mfa") #muac-for-age
+#df <- addWGSR(data=df, sex="sex_z", firstPart = "muac", secondPart = "age_days", index = "mfa") #muac-for-age
 df <- df %>% mutate(
   stunted = case_when(hfaz <=-3 ~ "severe",
                       hfaz <=-2 & hfaz >-3 ~ "moderate",
@@ -102,26 +117,11 @@ df <- df %>% mutate(
 )
 
 # Create anemia status variable (based on WHO guidelines: WHO/NMH/NHD/MNM/11.1)
-df$anemia_status <- case_when(df$hemocue_hb<7.0 ~ "severe",
-                              df$hemocue_hb<10 & df$hemocue_hb>=7.0 ~ "moderate",
-                              df$hemocue_hb<11 & df$hemocue_hb>=10.0 ~ "mild",
-                              df$hemocue_hb>=11.0 ~ "none")
+df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
+                              df$hb<10 & df$hb>=7.0 ~ "moderate",
+                              df$hb<11 & df$hb>=10.0 ~ "mild",
+                              df$hb>=11.0 ~ "none")
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
-
-# Replace all 999 with NA
-df$spo2 <- ifelse(df$spo2>=999, NA, df$spo2)
-df$pr <- ifelse(df$pr>=999, NA, df$pr)
-df$rr <- ifelse(df$rr>=999, NA, df$rr)
-df$temp_po <- ifelse(df$temp_po>=999, NA, df$temp_po)
-df$weight <- ifelse(df$weight>=999, NA, df$weight)
-df$height <- ifelse(df$height>=999, NA, df$height)
-df$muac <- ifelse(df$muac>=999, NA, df$muac)
-df$hb <- ifelse(df$hb>=999, NA, df$hb)
-
-# Basic cleaning (exclude ineligible records)
-df <- subset(df, exclude_data_rsn!=2) # remove duplicates, N = 25
-df <- subset(df, cg_consent_yn==1) # remove non-consented, N = 0
-df <- subset(df, exclude_data_rsn!=3) # remove records w/insufficient data, N = 43
 
 # Write file as .csv to shared Box folder
 write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-02.csv")
