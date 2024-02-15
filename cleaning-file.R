@@ -4,7 +4,6 @@
 library(plyr)
 library(dplyr)
 library(lubridate)
-library(zscorer)
 `%!in%` = Negate(`%in%`)
 
 # Read in REDCap data for Kenya and Tanzania (saved in Box)
@@ -99,22 +98,7 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
                         df$facility_name=="KYA01"|df$facility_name=="KYA02" ~ "Kenya")
 df$bmi <- (df$weight/(df$height^2))*10000
 
-# Calculate z-scores for nutrition metrics; use to create indicator variables
-df$sex_z <- ifelse(df$sex==0, 1, 2)
-df$age_days <- ifelse(df$age_months<6, df$age_months * (365.25 / 12), df$age_months * 30.42)
-df$height_z <- round(df$height, 0)
-df <- addWGSR(data=df, sex="sex_z", firstPart = "weight", secondPart = "height_z", index = "wfh") #weight-for-height
-df <- addWGSR(data=df, sex="sex_z", firstPart = "height_z", secondPart = "age_days", index = "hfa") #height/length-for-age
-#df <- addWGSR(data=df, sex="sex_z", firstPart = "muac", secondPart = "age_days", index = "mfa") #muac-for-age
-df <- df %>% mutate(
-  stunted = case_when(hfaz <=-3 ~ "severe",
-                      hfaz <=-2 & hfaz >-3 ~ "moderate",
-                      hfaz >-2 ~ "normal"),
-  wasted_overweight = case_when(wfhz <= -3 ~ "severely wasted",
-                                wfhz <=-2 & wfhz >-3 ~ "moderately wasted",
-                                wfhz <=2 & wfhz >-2 ~ "normal",
-                                wfhz >2 ~ "overweight")
-)
+# Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
 # Create anemia status variable (based on WHO guidelines: WHO/NMH/NHD/MNM/11.1)
 df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
@@ -124,4 +108,4 @@ df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-14.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-15.csv")
