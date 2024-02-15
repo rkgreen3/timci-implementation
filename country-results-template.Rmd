@@ -6,7 +6,7 @@ output:
   html_document:
     toc: TRUE
     toc_float: TRUE
-    theme: flatly
+    theme: flatly 
 ---
 
 
@@ -36,6 +36,7 @@ library(Hmisc)
 # The Renviron will be ignored when pushing changes to Github
 
 
+<<<<<<< Updated upstream
 df_og <- read.csv(file.choose())
 
 describe(df_og$country)
@@ -46,10 +47,19 @@ df_sn <- subset(df_og, df_og$country=="Senegal")
 ```
 
 # Table 1: Patient demographic and household characterdf_ogtics.
+=======
+library(readxl)
+IS <- read_excel("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Desktop/TIMSI/Implamentation study training/IS.xlsx")
+
+```
+
+# Table 1: Patient demographic and household characteristics.
+>>>>>>> Stashed changes
 
 ```{r}
 #CARACTERISTIQUES 
 
+<<<<<<< Updated upstream
 ## Sex
 
 df_sn$sex=as.factor(df_sn$sex)
@@ -128,7 +138,7 @@ tabpct(df_sn$facility_name,df_sn$facility_choice_reason___8)
 
 ## ## Mode of travel to clinic
 
-df_sn$travel_mode___1=as.factor(df_sn$travel_mode___1)
+df_sn$travel_mode___1=as.factor(df_sn$travel_mode___1) 
 describe(df_sn$travel_mode___1)
 tabpct(df_sn$facility_name,df_sn$travel_mode___1)
 
@@ -142,7 +152,7 @@ tabpct(df_sn$facility_name,df_sn$travel_mode___3)
 df_sn$travel_mode___4=as.factor(df_sn$travel_mode___4)
 describe(df_sn$travel_mode___4)
 
-df_sn$travel_mode___5=as.factor(df_sn$travel_mode___5)
+df_sn$travel_mode___5=as.factor(df_sn$travel_mode___5) 
 describe(df_sn$travel_mode___5)
 
 df_sn$travel_mode___6=as.factor(df_sn$travel_mode___6)
@@ -186,6 +196,162 @@ describe(df_sn$travel_cost)
 tabpct(df_sn$facility_name,df_sn$travel_cost)
 ```
 
+=======
+## Age Category
+
+IS$visit_date=as.Date(IS$visit_date)
+IS$Birthday=as.Date(IS$Birthday)
+
+IS$Age_categ = difftime(IS$visit_date,IS$Birthday,units = "days")
+IS$age_categorie = IS$Age_categ/30
+print(IS$age_categorie)
+IS$age_categorie=as.numeric(IS$age_categorie)
+summ(IS$age_categorie)
+
+IS$age_categorie_1 = cut(IS$age_categorie,
+             breaks = c(0,2,12,60,100),
+             right = F,
+             labels = c("0-1","2-11","12-59","60-66"))
+describe(IS$age_categorie_1)
+tabpct(IS$facility_name,IS$age_categorie_1)
+
+## Sex
+
+IS$sex=as.factor(IS$sex)
+describe(IS$sex)
+tabpct(IS$facility_name,IS$sex)
+
+## Relationship of caregiver to child
+
+IS$cg_relationship = as.factor(IS$cg_relationship)
+describe(IS$cg_relationship)
+tabpct(IS$facility_name,IS$cg_relationship)
+
+## Maternal education
+
+IS$cg_edu_mother=as.factor(IS$cg_edu_mother)
+describe(IS$cg_edu_mother)
+tabpct(IS$facility_name,IS$cg_edu_mother)
+
+## Household head
+
+IS$household_head=as.factor(IS$household_head)
+describe(IS$household_head)
+tabpct(IS$facility_name,IS$household_head)
+
+## Household toilet
+
+IS$household_toilet=as.factor(IS$household_toilet)
+describe(IS$household_toilet)
+tabpct(IS$facility_name,IS$household_toilet)
+
+## Household fuel
+
+IS$household_fuel=as.factor(IS$household_fuel)
+describe(IS$household_fuel)
+tabpct(IS$facility_name,IS$household_fuel)
+
+## Household water located in house
+
+IS$household_water_loc=as.factor(IS$household_water_loc)
+describe(IS$household_water_loc)
+tabpct(IS$facility_name,IS$household_water_loc)
+
+## Household floor
+
+IS$household_floor=as.factor(IS$household_floor)
+describe(IS$household_floor)
+tabpct(IS$facility_name,IS$household_floor)
+
+```
+
+
+# Table 2: Patient clinical and care seeking characteristics.
+
+```{r}
+
+## Reason for visit to clinic
+IS$facility_choice_reason___2 = as.factor(IS$facility_choice_reason___2)
+describe(IS$facility_choice_reason___2)
+tabpct(IS$facility_name,IS$facility_choice_reason___2)
+
+IS$facility_choice_reason___3 = as.factor(IS$facility_choice_reason___3)
+describe(IS$facility_choice_reason___3)
+tabpct(IS$facility_name,IS$facility_choice_reason___3)
+
+IS$facility_choice_reason___4 = as.factor(IS$facility_choice_reason___4)
+describe(IS$facility_choice_reason___4)
+tabpct(IS$facility_name,IS$facility_choice_reason___4)
+
+IS$facility_choice_reason___5 = as.factor(IS$facility_choice_reason___5)
+describe(IS$facility_choice_reason___5)
+tabpct(IS$facility_name,IS$facility_choice_reason___5)
+
+IS$facility_choice_reason___8 = as.factor(IS$facility_choice_reason___8)
+describe(IS$facility_choice_reason___8)
+tabpct(IS$facility_name,IS$facility_choice_reason___8)
+
+## ## Mode of travel to clinic
+
+IS$travel_mode___1=as.factor(IS$travel_mode___1)
+describe(IS$travel_mode___1)
+tabpct(IS$facility_name,IS$travel_mode___1)
+
+IS$travel_mode___2=as.factor(IS$travel_mode___2)
+describe(IS$travel_mode___2)
+
+IS$travel_mode___3=as.factor(IS$travel_mode___3)
+describe(IS$travel_mode___3)
+tabpct(IS$facility_name,IS$travel_mode___3)
+
+IS$travel_mode___4=as.factor(IS$travel_mode___4)
+describe(IS$travel_mode___4)
+
+IS$travel_mode___5=as.factor(IS$travel_mode___5)
+describe(IS$travel_mode___5)
+
+IS$travel_mode___6=as.factor(IS$travel_mode___6)
+describe(IS$travel_mode___6)
+tabpct(IS$facility_name,IS$travel_mode___6)
+
+IS$travel_mode___7=as.factor(IS$travel_mode___7)
+describe(IS$travel_mode___7)
+tabpct(IS$facility_name,IS$travel_mode___7)
+
+IS$travel_mode___8=as.factor(IS$travel_mode___8)
+describe(IS$travel_mode___8)
+tabpct(IS$facility_name,IS$travel_mode___8)
+
+IS$travel_mode___9=as.factor(IS$travel_mode___9)
+describe(IS$travel_mode___9)
+tabpct(IS$facility_name,IS$travel_mode___9)
+
+IS$travel_mode___10=as.factor(IS$travel_mode___10)
+describe(IS$travel_mode___10)
+tabpct(IS$facility_name,IS$travel_mode___10)
+
+IS$travel_mode___11=as.factor(IS$travel_mode___11)
+describe(IS$travel_mode___11)
+tabpct(IS$facility_name,IS$travel_mode___11)
+
+IS$travel_mode___999=as.factor(IS$travel_mode___999)
+describe(IS$travel_mode___999)
+tabpct(IS$facility_name,IS$travel_mode___999)
+
+## Travel time to arrive at clinic
+
+IS$travel_time=as.factor(IS$travel_time)
+describe(IS$travel_time)
+tabpct(IS$facility_name,IS$travel_time)
+
+## Estimated amount of money spent for transport to arrive at clinic (USD)
+
+IS$travel_cost=as.factor(IS$travel_cost)
+describe(IS$travel_cost)
+tabpct(IS$facility_name,IS$travel_cost)
+```
+
+>>>>>>> Stashed changes
 
 # Table 3: Use of PO device across facilities.
 
@@ -193,6 +359,7 @@ tabpct(df_sn$facility_name,df_sn$travel_cost)
 
 ## PO device used during encounter
 
+<<<<<<< Updated upstream
 df_sn$used_po_yn=as.factor(df_sn$used_po_yn)
 describe(df_sn$used_po_yn)
 
@@ -236,6 +403,50 @@ df_sn$correct_use_measurements = df_sn$correct_use_measurements___1 + df_sn$corr
 df_sn$correct_use_measurements=as.factor(df_sn$correct_use_measurements)
 describe(df_sn$correct_use_measurements)
 tabpct(df_sn$facility_name,df_sn$correct_use_measurements)
+=======
+IS$used_po_yn=as.factor(IS$used_po_yn)
+describe(IS$used_po_yn)
+
+## PO device used correctly
+
+IS$correct_use_yn=as.factor(IS$correct_use_yn)
+describe(IS$correct_use_yn)
+tabpct(IS$facility_name,IS$correct_use_yn)
+
+## Duration of PO device use
+
+IS$duration_po =difftime(IS$po_stop,IS$po_start, units = "mins")
+print(IS$duration_po)
+IS$duration_po=as.numeric(IS$duration_po)
+summ(IS$duration_po)
+IS$duration_po_1 = cut(IS$duration_po,
+                       breaks = c(0,1,3.1,5.1,10.1,30.1,60),
+                       right = F,
+                       labels = c("Moins une min","1 à 3 m","4-5m","6-10m","11-30","31-60"))
+describe(IS$duration_po_1)
+tabpct(IS$facility_name,IS$duration_po_1)
+
+## Consultation duration
+
+IS$consultation_duration = difftime(IS$consult_stop,IS$consult_start,units = "mins")
+print(IS$consultation_duration)
+IS$consultation_duration=as.numeric(IS$consultation_duration)
+summ(IS$consultation_duration)
+IS$consultation_duration_1 = cut(IS$consultation_duration,
+                       breaks = c(0,2.1,5.1,10.1,30.1,60.1,100),
+                       right = F,
+                       labels = c("2 min","3-5m","6-10m","11-30","31-60","Plus 60"))
+describe(IS$consultation_duration_1)
+tabpct(IS$facility_name,IS$consultation_duration_1)
+
+## Encounters where all clinical measurements were assessed
+
+IS$correct_use_measurements = IS$correct_use_measurements___1 + IS$correct_use_measurements___2 +
+  IS$correct_use_measurements___3 + IS$correct_use_measurements___4
+IS$correct_use_measurements=as.factor(IS$correct_use_measurements)
+describe(IS$correct_use_measurements)
+tabpct(IS$facility_name,IS$correct_use_measurements)
+>>>>>>> Stashed changes
 
 ```
 
