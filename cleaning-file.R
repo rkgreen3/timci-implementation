@@ -124,4 +124,4 @@ df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-02.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-14.csv")
