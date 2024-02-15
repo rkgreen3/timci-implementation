@@ -12,7 +12,7 @@ output:
 
 # Background
 
-The overall goal of thdf_og project df_og to reduce morbidity and mortality of sick children attending primary care facilities while supporting the rational and efficient use of diagnostics and medicines by healthcare providers. Thdf_og study df_og focused on understanding the operational feasibility of multimodal pulse ox use in standard care. The results presented in thdf_og document describe several weeks of use of the Masimo pulse oximeter in primary care settings.
+The overall goal of this project is to reduce morbidity and mortality of sick children attending primary care facilities while supporting the rational and efficient use of diagnostics and medicines by healthcare providers. This study is focused on understanding the operational feasibility of multimodal pulse ox use in standard care. The results presented in this document describe several weeks of use of the Masimo pulse oximeter in primary care settings.
 
 ```{r setup, include=FALSE}
 rm(ldf_ogt=ls())
@@ -35,31 +35,21 @@ library(Hmisc)
 # After adding the file and content restart R session and you are good to go
 # The Renviron will be ignored when pushing changes to Github
 
+df_og <- read.csv(Sys.getenv("filename"))
 
-<<<<<<< Updated upstream
-df_og <- read.csv(file.choose())
-
-describe(df_og$country)
 # Define country and subset
 COUNTRY <- Sys.getenv("COUNTRY")
-df_sn <- subset(df_og, df_og$country=="Senegal")
-
-```
-
-# Table 1: Patient demographic and household characterdf_ogtics.
-=======
-library(readxl)
-IS <- read_excel("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Desktop/TIMSI/Implamentation study training/IS.xlsx")
+df <- subset(df_og, df_og$country=="Senegal")
 
 ```
 
 # Table 1: Patient demographic and household characteristics.
->>>>>>> Stashed changes
+Leila
+
 
 ```{r}
 #CARACTERISTIQUES 
 
-<<<<<<< Updated upstream
 ## Sex
 
 df_sn$sex=as.factor(df_sn$sex)
@@ -111,7 +101,10 @@ tabpct(df_sn$facility_name,df_sn$household_floor)
 ```
 
 
-# Table 2: Patient clinical and care seeking characterdf_sntics.
+# Table 2: Patient clinical and care seeking characteristics.
+Samwel
+
+
 
 ```{r}
 
@@ -263,7 +256,6 @@ IS$household_floor=as.factor(IS$household_floor)
 describe(IS$household_floor)
 tabpct(IS$facility_name,IS$household_floor)
 
-```
 
 
 # Table 2: Patient clinical and care seeking characteristics.
@@ -351,7 +343,6 @@ describe(IS$travel_cost)
 tabpct(IS$facility_name,IS$travel_cost)
 ```
 
->>>>>>> Stashed changes
 
 # Table 3: Use of PO device across facilities.
 
@@ -359,7 +350,6 @@ tabpct(IS$facility_name,IS$travel_cost)
 
 ## PO device used during encounter
 
-<<<<<<< Updated upstream
 df_sn$used_po_yn=as.factor(df_sn$used_po_yn)
 describe(df_sn$used_po_yn)
 
@@ -403,7 +393,7 @@ df_sn$correct_use_measurements = df_sn$correct_use_measurements___1 + df_sn$corr
 df_sn$correct_use_measurements=as.factor(df_sn$correct_use_measurements)
 describe(df_sn$correct_use_measurements)
 tabpct(df_sn$facility_name,df_sn$correct_use_measurements)
-=======
+
 IS$used_po_yn=as.factor(IS$used_po_yn)
 describe(IS$used_po_yn)
 
@@ -446,7 +436,7 @@ IS$correct_use_measurements = IS$correct_use_measurements___1 + IS$correct_use_m
 IS$correct_use_measurements=as.factor(IS$correct_use_measurements)
 describe(IS$correct_use_measurements)
 tabpct(IS$facility_name,IS$correct_use_measurements)
->>>>>>> Stashed changes
+
 
 ```
 
