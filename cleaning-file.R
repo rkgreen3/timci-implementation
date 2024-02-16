@@ -97,6 +97,8 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
                         df$facility_name=="SEN01"|df$facility_name=="SEN02" ~ "Senegal",
                         df$facility_name=="KYA01"|df$facility_name=="KYA02" ~ "Kenya")
 df$bmi <- (df$weight/(df$height^2))*10000
+df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
+df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_days) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all amins sxs assessed by provider
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
