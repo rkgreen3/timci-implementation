@@ -9,13 +9,12 @@ output:
     theme: flatly 
 ---
 
-
 # Background
 
 The overall goal of this project is to reduce morbidity and mortality of sick children attending primary care facilities while supporting the rational and efficient use of diagnostics and medicines by healthcare providers. This study is focused on understanding the operational feasibility of multimodal pulse ox use in standard care. The results presented in this document describe several weeks of use of the Masimo pulse oximeter in primary care settings.
 
 ```{r setup, include=FALSE}
-rm(ldf_ogt=ls())
+rm(list=ls())
 
 knitr::opts_chunk$set(echo = FALSE)
 
@@ -39,13 +38,13 @@ df_og <- read.csv(Sys.getenv("filename"))
 
 # Define country and subset
 COUNTRY <- Sys.getenv("COUNTRY")
-df <- subset(df_og, df_og$country=="Senegal")
+df_sn <- subset(df_og, df_og$country==COUNTRY)
 
 ```
 
 # Table 1: Patient demographic and household characteristics.
-Leila
 
+Leila
 
 ```{r}
 #CARACTERISTIQUES 
@@ -100,11 +99,9 @@ tabpct(df_sn$facility_name,df_sn$household_floor)
 
 ```
 
-
 # Table 2: Patient clinical and care seeking characteristics.
+
 Samwel
-
-
 
 ```{r}
 
@@ -160,21 +157,24 @@ df_sn$travel_mode___8=as.factor(df_sn$travel_mode___8)
 describe(df_sn$travel_mode___8)
 tabpct(df_sn$facility_name,df_sn$travel_mode___8)
 
-df_sn$travel_mode___9=as.factor(df_sn$travel_mode___9)
-describe(df_sn$travel_mode___9)
-tabpct(df_sn$facility_name,df_sn$travel_mode___9)
-
-df_sn$travel_mode___10=as.factor(df_sn$travel_mode___10)
-describe(df_sn$travel_mode___10)
-tabpct(df_sn$facility_name,df_sn$travel_mode___10)
-
+if( COUNTRY != "Tanzania") {
+  df_sn$travel_mode___9=as.factor(df_sn$travel_mode___9)
+  describe(df_sn$travel_mode___9)
+  tabpct(df_sn$facility_name,df_sn$travel_mode___9)
+  
+  df_sn$travel_mode___10=as.factor(df_sn$travel_mode___10)
+  describe(df_sn$travel_mode___10)
+  tabpct(df_sn$facility_name,df_sn$travel_mode___10)
+  
+  df_sn$travel_mode___999=as.factor(df_sn$travel_mode___999)
+  describe(df_sn$travel_mode___999)
+  tabpct(df_sn$facility_name,df_sn$travel_mode___999)
+}
 df_sn$travel_mode___11=as.factor(df_sn$travel_mode___11)
 describe(df_sn$travel_mode___11)
 tabpct(df_sn$facility_name,df_sn$travel_mode___11)
 
-df_sn$travel_mode___999=as.factor(df_sn$travel_mode___999)
-describe(df_sn$travel_mode___999)
-tabpct(df_sn$facility_name,df_sn$travel_mode___999)
+
 
 ## Travel time to arrive at clinic
 
@@ -189,74 +189,45 @@ describe(df_sn$travel_cost)
 tabpct(df_sn$facility_name,df_sn$travel_cost)
 ```
 
-=======
-## Age Category
+======= \## Age Category
 
-IS$visit_date=as.Date(IS$visit_date)
-IS$Birthday=as.Date(IS$Birthday)
+IS$visit_date=as.Date(IS$visit_date) IS$Birthday=as.Date(IS$Birthday)
 
-IS$Age_categ = difftime(IS$visit_date,IS$Birthday,units = "days")
-IS$age_categorie = IS$Age_categ/30
-print(IS$age_categorie)
-IS$age_categorie=as.numeric(IS$age_categorie)
-summ(IS$age_categorie)
+IS$Age_categ = difftime(IS$visit_date,IS$Birthday,units = "days") IS$age_categorie = IS$Age_categ/30 print(IS$age_categorie) IS$age_categorie=as.numeric(IS$age_categorie) summ(IS\$age_categorie)
 
-IS$age_categorie_1 = cut(IS$age_categorie,
-             breaks = c(0,2,12,60,100),
-             right = F,
-             labels = c("0-1","2-11","12-59","60-66"))
-describe(IS$age_categorie_1)
-tabpct(IS$facility_name,IS$age_categorie_1)
+IS$age_categorie_1 = cut(IS$age_categorie, breaks = c(0,2,12,60,100), right = F, labels = c("0-1","2-11","12-59","60-66")) describe(IS$age_categorie_1) tabpct(IS$facility_name,IS\$age_categorie_1)
 
 ## Sex
 
-IS$sex=as.factor(IS$sex)
-describe(IS$sex)
-tabpct(IS$facility_name,IS$sex)
+IS$sex=as.factor(IS$sex) describe(IS$sex) tabpct(IS$facility_name,IS\$sex)
 
 ## Relationship of caregiver to child
 
-IS$cg_relationship = as.factor(IS$cg_relationship)
-describe(IS$cg_relationship)
-tabpct(IS$facility_name,IS$cg_relationship)
+IS$cg_relationship = as.factor(IS$cg_relationship) describe(IS$cg_relationship) tabpct(IS$facility_name,IS\$cg_relationship)
 
 ## Maternal education
 
-IS$cg_edu_mother=as.factor(IS$cg_edu_mother)
-describe(IS$cg_edu_mother)
-tabpct(IS$facility_name,IS$cg_edu_mother)
+IS$cg_edu_mother=as.factor(IS$cg_edu_mother) describe(IS$cg_edu_mother) tabpct(IS$facility_name,IS\$cg_edu_mother)
 
 ## Household head
 
-IS$household_head=as.factor(IS$household_head)
-describe(IS$household_head)
-tabpct(IS$facility_name,IS$household_head)
+IS$household_head=as.factor(IS$household_head) describe(IS$household_head) tabpct(IS$facility_name,IS\$household_head)
 
 ## Household toilet
 
-IS$household_toilet=as.factor(IS$household_toilet)
-describe(IS$household_toilet)
-tabpct(IS$facility_name,IS$household_toilet)
+IS$household_toilet=as.factor(IS$household_toilet) describe(IS$household_toilet) tabpct(IS$facility_name,IS\$household_toilet)
 
 ## Household fuel
 
-IS$household_fuel=as.factor(IS$household_fuel)
-describe(IS$household_fuel)
-tabpct(IS$facility_name,IS$household_fuel)
+IS$household_fuel=as.factor(IS$household_fuel) describe(IS$household_fuel) tabpct(IS$facility_name,IS\$household_fuel)
 
 ## Household water located in house
 
-IS$household_water_loc=as.factor(IS$household_water_loc)
-describe(IS$household_water_loc)
-tabpct(IS$facility_name,IS$household_water_loc)
+IS$household_water_loc=as.factor(IS$household_water_loc) describe(IS$household_water_loc) tabpct(IS$facility_name,IS\$household_water_loc)
 
 ## Household floor
 
-IS$household_floor=as.factor(IS$household_floor)
-describe(IS$household_floor)
-tabpct(IS$facility_name,IS$household_floor)
-
-
+IS$household_floor=as.factor(IS$household_floor) describe(IS$household_floor) tabpct(IS$facility_name,IS\$household_floor)
 
 # Table 2: Patient clinical and care seeking characteristics.
 
@@ -342,7 +313,6 @@ IS$travel_cost=as.factor(IS$travel_cost)
 describe(IS$travel_cost)
 tabpct(IS$facility_name,IS$travel_cost)
 ```
-
 
 # Table 3: Use of PO device across facilities.
 
@@ -439,6 +409,5 @@ tabpct(IS$facility_name,IS$correct_use_measurements)
 
 
 ```
-
 
 # Table 4: Clinical outcomes following implementation of PO device.
