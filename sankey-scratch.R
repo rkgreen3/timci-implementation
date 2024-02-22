@@ -8,7 +8,7 @@ library(networkD3)
 
 # Load most recently cleaned data file
 df_og <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-15.csv")
-df_og$cough_dx_binary <- ifelse(df_og$cough_dx==0, 0, 1)
+df_og$cough_dx_binary <- as.integer(ifelse(df_og$cough_dx==0, 0, 1))
 
 # We will start with preparing an example of imci process fidelity illustrated via sankey diagram. Our flow of interest will be:
 ## cg reported cough (y) -> provider assessed all danger signs? (y/n) -> provider assessed all main symptoms? (y/n) -> imci classification assignment for cough
@@ -71,4 +71,22 @@ cough_sankey <- sankeyNetwork(
     nodeWidth=30,
     iterations = 100
 )
+
+## Sankey diagram is maybe not the best viz option...let's try a funnel diagram?
+library(plotly)
+
+funnel_cough <- plot_ly()
+funnel_cough <- funnel_cough %>%
+                  add_trace(
+                    type = "funnel",
+                    y = c("Reported cough", "Danger signs assessed", "Main symptoms assessed", "Yellow/Red IMCI classification for cough"),
+                    x = c(sum(cough_df$cg_report_cough, na.rm = T), sum(cough_df$danger_assessed_yn, na.rm = T), sum(cough_df$mainsxs_assessed_yn, na.rm = T), sum(cough_df$cough_dx_binary, na.rm = T)),
+                    textinfo = "value+percent previous",
+                    marker = list(color = c("paleturquoise", "darksalmon", "#00ffff", "coral")),
+                    connector = list(line = list(color = "darkgray", width = 2)),
+                    hoverinfo = 'skip'
+                  )
+funnel_cough <- funnel_cough %>%
+                  layout(yaxis = list(categoryarray = c("Reported cough", "Danger signs assessed", "Main symptoms assessed", "Yellow/Red IMCI classification for cough")),
+                         title = "IMCI Process Fidelity for Cough (N, % of previous)")
 
