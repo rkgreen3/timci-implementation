@@ -104,7 +104,13 @@ df$po_start <- paste(df$po_start, ":00", sep = "")
 df$po_start <- strptime(df$po_start, format = '%H:%M:%S')
 df$po_stop <- paste(df$po_stop, ":00", sep = "")
 df$po_stop <- strptime(df$po_stop, format = '%H:%M:%S')
-df$po_duration <- difftime(df$po_start, df$po_stop, units = "secs")
+df$po_duration <- difftime(df$po_stop, df$po_start, units = "secs")
+
+df$consult_start <- paste(df$consult_start, ":00", sep = "")
+df$consult_start <- strptime(df$consult_start, format = '%H:%M:%S')
+df$consult_stop <- paste(df$consult_stop, ":00", sep = "")
+df$consult_stop <- strptime(df$consult_stop, format = '%H:%M:%S')
+df$consult_duration <- difftime(df$consult_stop, df$consult_start, units = "secs")
 
 # Create other variables
 df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "Tanzania",
@@ -113,6 +119,7 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
 df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_days) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
+df$clinical_measures_complete <- ifelse(!is.na(df$spo2 & df$pr & df$rr & df$temp_po), 1, 0)
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
@@ -127,4 +134,4 @@ df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 df <- df %>% select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-15.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-23.csv")
