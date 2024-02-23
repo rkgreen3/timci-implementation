@@ -90,3 +90,10 @@ funnel_cough <- funnel_cough %>%
                   layout(yaxis = list(categoryarray = c("Reported cough", "Danger signs assessed", "Main symptoms assessed", "Yellow/Red IMCI classification for cough")),
                          title = "IMCI Process Fidelity for Cough (N, % of previous)")
 
+# Getting closer but not quite there...let's try a proper consort...maybe
+library(consort)
+df_consort <- df_og %>% select(screening_id, cg_report_cough, cg_report_fever, cg_report_rapidbreathing, cg_report_diarrhea, cg_report_vomit, danger_assessed_yn, cough_yn, dyspnea_yn, diarrhea_yn, fever_yn, earproblem_yn, anemia_yn, rr_yn, spo2_yn, pr_yn, temp_yn, weight_yn, height_yn, muac_yn, wfh_yn, hb_yn, cough_dx, diarrhea_dx, fever_dx, ear_dx, malnutrition_dx, anemia_dx, hiv_dx)
+dispo_df_cough <- df_consort %>% select(screening_id, cg_report_cough, danger_assessed_yn, cough_yn, dyspnea_yn, fever_yn, rr_yn, spo2_yn, pr_yn, temp_yn, cough_dx)
+dispo_df_cough$cg_report_cough <- ifelse(dispo_df_cough$cg_report_cough==1, NA, 1) #make cough reported NA to continue to next node
+colnames(dispo_df_cough)[colnames(dispo_df_cough) == "cg_report_cough"] = "excl1_cough_not_reported"
+dispo_df_cough$danger_assessed_yn <- ifelse(dispo_df_cough$danger_assessed_yn==1, dispo_df_cough$screening_id, NA)

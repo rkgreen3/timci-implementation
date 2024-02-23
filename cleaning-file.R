@@ -69,7 +69,8 @@ df$bdate <- paste(df$birth_year, df$birth_month, "15", sep = "-")
 df$month_diff <- interval(as.Date(df$bdate), as.Date(df$visit_date)) %/% days(1) / (365/12)
 df$age_months <- round(df$month_diff, 2)
 df$age_cat <- case_when(df$age_months<2 ~ "0-1 month",
-                         df$age_months>=2 ~ "2-59 months")
+                        df$age_months>=2 & df$age_months<12 ~ "2-11 months",
+                         df$age_months>=12 ~ "12-59 months")
 df$age_months <- ifelse(df$age_months<0, 0.5, df$age_months)
 df <- df %>% select(-c("bdate", "month_diff"))
 
