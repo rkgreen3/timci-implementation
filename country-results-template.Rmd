@@ -522,11 +522,11 @@ tabpct(df$facility_name,df$correct_use_measurements)
 factorVars <- c("used_po_yn", "correct_use_yn", "clinical_measures_complete")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("used_po_yn", "correct_use_yn", "po_duration", "consult_duration", "clinical_measures_complete")
+myVars <- c("used_po_yn", "correct_use_yn", "po_duration_min", "consult_duration_min", "clinical_measures_complete")
 
 ## issue identified w/duration variables, troubleshooting in progress in cleaning file
 
-t3lab <- c("N", "",)
+t3lab <- c("N", "Used PO device during encounter (%)", "PO device used correctly (%)", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)")
 
 out3 <- CreateTableOne(vars = myVars,
                data = df,
@@ -534,17 +534,21 @@ out3 <- CreateTableOne(vars = myVars,
                strata = "facility_name",
                test = FALSE,
                addOverall = TRUE)
+out3_overall <- print(out3)
+rownames(out3_overall) <- c(t3lab) # Add row labels
 
-# Add row labels
-rownames(out3) <- c(t3lab)
-
-t3_overall <- print(out3)
-
-t3 <- kable(print(out3)) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(c(3:5))
+out3 <- kable(print(out3_overall)) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
-`r t3`
-The PO device was used consistently across encounters except for `r` instances where the child was too fussy, `r` instances where the caregiver did not want it, and `r` instances wherethe provider decided it was not needed.
+`r out3`
+
+The PO device was used consistently across encounters except for:
+* `r sum(df_og$no_po_reason==1, na.rm = T)` instances where the device was broken
+* `r sum(df_og$no_po_reason==2, na.rm = T)` instances where the battery was not charged
+* `r sum(df_og$no_po_reason==3, na.rm = T)` instances where the device was being used in another part of the facility
+* `r sum(df_og$no_po_reason==4, na.rm = T)` instances where the device was missing
+* `r sum(df_og$no_po_reason==5, na.rm = T)` instances where the child was too fussy
+* `r sum(df_og$no_po_reason==6, na.rm = T)` instances where the caregiver did not want it
+* `r sum(df_og$no_po_reason==7, na.rm = T)` instances where the provider decided it was not needed
 
 # Table 4: Clinical outcomes following implementation of PO device.
