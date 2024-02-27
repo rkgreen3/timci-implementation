@@ -36,15 +36,98 @@ library(Hmisc)
 
 df_og <- read.csv(Sys.getenv("filename"))
 
+# Basic data cleaning/formatting -- do this before subset so all levels are present
+
+## Relationship of caregiver to child 
+df_og$cg_relationship <- factor(df_og$cg_relationship,
+                                  labels = c("Mother and Father","Mother and Grandmother","Mother only",
+                                             "Father only", "Grandmother only","Grandfather only","Sibling",
+                                             "Other family member","Community member"))
+
+## Convert categorical variables into factors
+df_og$age_cat <- factor(df_og$age_cat, labels=c("0-1 month", "2-11 months", "12-59 months"))
+
+## Sex - omitted since data collected on 'sex' was that of the providers and not the caregiver/child
+
+## Maternal education
+df_og$cg_edu_mother<- factor(df_og$cg_edu_mother,levels = c(1,2,3,4,5,6,7,8,9),
+                              labels = c("Primary", "Post-primary/vocational", "Secondary", "Diploma/certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", "Other", "Never attended any formal schooling", "Declined"))
+
+## Household head
+df_og$household_head<- factor(df_og$household_head,levels = c(1,2,3,4,5,6,7,8,9,10,11,12),
+                               labels = c("Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", "Unknown/uncertain", "Declined"))
+
+## Household toilet
+df_og$household_toilet<- factor(df_og$household_toilet,levels = c(1,2,3,4,5,6,7,8,9,10,11),
+                                 labels = c("Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other", "Unknown/uncertain", "Declined"))
+
+## Household fuel
+df_og$household_fuel<- factor(df_og$household_fuel,levels = c(1,2,3,4,5,6,7,8,9),
+                               labels = c("Firewood", "Charcoal", "Solar", "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other", "Unknown/uncertain", "Declined"))
+
+## Household water located in house
+df_og$household_water_loc<- factor(df_og$household_water_loc, levels= c(1,2),
+                                    labels = c("In the house/grounds", "Outside the grounds"))
+
+## Household floor
+df_og$household_floor <- factor(df_og$household_floor, 
+                                 levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                                 labels = c("Natural", "Earth", "Sand", "Clay", "Mud", "Dung", "Rudimentary", "Tablets/Wood planks",
+                                            "Palm", "Bamboo", "Mat", "Adobe", "Finished", "Parquet", "Vinyl", "Linoleum", "Ceramic,tile",
+                                            "Carpet", "Stone, cement", "Bricks"))
+
 # Define country and subset
 COUNTRY <- Sys.getenv("COUNTRY")
 df <- subset(df_og, df_og$country==COUNTRY)
-
 ```
 
-# Table 1: Patient demographic and household characteristics.
+# Table 1: Patient demographic and household characteristics. {.tabset}
+
+```{r}
+# Specify all the variables you want to treat as factors
+factorVars <- c("age_cat")
+
+# Specify all the variables to include
+myVars <- c("age_cat", "cg_relationship", "cg_age", "cg_edu_mother", "household_head",
+            "household_toilet", "household_fuel", "household_water_loc","household_floor")
+
+# CreateTableOne:
+out1 <- CreateTableOne(vars = myVars,
+                       data = df,
+                       factorVars = factorVars,
+                       strata = "facility_name",
+                       test = FALSE,
+                       addOverall = TRUE) 
+
+t1_overall <- print(out1,
+            cramVars = c("household_water_loc"))
+
+# Create row labels
+t1lab <- c("N",
+           "Age Category (%)", "0-1 month", "2-11 months", "12-59 months",
+            "Caregiver Relationship (%)", "Mother and father", "Mother and grandmother", "Mother only", "Father only", "Grandmother only", "Grandfather only", "Sibling", "Other family member", "Community member", "Caregiver Age (mean (SD))", 
+            "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
+              "Other", "Never attended any formal schooling", "Declined",
+            "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", "Unknown/Uncertain", "Declined",
+            "What kind of toilet facility do members of your household usually use? (%)", "Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other", "Unknown/Uncertain", "Declined",
+            "What type of fuel is mainly used for cooking in the household? (%)", "Firewood","Charcoal", "Solar",  "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other", "Unknown/Uncertain", "Declined",
+            "Household water location = In the house or grounds/ Outside the grounds (%)",
+            "What is the main material of the floor of the household? (%)", "Natural", "Earth", "Sand", "Clay", "Mud", "Dung", "Rudimentary", "Tablets/Wood planks", "Palm", "Bamboo", "Mat", "Adobe", "Finished", "Parquet", "Vinyl", "Linoleum", "Ceramic,tile", "Carpet", "Stone, cement", "Bricks")
 
 
+# Add row labels
+rownames(t1_overall) <- c(t1lab)
+
+# Table formatting
+t1 <- kable(t1_overall) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
+  add_indent(c(3:5, 7:15, 17:26, 28:39, 41:51, 53:61, 64:83)) %>%
+  pack_rows("Demographic Characteristics)", 2, 26) %>%
+  pack_rows("Household Characteristics", 27, 83)
+```
+`r t1`
+
+## Additional detail
 ```{r}
 #CARACTERISTIQUES 
 
@@ -95,114 +178,6 @@ tabpct(df$facility_name,df$household_water_loc)
 df$household_floor=as.factor(df$household_floor)
 describe(df$household_floor)
 tabpct(df$facility_name,df$household_floor)
-
-```
-
-
-# Alternative Table One code - Leila
-
-```{r}
-
-# Convert categorical variables into factors
-
-## Sex - omitted since data collected on 'sex' was that of the providers and not the caregiver/child
-
-## Relationship of caregiver to child
-
-df_imp$cg_relationship <- factor(df_imp$cg_relationship,levels = c(1,2,3,4,5,6,7,8,9,10),
-                                  labels = c("Mother and Father","Mother and Grandmother","Mother only",
-                                             "Father only", "Grandmother only","Grandfather only","Sibling",
-                                             "Other family member","Community member", "Other"))
-
-
-## Maternal education
-
-df_imp$cg_edu_mother<- factor(df_imp$cg_edu_mother,levels = c(1,2,3,4,5,6,7,8,9),
-                              labels = c("Primary", "Post-primary/vocational", "Secondary", "Diploma/certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", "Other", "Never attended any formal schooling", "Declined"))
-
-
-## Household head
-
-df_imp$household_head<- factor(df_imp$household_head,levels = c(1,2,3,4,5,6,7,8,9,10,11,12),
-                               labels = c("Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", "Unknown/uncertain", "Declined"))
-
-
-## Household toilet
-
-df_imp$household_toilet<- factor(df_imp$household_toilet,levels = c(1,2,3,4,5,6,7,8,9,10,11),
-                                 labels = c("Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other", "Unknown/uncertain", "Declined"))
-
-
-## Household fuel
-
-df_imp$household_fuel<- factor(df_imp$household_fuel,levels = c(1,2,3,4,5,6,7,8,9),
-                               labels = c("Firewood", "Charcoal", "Solar", "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other", "Unknown/uncertain", "Declined"))
-
-
-## Household water located in house
-
-df_imp$household_water_loc<- factor(df_imp$household_water_loc, levels= c(1,2),
-                                    labels = c("In the house/grounds", "Outside the grounds"))
-
-
-## Household floor
-
-df_imp$household_floor <- factor(df_imp$household_floor, 
-                                 levels = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 
-                                                                    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
-                                                                    99, 999),
-                                 labels = c("Natural", "Earth", "Sand", "Clay", "Mud", "Dung", "Rudimentary", "Tablets/Wood planks",
-                                            "Palm", "Bamboo", "Mat", "Adobe", "Finished", "Parquet", "Vinyl", "Linoleum", "Ceramic,tile",
-                                            "Carpet", "Stone, cement", "Bricks", "Unknown/Uncertain", "Declined"))
-
-
-# Specify all the variables you want to treat as factors
-
-factorVars <- c("age_cat")
-
-# Specify all the variables to include
-
-myVars <- c("age_cat", "cg_relationship", "cg_age", "cg_edu_mother", "household_head",
-            "household_toilet", "household_fuel", "household_water_loc","household_floor")
-
-# CreateTableOne:
-out1 <- CreateTableOne(vars = myVars,
-                       data = df_imp,
-                       factorVars = factorVars,
-                       strata = "facility_name",
-                       test = FALSE,
-                       addOverall = TRUE) 
-
-t1_overall <- print(out1,
-            cramVars = c("age_cat", "household_water_loc"))
-
-# Create row labels
-
-t1lab <- c("N", 
-          "Age Category = 0-1 month/ 2-59 months",
-           "Caregiver Age (mean (SD))", 
-           "Maternal Education (highest level attended)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate",
-           "Bachelors degree or equivalent", "Masters degree or equivalent", "Other", "Never attended any formal schooling", "Declined",
-           "Household head", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", "Unknown/Uncertain", "Declined",
-           "What kind of toilet facility do members of your household usually use?", "Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other", "Unknown/Uncertain", "Declined",
-           "What type of fuel is mainly used for cooking in the household?", "Firewood","Charcoal", "Solar",  "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other", "Unknown/Uncertain", "Declined", 
-           "Household water location = In the house or grounds/ Outside the grounds",
-           "What is the main material of the floor of the household?", "Natural", "Earth", "Sand", "Clay", "Mud", "Dung", "Rudimentary", "Tablets/Wood planks", "Palm", "Bamboo", "Mat", "Adobe", "Finished", "Parquet", "Vinyl", "Linoleum", "Ceramic,tile", "Carpet", "Stone, cement", "Bricks", "Unknown/Uncertain", "Declined")
-
-
-# Add row labels
-rownames(t1_overall) <- c(t1lab)
-
-# Table formatting
-
-t1 <- kable(t1_overall) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(5:13, 15:26, 28:38, 40:48, 51:72)) %>%
-  pack_rows("Maternal education (highest level attended)", 4, 12) %>%
-  pack_rows("Household head", 14, 25) %>%
-  pack_rows("What kind of toilet facility do members of your household usually use?", 27, 37) %>%
-  pack_rows("What type of fuel is mainly used for cooking in the household?", 39, 47) %>%
-  pack_rows("What is the main material of the floor of the household?", 50, 71)
 
 ```
 
@@ -295,47 +270,40 @@ tabpct(df$facility_name,df$travel_time)
 df$travel_cost=as.factor(df$travel_cost)
 describe(df$travel_cost)
 tabpct(df$facility_name,df$travel_cost)
+
+# ## Sex
+# 
+# IS$sex=as.factor(IS$sex) describe(IS$sex) tabpct(IS$facility_name,IS$sex)
+# 
+# ## Relationship of caregiver to child
+# 
+# IS$cg_relationship = as.factor(IS$cg_relationship) describe(IS$cg_relationship) tabpct(IS$facility_name,IS$cg_relationship)
+# 
+# ## Maternal education
+# 
+# IS$cg_edu_mother=as.factor(IS$cg_edu_mother) describe(IS$cg_edu_mother) tabpct(IS$facility_name,IS$cg_edu_mother)
+# 
+# ## Household head
+# 
+# IS$household_head=as.factor(IS$household_head) describe(IS$household_head) tabpct(IS$facility_name,IS$household_head)
+# 
+# ## Household toilet
+# 
+# IS$household_toilet=as.factor(IS$household_toilet) describe(IS$household_toilet) tabpct(IS$facility_name,IS$household_toilet)
+# 
+# ## Household fuel
+# 
+# IS$household_fuel=as.factor(IS$household_fuel) describe(IS$household_fuel) tabpct(IS$facility_name,IS$household_fuel)
+# 
+# ## Household water located in house
+# 
+# IS$household_water_loc=as.factor(IS$household_water_loc) describe(IS$household_water_loc) tabpct(IS$facility_name,IS$household_water_loc)
+# 
+# ## Household floor
+# 
+# IS$household_floor=as.factor(IS$household_floor) describe(IS$household_floor) tabpct(IS$facility_name,IS$household_floor)
 ```
 
-======= \## Age Category
-
-IS$visit_date=as.Date(IS$visit_date) IS$Birthday=as.Date(IS$Birthday)
-
-IS$Age_categ = difftime(IS$visit_date,IS$Birthday,units = "days") IS$age_categorie = IS$Age_categ/30 print(IS$age_categorie) IS$age_categorie=as.numeric(IS$age_categorie) summ(IS\$age_categorie)
-
-IS$age_categorie_1 = cut(IS$age_categorie, breaks = c(0,2,12,60,100), right = F, labels = c("0-1","2-11","12-59","60-66")) describe(IS$age_categorie_1) tabpct(IS$facility_name,IS\$age_categorie_1)
-
-## Sex
-
-IS$sex=as.factor(IS$sex) describe(IS$sex) tabpct(IS$facility_name,IS\$sex)
-
-## Relationship of caregiver to child
-
-IS$cg_relationship = as.factor(IS$cg_relationship) describe(IS$cg_relationship) tabpct(IS$facility_name,IS\$cg_relationship)
-
-## Maternal education
-
-IS$cg_edu_mother=as.factor(IS$cg_edu_mother) describe(IS$cg_edu_mother) tabpct(IS$facility_name,IS\$cg_edu_mother)
-
-## Household head
-
-IS$household_head=as.factor(IS$household_head) describe(IS$household_head) tabpct(IS$facility_name,IS\$household_head)
-
-## Household toilet
-
-IS$household_toilet=as.factor(IS$household_toilet) describe(IS$household_toilet) tabpct(IS$facility_name,IS\$household_toilet)
-
-## Household fuel
-
-IS$household_fuel=as.factor(IS$household_fuel) describe(IS$household_fuel) tabpct(IS$facility_name,IS\$household_fuel)
-
-## Household water located in house
-
-IS$household_water_loc=as.factor(IS$household_water_loc) describe(IS$household_water_loc) tabpct(IS$facility_name,IS\$household_water_loc)
-
-## Household floor
-
-IS$household_floor=as.factor(IS$household_floor) describe(IS$household_floor) tabpct(IS$facility_name,IS\$household_floor)
 
 # Table 2: Patient clinical and care seeking characteristics.
 
@@ -422,8 +390,35 @@ describe(IS$travel_cost)
 tabpct(IS$facility_name,IS$travel_cost)
 ```
 
-# Table 3: Use of PO device across facilities.
+# Table 3: Use of PO device across facilities. {.tabset}
 
+```{r}
+# Specify all the variables you want to treat as factors
+
+factorVars <- c("used_po_yn", "correct_use_yn", "clinical_measures_complete")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("used_po_yn", "correct_use_yn", "po_duration_min", "consult_duration_min", "clinical_measures_complete")
+
+## issue identified w/duration variables, troubleshooting in progress in cleaning file
+
+t3lab <- c("N", "Used PO device during encounter (%)", "PO device used correctly (%)", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)")
+
+out3 <- CreateTableOne(vars = myVars,
+               data = df,
+               factorVars = factorVars,
+               strata = "facility_name",
+               test = FALSE,
+               addOverall = TRUE)
+out3_overall <- print(out3)
+rownames(out3_overall) <- c(t3lab) # Add row labels
+
+out3 <- kable(print(out3_overall)) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r out3`
+
+## Additional detail
 ```{r}
 
 ## PO device used during encounter
@@ -515,32 +510,6 @@ df$correct_use_measurements=as.factor(df$correct_use_measurements)
 describe(df$correct_use_measurements)
 tabpct(df$facility_name,df$correct_use_measurements)
 ```
-
-```{r}
-# Specify all the variables you want to treat as factors
-
-factorVars <- c("used_po_yn", "correct_use_yn", "clinical_measures_complete")
-
-# Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("used_po_yn", "correct_use_yn", "po_duration_min", "consult_duration_min", "clinical_measures_complete")
-
-## issue identified w/duration variables, troubleshooting in progress in cleaning file
-
-t3lab <- c("N", "Used PO device during encounter (%)", "PO device used correctly (%)", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)")
-
-out3 <- CreateTableOne(vars = myVars,
-               data = df,
-               factorVars = factorVars,
-               strata = "facility_name",
-               test = FALSE,
-               addOverall = TRUE)
-out3_overall <- print(out3)
-rownames(out3_overall) <- c(t3lab) # Add row labels
-
-out3 <- kable(print(out3_overall)) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
-```
-`r out3`
 
 The PO device was used consistently across encounters except for:
 * `r sum(df_og$no_po_reason==1, na.rm = T)` instances where the device was broken
