@@ -3,7 +3,6 @@ title: "Implementation Study Analysis"
 author: "Senegal data manager"
 output: html_document
 date: "2024-02-28"
-output: html_document
 --- 
 
 ```{r,echo=FALSE,results='hide'}
@@ -70,7 +69,7 @@ summ(df$cg_age)
 ## Maternal education
 df$cg_edu_mother[df$cg_edu_mother==999] = NA
 df$cg_edu_mother=as.factor(df$cg_edu_mother)
-describe(df$cg_edu_mother)
+describe(df$cg_edu_mother) 
 tabpct(df$facility_name,df$cg_edu_mother)
 
 ## Household head
