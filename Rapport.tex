@@ -1,0 +1,1284 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Rapport Etude implementation},
+  pdfauthor={Senegal data manager},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Rapport Etude implementation}
+\author{Senegal data manager}
+\date{2024-02-28}
+
+\begin{document}
+\maketitle
+
+Resultats
+
+\begin{verbatim}
+## 
+## Attachement du package : 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:plyr':
+## 
+##     arrange, count, desc, failwith, id, mutate, rename, summarise,
+##     summarize
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attachement du package : 'kableExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## L'objet suivant est masqué depuis 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{verbatim}
+## Le chargement a nécessité le package : foreign
+\end{verbatim}
+
+\begin{verbatim}
+## Le chargement a nécessité le package : survival
+\end{verbatim}
+
+\begin{verbatim}
+## Le chargement a nécessité le package : MASS
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attachement du package : 'MASS'
+\end{verbatim}
+
+\begin{verbatim}
+## L'objet suivant est masqué depuis 'package:dplyr':
+## 
+##     select
+\end{verbatim}
+
+\begin{verbatim}
+## Le chargement a nécessité le package : nnet
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attachement du package : 'Hmisc'
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:dplyr':
+## 
+##     src, summarize
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:plyr':
+## 
+##     is.discrete, summarize
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:base':
+## 
+##     format.pval, units
+\end{verbatim}
+
+\hypertarget{table-1-patient-demographic-and-household-characteristics.}{%
+\section{Table 1: Patient demographic and household
+characteristics.}\label{table-1-patient-demographic-and-household-characteristics.}}
+
+\begin{verbatim}
+## df1$age_m_1 
+##        n  missing distinct 
+##      375       31        3 
+##                             
+## Value        0-1  2-11 12-59
+## Frequency      9   110   256
+## Proportion 0.024 0.293 0.683
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$age_m_1
+## df1$facility_name  0-1  2-11  12-59  Total
+##             SEN01    6    38    128    172
+##             SEN02    3    72    128    203
+##             Total    9   110    256    375
+## 
+## Row percent 
+##                  df1$age_m_1
+## df1$facility_name    0-1    2-11   12-59  Total
+##             SEN01      6      38     128    172
+##                    (3.5)  (22.1)  (74.4)  (100)
+##             SEN02      3      72     128    203
+##                    (1.5)  (35.5)  (63.1)  (100)
+## 
+## Column percent 
+##                  df1$age_m_1
+## df1$facility_name  0-1       %  2-11       %  12-59      %
+##             SEN01    6  (66.7)    38  (34.5)    128   (50)
+##             SEN02    3  (33.3)    72  (65.5)    128   (50)
+##             Total    9   (100)   110   (100)    256  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$sex 
+##        n  missing distinct 
+##      405        1        2 
+##                       
+## Value          0     1
+## Frequency    333    72
+## Proportion 0.822 0.178
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$sex
+## df1$facility_name    0    1  Total
+##             SEN01  121   71    192
+##             SEN02  212    1    213
+##             Total  333   72    405
+## 
+## Row percent 
+##                  df1$sex
+## df1$facility_name       0      1  Total
+##             SEN01     121     71    192
+##                      (63)   (37)  (100)
+##             SEN02     212      1    213
+##                    (99.5)  (0.5)  (100)
+## 
+## Column percent 
+##                  df1$sex
+## df1$facility_name    0       %   1       %
+##             SEN01  121  (36.3)  71  (98.6)
+##             SEN02  212  (63.7)   1   (1.4)
+##             Total  333   (100)  72   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$cg_relationship 
+##        n  missing distinct 
+##      403        3        9 
+## 
+## Community member (1, 0.002), Father only (11, 0.027), Grandfather only (1,
+## 0.002), Grandmother only (27, 0.067), Mother and father (6, 0.015), Mother and
+## grandmother (4, 0.010), Mother only (339, 0.841), Other family member (9,
+## 0.022), Sibling (5, 0.012)
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$cg_relationship
+## df1$facility_name  Community member  Father only  Grandfather only
+##             SEN01                 0            3                 0
+##             SEN02                 1            8                 1
+##             Total                 1           11                 1
+##                  df1$cg_relationship
+## df1$facility_name  Grandmother only  Mother and father  Mother and grandmother
+##             SEN01                16                  0                       2
+##             SEN02                11                  6                       2
+##             Total                27                  6                       4
+##                  df1$cg_relationship
+## df1$facility_name  Mother only  Other family member  Sibling  Total
+##             SEN01          166                    2        2    191
+##             SEN02          173                    7        3    212
+##             Total          339                    9        5    403
+## 
+## Row percent 
+##                  df1$cg_relationship
+## df1$facility_name  Community member  Father only  Grandfather only
+##             SEN01                 0            3                 0
+##                                 (0)        (1.6)               (0)
+##             SEN02                 1            8                 1
+##                               (0.5)        (3.8)             (0.5)
+##                  df1$cg_relationship
+## df1$facility_name  Grandmother only  Mother and father  Mother and grandmother
+##             SEN01                16                  0                       2
+##                               (8.4)                (0)                     (1)
+##             SEN02                11                  6                       2
+##                               (5.2)              (2.8)                   (0.9)
+##                  df1$cg_relationship
+## df1$facility_name  Mother only  Other family member  Sibling  Total
+##             SEN01          166                    2        2    191
+##                         (86.9)                  (1)      (1)  (100)
+##             SEN02          173                    7        3    212
+##                         (81.6)                (3.3)    (1.4)  (100)
+## 
+## Column percent 
+##                  df1$cg_relationship
+## df1$facility_name  Community member      %  Father only       %
+##             SEN01                 0    (0)            3  (27.3)
+##             SEN02                 1  (100)            8  (72.7)
+##             Total                 1  (100)           11   (100)
+##                  df1$cg_relationship
+## df1$facility_name  Grandfather only      %  Grandmother only       %
+##             SEN01                 0    (0)                16  (59.3)
+##             SEN02                 1  (100)                11  (40.7)
+##             Total                 1  (100)                27   (100)
+##                  df1$cg_relationship
+## df1$facility_name  Mother and father      %  Mother and grandmother      %
+##             SEN01                  0    (0)                       2   (50)
+##             SEN02                  6  (100)                       2   (50)
+##             Total                  6  (100)                       4  (100)
+##                  df1$cg_relationship
+## df1$facility_name  Mother only      %  Other family member       %  Sibling
+##             SEN01          166   (49)                    2  (22.2)        2
+##             SEN02          173   (51)                    7  (77.8)        3
+##             Total          339  (100)                    9   (100)        5
+##                  df1$cg_relationship
+## df1$facility_name      %
+##             SEN01   (40)
+##             SEN02   (60)
+##             Total  (100)
+\end{verbatim}
+
+\begin{verbatim}
+##  obs. mean   median  s.d.   min.   max.  
+##  403  36.4   29      99.814 17     2023
+\end{verbatim}
+
+\begin{verbatim}
+##    SEN01    SEN02 
+## 33.13158 39.31455
+\end{verbatim}
+
+\begin{verbatim}
+## df1$cg_edu_mother 
+##        n  missing distinct 
+##      347       59        6 
+##                                               
+## Value          1     3     4     5     7     8
+## Frequency    109    73     5     3   131    26
+## Proportion 0.314 0.210 0.014 0.009 0.378 0.075
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$cg_edu_mother
+## df1$facility_name    1    3    4    5    7    8  Total
+##             SEN01   74   28    4    1   59    0    166
+##             SEN02   35   45    1    2   72   26    181
+##             Total  109   73    5    3  131   26    347
+## 
+## Row percent 
+##                  df1$cg_edu_mother
+## df1$facility_name       1       3      4      5       7       8  Total
+##             SEN01      74      28      4      1      59       0    166
+##                    (44.6)  (16.9)  (2.4)  (0.6)  (35.5)     (0)  (100)
+##             SEN02      35      45      1      2      72      26    181
+##                    (19.3)  (24.9)  (0.6)  (1.1)  (39.8)  (14.4)  (100)
+## 
+## Column percent 
+##                  df1$cg_edu_mother
+## df1$facility_name    1       %   3       %  4      %  5       %    7      %   8
+##             SEN01   74  (67.9)  28  (38.4)  4   (80)  1  (33.3)   59   (45)   0
+##             SEN02   35  (32.1)  45  (61.6)  1   (20)  2  (66.7)   72   (55)  26
+##             Total  109   (100)  73   (100)  5  (100)  3   (100)  131  (100)  26
+##                  df1$cg_edu_mother
+## df1$facility_name      %
+##             SEN01    (0)
+##             SEN02  (100)
+##             Total  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$household_head 
+##        n  missing distinct 
+##      394       12        7 
+##                                                     
+## Value          1     2     3     5     6     7     8
+## Frequency      4     8    14   260    22    56    30
+## Proportion 0.010 0.020 0.036 0.660 0.056 0.142 0.076
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$household_head
+## df1$facility_name    1    2    3    5    6    7    8  Total
+##             SEN01    4    2    4  177    0    1    0    188
+##             SEN02    0    6   10   83   22   55   30    206
+##             Total    4    8   14  260   22   56   30    394
+## 
+## Row percent 
+##                  df1$household_head
+## df1$facility_name      1      2      3       5       6       7       8  Total
+##             SEN01      4      2      4     177       0       1       0    188
+##                    (2.1)  (1.1)  (2.1)  (94.1)     (0)   (0.5)     (0)  (100)
+##             SEN02      0      6     10      83      22      55      30    206
+##                      (0)  (2.9)  (4.9)  (40.3)  (10.7)  (26.7)  (14.6)  (100)
+## 
+## Column percent 
+##                  df1$household_head
+## df1$facility_name  1      %  2      %   3       %    5       %   6      %   7
+##             SEN01  4  (100)  2   (25)   4  (28.6)  177  (68.1)   0    (0)   1
+##             SEN02  0    (0)  6   (75)  10  (71.4)   83  (31.9)  22  (100)  55
+##             Total  4  (100)  8  (100)  14   (100)  260   (100)  22  (100)  56
+##                  df1$household_head
+## df1$facility_name       %   8      %
+##             SEN01   (1.8)   0    (0)
+##             SEN02  (98.2)  30  (100)
+##             Total   (100)  30  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$household_toilet 
+##        n  missing distinct 
+##      394       12        6 
+##                                               
+## Value          1     2     3     6     8     9
+## Frequency     71   157   155     4     6     1
+## Proportion 0.180 0.398 0.393 0.010 0.015 0.003
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$household_toilet
+## df1$facility_name    1    2    3    6    8    9  Total
+##             SEN01   20    2  154    4    6    1    187
+##             SEN02   51  155    1    0    0    0    207
+##             Total   71  157  155    4    6    1    394
+## 
+## Row percent 
+##                  df1$household_toilet
+## df1$facility_name       1       2       3      6      8      9  Total
+##             SEN01      20       2     154      4      6      1    187
+##                    (10.7)   (1.1)  (82.4)  (2.1)  (3.2)  (0.5)  (100)
+##             SEN02      51     155       1      0      0      0    207
+##                    (24.6)  (74.9)   (0.5)    (0)    (0)    (0)  (100)
+## 
+## Column percent 
+##                  df1$household_toilet
+## df1$facility_name   1       %    2       %    3       %  6      %  8      %  9
+##             SEN01  20  (28.2)    2   (1.3)  154  (99.4)  4  (100)  6  (100)  1
+##             SEN02  51  (71.8)  155  (98.7)    1   (0.6)  0    (0)  0    (0)  0
+##             Total  71   (100)  157   (100)  155   (100)  4  (100)  6  (100)  1
+##                  df1$household_toilet
+## df1$facility_name      %
+##             SEN01  (100)
+##             SEN02    (0)
+##             Total  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$household_fuel 
+##        n  missing distinct 
+##      395       11        4 
+##                                   
+## Value          1     2     4     5
+## Frequency    192    48    12   143
+## Proportion 0.486 0.122 0.030 0.362
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$household_fuel
+## df1$facility_name    1    2    4    5  Total
+##             SEN01  133   10    9   36    188
+##             SEN02   59   38    3  107    207
+##             Total  192   48   12  143    395
+## 
+## Row percent 
+##                  df1$household_fuel
+## df1$facility_name       1       2      4       5  Total
+##             SEN01     133      10      9      36    188
+##                    (70.7)   (5.3)  (4.8)  (19.1)  (100)
+##             SEN02      59      38      3     107    207
+##                    (28.5)  (18.4)  (1.4)  (51.7)  (100)
+## 
+## Column percent 
+##                  df1$household_fuel
+## df1$facility_name    1       %   2       %   4      %    5       %
+##             SEN01  133  (69.3)  10  (20.8)   9   (75)   36  (25.2)
+##             SEN02   59  (30.7)  38  (79.2)   3   (25)  107  (74.8)
+##             Total  192   (100)  48   (100)  12  (100)  143   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$household_water_loc 
+##        n  missing distinct 
+##      385       21        2 
+##                       
+## Value          1     2
+## Frequency    346    39
+## Proportion 0.899 0.101
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$household_water_loc
+## df1$facility_name    1    2  Total
+##             SEN01  155   24    179
+##             SEN02  191   15    206
+##             Total  346   39    385
+## 
+## Row percent 
+##                  df1$household_water_loc
+## df1$facility_name       1       2  Total
+##             SEN01     155      24    179
+##                    (86.6)  (13.4)  (100)
+##             SEN02     191      15    206
+##                    (92.7)   (7.3)  (100)
+## 
+## Column percent 
+##                  df1$household_water_loc
+## df1$facility_name    1       %   2       %
+##             SEN01  155  (44.8)  24  (61.5)
+##             SEN02  191  (55.2)  15  (38.5)
+##             Total  346   (100)  39   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$household_floor 
+##        n  missing distinct 
+##      394       12        5 
+##                                         
+## Value          2     3     4    17    19
+## Frequency     15   268    10    51    50
+## Proportion 0.038 0.680 0.025 0.129 0.127
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$household_floor
+## df1$facility_name    2    3    4   17   19  Total
+##             SEN01   15  116   10   20   26    187
+##             SEN02    0  152    0   31   24    207
+##             Total   15  268   10   51   50    394
+## 
+## Row percent 
+##                  df1$household_floor
+## df1$facility_name    2       3      4      17      19  Total
+##             SEN01   15     116     10      20      26    187
+##                    (8)    (62)  (5.3)  (10.7)  (13.9)  (100)
+##             SEN02    0     152      0      31      24    207
+##                    (0)  (73.4)    (0)    (15)  (11.6)  (100)
+## 
+## Column percent 
+##                  df1$household_floor
+## df1$facility_name   2      %    3       %   4      %  17       %  19      %
+##             SEN01  15  (100)  116  (43.3)  10  (100)  20  (39.2)  26   (52)
+##             SEN02   0    (0)  152  (56.7)   0    (0)  31  (60.8)  24   (48)
+##             Total  15  (100)  268   (100)  10  (100)  51   (100)  50  (100)
+\end{verbatim}
+
+\hypertarget{table-2-patient-clinical-and-care-seeking-characteristics}{%
+\section{Table 2: Patient clinical and care seeking
+characteristics}\label{table-2-patient-clinical-and-care-seeking-characteristics}}
+
+\begin{verbatim}
+## df1$facility_choice_reason___2 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    405     1
+## Proportion 0.998 0.002
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$facility_choice_reason___2
+## df1$facility_name    0    1  Total
+##             SEN01  192    1    193
+##             SEN02  213    0    213
+##             Total  405    1    406
+## 
+## Row percent 
+##                  df1$facility_choice_reason___2
+## df1$facility_name       0      1  Total
+##             SEN01     192      1    193
+##                    (99.5)  (0.5)  (100)
+##             SEN02     213      0    213
+##                     (100)    (0)  (100)
+## 
+## Column percent 
+##                  df1$facility_choice_reason___2
+## df1$facility_name    0       %  1      %
+##             SEN01  192  (47.4)  1  (100)
+##             SEN02  213  (52.6)  0    (0)
+##             Total  405   (100)  1  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$facility_choice_reason___3 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    376    30
+## Proportion 0.926 0.074
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$facility_choice_reason___3
+## df1$facility_name    0    1  Total
+##             SEN01  193    0    193
+##             SEN02  183   30    213
+##             Total  376   30    406
+## 
+## Row percent 
+##                  df1$facility_choice_reason___3
+## df1$facility_name       0       1  Total
+##             SEN01     193       0    193
+##                     (100)     (0)  (100)
+##             SEN02     183      30    213
+##                    (85.9)  (14.1)  (100)
+## 
+## Column percent 
+##                  df1$facility_choice_reason___3
+## df1$facility_name    0       %   1      %
+##             SEN01  193  (51.3)   0    (0)
+##             SEN02  183  (48.7)  30  (100)
+##             Total  376   (100)  30  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$facility_choice_reason___4 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    403     3
+## Proportion 0.993 0.007
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$facility_choice_reason___4
+## df1$facility_name    0    1  Total
+##             SEN01  192    1    193
+##             SEN02  211    2    213
+##             Total  403    3    406
+## 
+## Row percent 
+##                  df1$facility_choice_reason___4
+## df1$facility_name       0      1  Total
+##             SEN01     192      1    193
+##                    (99.5)  (0.5)  (100)
+##             SEN02     211      2    213
+##                    (99.1)  (0.9)  (100)
+## 
+## Column percent 
+##                  df1$facility_choice_reason___4
+## df1$facility_name    0       %  1       %
+##             SEN01  192  (47.6)  1  (33.3)
+##             SEN02  211  (52.4)  2  (66.7)
+##             Total  403   (100)  3   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$facility_choice_reason___5 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    405     1
+## Proportion 0.998 0.002
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$facility_choice_reason___5
+## df1$facility_name    0    1  Total
+##             SEN01  192    1    193
+##             SEN02  213    0    213
+##             Total  405    1    406
+## 
+## Row percent 
+##                  df1$facility_choice_reason___5
+## df1$facility_name       0      1  Total
+##             SEN01     192      1    193
+##                    (99.5)  (0.5)  (100)
+##             SEN02     213      0    213
+##                     (100)    (0)  (100)
+## 
+## Column percent 
+##                  df1$facility_choice_reason___5
+## df1$facility_name    0       %  1      %
+##             SEN01  192  (47.4)  1  (100)
+##             SEN02  213  (52.6)  0    (0)
+##             Total  405   (100)  1  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$facility_choice_reason___8 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    405     1
+## Proportion 0.998 0.002
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$facility_choice_reason___8
+## df1$facility_name    0    1  Total
+##             SEN01  193    0    193
+##             SEN02  212    1    213
+##             Total  405    1    406
+## 
+## Row percent 
+##                  df1$facility_choice_reason___8
+## df1$facility_name       0      1  Total
+##             SEN01     193      0    193
+##                     (100)    (0)  (100)
+##             SEN02     212      1    213
+##                    (99.5)  (0.5)  (100)
+## 
+## Column percent 
+##                  df1$facility_choice_reason___8
+## df1$facility_name    0       %  1      %
+##             SEN01  193  (47.7)  0    (0)
+##             SEN02  212  (52.3)  1  (100)
+##             Total  405   (100)  1  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___1 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    155   251
+## Proportion 0.382 0.618
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___1
+## df1$facility_name    0    1  Total
+##             SEN01   58  135    193
+##             SEN02   97  116    213
+##             Total  155  251    406
+## 
+## Row percent 
+##                  df1$travel_mode___1
+## df1$facility_name       0       1  Total
+##             SEN01      58     135    193
+##                    (30.1)  (69.9)  (100)
+##             SEN02      97     116    213
+##                    (45.5)  (54.5)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___1
+## df1$facility_name    0       %    1       %
+##             SEN01   58  (37.4)  135  (53.8)
+##             SEN02   97  (62.6)  116  (46.2)
+##             Total  155   (100)  251   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___2 
+##        n  missing distinct    value 
+##      406        0        1        0 
+##               
+## Value        0
+## Frequency  406
+## Proportion   1
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___3 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    404     2
+## Proportion 0.995 0.005
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___3
+## df1$facility_name    0    1  Total
+##             SEN01  191    2    193
+##             SEN02  213    0    213
+##             Total  404    2    406
+## 
+## Row percent 
+##                  df1$travel_mode___3
+## df1$facility_name      0    1  Total
+##             SEN01    191    2    193
+##                     (99)  (1)  (100)
+##             SEN02    213    0    213
+##                    (100)  (0)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___3
+## df1$facility_name    0       %  1      %
+##             SEN01  191  (47.3)  2  (100)
+##             SEN02  213  (52.7)  0    (0)
+##             Total  404   (100)  2  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___4 
+##        n  missing distinct    value 
+##      406        0        1        0 
+##               
+## Value        0
+## Frequency  406
+## Proportion   1
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___5 
+##        n  missing distinct    value 
+##      406        0        1        0 
+##               
+## Value        0
+## Frequency  406
+## Proportion   1
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___6 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    321    85
+## Proportion 0.791 0.209
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___6
+## df1$facility_name    0    1  Total
+##             SEN01  192    1    193
+##             SEN02  129   84    213
+##             Total  321   85    406
+## 
+## Row percent 
+##                  df1$travel_mode___6
+## df1$facility_name       0       1  Total
+##             SEN01     192       1    193
+##                    (99.5)   (0.5)  (100)
+##             SEN02     129      84    213
+##                    (60.6)  (39.4)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___6
+## df1$facility_name    0       %   1       %
+##             SEN01  192  (59.8)   1   (1.2)
+##             SEN02  129  (40.2)  84  (98.8)
+##             Total  321   (100)  85   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___7 
+##        n  missing distinct 
+##      406        0        2 
+##                     
+## Value         0    1
+## Frequency   402    4
+## Proportion 0.99 0.01
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___7
+## df1$facility_name    0    1  Total
+##             SEN01  191    2    193
+##             SEN02  211    2    213
+##             Total  402    4    406
+## 
+## Row percent 
+##                  df1$travel_mode___7
+## df1$facility_name       0      1  Total
+##             SEN01     191      2    193
+##                      (99)    (1)  (100)
+##             SEN02     211      2    213
+##                    (99.1)  (0.9)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___7
+## df1$facility_name    0       %  1      %
+##             SEN01  191  (47.5)  2   (50)
+##             SEN02  211  (52.5)  2   (50)
+##             Total  402   (100)  4  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___8 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    392    14
+## Proportion 0.966 0.034
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___8
+## df1$facility_name    0    1  Total
+##             SEN01  184    9    193
+##             SEN02  208    5    213
+##             Total  392   14    406
+## 
+## Row percent 
+##                  df1$travel_mode___8
+## df1$facility_name       0      1  Total
+##             SEN01     184      9    193
+##                    (95.3)  (4.7)  (100)
+##             SEN02     208      5    213
+##                    (97.7)  (2.3)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___8
+## df1$facility_name    0       %   1       %
+##             SEN01  184  (46.9)   9  (64.3)
+##             SEN02  208  (53.1)   5  (35.7)
+##             Total  392   (100)  14   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_mode___11 
+##        n  missing distinct 
+##      406        0        2 
+##                       
+## Value          0     1
+## Frequency    386    20
+## Proportion 0.951 0.049
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_mode___11
+## df1$facility_name    0    1  Total
+##             SEN01  173   20    193
+##             SEN02  213    0    213
+##             Total  386   20    406
+## 
+## Row percent 
+##                  df1$travel_mode___11
+## df1$facility_name       0       1  Total
+##             SEN01     173      20    193
+##                    (89.6)  (10.4)  (100)
+##             SEN02     213       0    213
+##                     (100)     (0)  (100)
+## 
+## Column percent 
+##                  df1$travel_mode___11
+## df1$facility_name    0       %   1      %
+##             SEN01  173  (44.8)  20  (100)
+##             SEN02  213  (55.2)   0    (0)
+##             Total  386   (100)  20  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_time 
+##        n  missing distinct 
+##      361       45        3 
+##                             
+## Value          1     2     3
+## Frequency    280    74     7
+## Proportion 0.776 0.205 0.019
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_time
+## df1$facility_name    1    2    3  Total
+##             SEN01  139   30    7    176
+##             SEN02  141   44    0    185
+##             Total  280   74    7    361
+## 
+## Row percent 
+##                  df1$travel_time
+## df1$facility_name       1       2    3  Total
+##             SEN01     139      30    7    176
+##                      (79)    (17)  (4)  (100)
+##             SEN02     141      44    0    185
+##                    (76.2)  (23.8)  (0)  (100)
+## 
+## Column percent 
+##                  df1$travel_time
+## df1$facility_name    1       %   2       %  3      %
+##             SEN01  139  (49.6)  30  (40.5)  7  (100)
+##             SEN02  141  (50.4)  44  (59.5)  0    (0)
+##             Total  280   (100)  74   (100)  7  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$travel_cost 
+##        n  missing distinct 
+##      141      265        4 
+##                                   
+## Value          1     2     3     4
+## Frequency     57    39    43     2
+## Proportion 0.404 0.277 0.305 0.014
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$travel_cost
+## df1$facility_name    1    2    3    4  Total
+##             SEN01    6   18   27    2     53
+##             SEN02   51   21   16    0     88
+##             Total   57   39   43    2    141
+## 
+## Row percent 
+##                  df1$travel_cost
+## df1$facility_name       1       2       3      4  Total
+##             SEN01       6      18      27      2     53
+##                    (11.3)    (34)  (50.9)  (3.8)  (100)
+##             SEN02      51      21      16      0     88
+##                      (58)  (23.9)  (18.2)    (0)  (100)
+## 
+## Column percent 
+##                  df1$travel_cost
+## df1$facility_name   1       %   2       %   3       %  4      %
+##             SEN01   6  (10.5)  18  (46.2)  27  (62.8)  2  (100)
+##             SEN02  51  (89.5)  21  (53.8)  16  (37.2)  0    (0)
+##             Total  57   (100)  39   (100)  43   (100)  2  (100)
+\end{verbatim}
+
+\hypertarget{table-3-use-of-po-device-across-facilities.}{%
+\section{Table 3: Use of PO device across
+facilities.}\label{table-3-use-of-po-device-across-facilities.}}
+
+\begin{verbatim}
+## df1$used_po_yn 
+##        n  missing distinct    value 
+##      406        0        1        1 
+##               
+## Value        1
+## Frequency  406
+## Proportion   1
+\end{verbatim}
+
+\begin{verbatim}
+## df1$correct_use_yn 
+##        n  missing distinct 
+##      406        0        3 
+##                             
+## Value          0     1     2
+## Frequency      1   392    13
+## Proportion 0.002 0.966 0.032
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$correct_use_yn
+## df1$facility_name    0    1    2  Total
+##             SEN01    0  185    8    193
+##             SEN02    1  207    5    213
+##             Total    1  392   13    406
+## 
+## Row percent 
+##                  df1$correct_use_yn
+## df1$facility_name      0       1      2  Total
+##             SEN01      0     185      8    193
+##                      (0)  (95.9)  (4.1)  (100)
+##             SEN02      1     207      5    213
+##                    (0.5)  (97.2)  (2.3)  (100)
+## 
+## Column percent 
+##                  df1$correct_use_yn
+## df1$facility_name  0      %    1       %   2       %
+##             SEN01  0    (0)  185  (47.2)   8  (61.5)
+##             SEN02  1  (100)  207  (52.8)   5  (38.5)
+##             Total  1  (100)  392   (100)  13   (100)
+\end{verbatim}
+
+\begin{verbatim}
+## Time differences in mins
+##   [1]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [26]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [51]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+##  [76]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [101]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [126]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [151]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [176]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [201]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [226]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [251]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [276]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [301]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [326]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [351]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+## [376]  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 NA  0  0  0  0  0  0  0  0
+## [401]  0  0  0  0  0  0
+\end{verbatim}
+
+\begin{verbatim}
+##  obs. mean   median  s.d.   min.   max.  
+##  405  0      0       0      0      0
+\end{verbatim}
+
+\begin{verbatim}
+## df1$duration_po_1 
+##             n       missing      distinct         value 
+##           405             1             1 Moins une min 
+##                         
+## Value      Moins une min
+## Frequency            405
+## Proportion             1
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$duration_po_1
+## df1$facility_name  Moins une min  1 à 3 m  4-5m  6-10m  11-30  31-60  Total
+##             SEN01            192        0     0      0      0      0    192
+##             SEN02            213        0     0      0      0      0    213
+##             Total            405        0     0      0      0      0    405
+## 
+## Row percent 
+##                  df1$duration_po_1
+## df1$facility_name  Moins une min  1 à 3 m  4-5m  6-10m  11-30  31-60  Total
+##             SEN01            192        0     0      0      0      0    192
+##                            (100)      (0)   (0)    (0)    (0)    (0)  (100)
+##             SEN02            213        0     0      0      0      0    213
+##                            (100)      (0)   (0)    (0)    (0)    (0)  (100)
+## 
+## Column percent 
+##                  df1$duration_po_1
+## df1$facility_name  Moins une min       %  1 à 3 m      %  4-5m      %  6-10m
+##             SEN01            192  (47.4)        0  (NaN)     0  (NaN)      0
+##             SEN02            213  (52.6)        0  (NaN)     0  (NaN)      0
+##             Total            405   (100)        0  (100)     0  (100)      0
+##                  df1$duration_po_1
+## df1$facility_name      %  11-30      %  31-60      %
+##             SEN01  (NaN)      0  (NaN)      0  (NaN)
+##             SEN02  (NaN)      0  (NaN)      0  (NaN)
+##             Total  (100)      0  (100)      0  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## Time differences in mins
+##   [1]   27   14   15   17   13   29   20   25   27   27   16   18  828    8   14
+##  [16]   20    5   12   20   20   13   13   13   13    8   12   13   10    9    3
+##  [31]   12   16   10   20   10    5   12    5   20   25   20   25   43   15   62
+##  [46]   10   13   11   13    7   10   12   NA   10   18   20   19   16   18   19
+##  [61]   16   14   12   23   19   10   10   29   13   16   26   13   16   20   15
+##  [76]   18    9   22    9   19    5   17   15   10   10   14   14    8    7   10
+##  [91]    2    8   10   12    5   10   11    8   19   10   15    7    3   22   11
+## [106]   10   13   15   20   20   31   37   14   18   19   11    5   10   10    6
+## [121] -888    5   32   33   22   18   45   34   20   44   19   24    9   13   44
+## [136]   28   15   14   15   29   28   40   25   31   24   18   40   51   24   18
+## [151]    9   19   41   30   48   27   29   27   28   18   16   17   24   17   19
+## [166]   15   31   21   28   42   19   17   31   13   26   22   43   23   32   22
+## [181]   17   31   17   52   26   31   25   26   30   35   14   10   23   18   34
+## [196]   26   77   13   20   21   27   26   82   20   36   22   37   44   23   36
+## [211]   19   13   42   18   21   26   70   26   46   20   21   29   43   24   41
+## [226]   32   24   36   27   23   20   34   53   57   40   16   64   16   16   53
+## [241]   10    9   48   12   16   10   13   12   45   30   25   16   17   26   19
+## [256]   16   20   24   38   20   22   21   33   15   29   17   58   17   59   33
+## [271]   22   17   33   10   16   21   19   13   18   17   37   20   21   18   11
+## [286]    3   12   11   11    3   18   11    3   12   15    7    6   11    5   11
+## [301]    8    8   16   10   10    6    5   10    7   28    8    8   13   15    6
+## [316]   10    7    8    8    7   19   10    6   10   12    8   13    6   15   10
+## [331]    9   24   19    8   18    9   16   16   13   13    6    5   10   10   14
+## [346]    8    9    8   18   16    8    9    8   16   14    8   10   16   21   15
+## [361] -927   27   25    8    8   11   10    5   12   13    8   14    8    6    3
+## [376]   15    4   13    3    9    7   15    7    7   11    6    6    8    2    6
+## [391]    8   13    6   10   10   10   16   18   11    8    6    8    7    8    9
+## [406]   13
+\end{verbatim}
+
+\begin{verbatim}
+##  obs. mean   median  s.d.   min.   max.  
+##  405  15.951 16      77.54  -927   828
+\end{verbatim}
+
+\begin{verbatim}
+## df1$consultation_duration_1 
+##        n  missing distinct 
+##      402        4        6 
+##                                                           
+## Value        2 min    3-5m   6-10m   11-30   31-60 Plus 60
+## Frequency        2      19      98     229      49       5
+## Proportion   0.005   0.047   0.244   0.570   0.122   0.012
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$consultation_duration_1
+## df1$facility_name  2 min  3-5m  6-10m  11-30  31-60  Plus 60  Total
+##             SEN01      2    19     87     82      0        0    190
+##             SEN02      0     0     11    147     49        5    212
+##             Total      2    19     98    229     49        5    402
+## 
+## Row percent 
+##                  df1$consultation_duration_1
+## df1$facility_name  2 min  3-5m   6-10m   11-30   31-60  Plus 60  Total
+##             SEN01      2    19      87      82       0        0    190
+##                    (1.1)  (10)  (45.8)  (43.2)     (0)      (0)  (100)
+##             SEN02      0     0      11     147      49        5    212
+##                      (0)   (0)   (5.2)  (69.3)  (23.1)    (2.4)  (100)
+## 
+## Column percent 
+##                  df1$consultation_duration_1
+## df1$facility_name  2 min      %  3-5m      %  6-10m       %  11-30       %
+##             SEN01      2  (100)    19  (100)     87  (88.8)     82  (35.8)
+##             SEN02      0    (0)     0    (0)     11  (11.2)    147  (64.2)
+##             Total      2  (100)    19  (100)     98   (100)    229   (100)
+##                  df1$consultation_duration_1
+## df1$facility_name  31-60      %  Plus 60      %
+##             SEN01      0    (0)        0    (0)
+##             SEN02     49  (100)        5  (100)
+##             Total     49  (100)        5  (100)
+\end{verbatim}
+
+\begin{verbatim}
+## df1$correct_use_measurements 
+##        n  missing distinct 
+##      406        0        3 
+##                             
+## Value          0     1     3
+## Frequency    393     6     7
+## Proportion 0.968 0.015 0.017
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Original table 
+##                  df1$correct_use_measurements
+## df1$facility_name    0    1    3  Total
+##             SEN01  185    4    4    193
+##             SEN02  208    2    3    213
+##             Total  393    6    7    406
+## 
+## Row percent 
+##                  df1$correct_use_measurements
+## df1$facility_name       0      1      3  Total
+##             SEN01     185      4      4    193
+##                    (95.9)  (2.1)  (2.1)  (100)
+##             SEN02     208      2      3    213
+##                    (97.7)  (0.9)  (1.4)  (100)
+## 
+## Column percent 
+##                  df1$correct_use_measurements
+## df1$facility_name    0       %  1       %  3       %
+##             SEN01  185  (47.1)  4  (66.7)  4  (57.1)
+##             SEN02  208  (52.9)  2  (33.3)  3  (42.9)
+##             Total  393   (100)  6   (100)  7   (100)
+\end{verbatim}
+
+\hypertarget{table-4-clinical-outcomes-following-implementation-of-po-device}{%
+\section{Table 4: Clinical outcomes following implementation of PO
+device}\label{table-4-clinical-outcomes-following-implementation-of-po-device}}
+
+\end{document}

@@ -1,27 +1,18 @@
 ---
 title: "Implementation Study Analysis"
+author: "Senegal data manager"
 output: html_document
-date: "`r Sys.Date()`"
-output:
-  html_document:
-    toc: TRUE
-    toc_float: TRUE
-    theme: flatly 
----
+date: "2024-02-28"
+output: html_document
+--- 
 
-# Background
-
-The overall goal of this project is to reduce morbidity and mortality of sick children attending primary care facilities while supporting the rational and efficient use of diagnostics and medicines by healthcare providers. This study is focused on understanding the operational feasibility of multimodal pulse ox use in standard care. The results presented in this document describe several weeks of use of the Masimo pulse oximeter in primary care settings.
-
-```{r setup, include=FALSE}
-rm(list=ls())
-
-knitr::opts_chunk$set(echo = FALSE)
+```{r,echo=FALSE,results='hide'}
 
 # install these packages if not already on your computer
 library(plyr)
 library(dplyr)
 library(tableone)
+library(knitr)
 library(kableExtra)
 library(epiDisplay)
 library(Hmisc)
@@ -34,380 +25,212 @@ library(Hmisc)
 # After adding the file and content restart R session and you are good to go
 # The Renviron will be ignored when pushing changes to Github
 
-df_og <- read.csv(Sys.getenv("filename"))
+df_og <- read.csv2("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Desktop/TIMCI/Implamentation study training/implementation-data_clean_2024-02-15.csv")
 
 # Define country and subset
-COUNTRY <- Sys.getenv("COUNTRY")
-df_sn <- subset(df_og, df_og$country==COUNTRY)
+
+df <- subset(df_og, df_og$country=="Senegal")
 
 ```
-
+ 
 # Table 1: Patient demographic and household characteristics.
 
-Leila
 
-```{r}
+```{r,echo=FALSE,fig.show='hide'}
 #CARACTERISTIQUES 
 
+## Age
+df$birthday<-as.Date(paste(df$birth_year,df$birth_month,"15",sep = "-"),format = "%Y-%m-%d")
+df$visit_date_1=as.Date(df$visit_date,format = "%d/%m/%Y")
+df$visit_date_2=format(df$visit_date_1,"%Y-%m-%d")
+df$Age_categ = difftime(df$visit_date_2,df$birthday,units = "days")
+df$age_m = df$Age_categ/30
+df$age_m=as.numeric(df$age_m)
+df$age_m_1 = cut(df$age_m,
+             breaks = c(0,2,12,60),
+             right = F,
+             labels = c("0-1","2-11","12-59"))
+describe(df$age_m_1)
+tabpct(df$facility_name,df$age_m_1)
 ## Sex
 
-df_sn$sex=as.factor(df_sn$sex)
-describe(df_sn$sex)
-tabpct(df_sn$facility_name,df_sn$sex)
+df$sex=as.factor(df$sex)
+describe(df$sex)
+tabpct(df$facility_name,df$sex)
 
 ## Relationship of caregiver to child
 
-df_sn$cg_relationship = as.factor(df_sn$cg_relationship)
-describe(df_sn$cg_relationship)
-tabpct(df_sn$facility_name,df_sn$cg_relationship)
+describe(df$cg_relationship)
+tabpct(df$facility_name,df$cg_relationship)
+
+## Caregiver age
+summ(df$cg_age)
+ tapply(df$cg_age, df$facility_name, mean,na.rm=T)
 
 ## Maternal education
-
-df_sn$cg_edu_mother=as.factor(df_sn$cg_edu_mother)
-describe(df_sn$cg_edu_mother)
-tabpct(df_sn$facility_name,df_sn$cg_edu_mother)
+df$cg_edu_mother[df$cg_edu_mother==999] = NA
+df$cg_edu_mother=as.factor(df$cg_edu_mother)
+describe(df$cg_edu_mother)
+tabpct(df$facility_name,df$cg_edu_mother)
 
 ## Household head
-
-df_sn$household_head=as.factor(df_sn$household_head)
-describe(df_sn$household_head)
-tabpct(df_sn$facility_name,df_sn$household_head)
+df$household_head[df$household_head==99] = NA
+df$household_head=as.factor(df$household_head)
+describe(df$household_head)
+tabpct(df$facility_name,df$household_head)
 
 ## Household toilet
-
-df_sn$household_toilet=as.factor(df_sn$household_toilet)
-describe(df_sn$household_toilet)
-tabpct(df_sn$facility_name,df_sn$household_toilet)
+df$household_toilet[df$household_toilet==999] = NA
+df$household_toilet=as.factor(df$household_toilet)
+describe(df$household_toilet)
+tabpct(df$facility_name,df$household_toilet)
 
 ## Household fuel
 
-df_sn$household_fuel=as.factor(df_sn$household_fuel)
-describe(df_sn$household_fuel)
-tabpct(df_sn$facility_name,df_sn$household_fuel)
+df$household_fuel=as.factor(df$household_fuel)
+describe(df$household_fuel)
+tabpct(df$facility_name,df$household_fuel)
 
 ## Household water located in house
 
-df_sn$household_water_loc=as.factor(df_sn$household_water_loc)
-describe(df_sn$household_water_loc)
-tabpct(df_sn$facility_name,df_sn$household_water_loc)
+df$household_water_loc=as.factor(df$household_water_loc)
+describe(df$household_water_loc)
+tabpct(df$facility_name,df$household_water_loc)
 
 ## Household floor
 
-df_sn$household_floor=as.factor(df_sn$household_floor)
-describe(df_sn$household_floor)
-tabpct(df_sn$facility_name,df_sn$household_floor)
-
+df$household_floor=as.factor(df$household_floor)
+describe(df$household_floor)
+tabpct(df$facility_name,df$household_floor)
 ```
+
 
 # Table 2: Patient clinical and care seeking characteristics.
 
-Samwel
 
-```{r}
+```{r,echo=FALSE,fig.show='hide'}
 
 ## Reason for visit to clinic
-df_sn$facility_choice_reason___2 = as.factor(df_sn$facility_choice_reason___2)
-describe(df_sn$facility_choice_reason___2)
-tabpct(df_sn$facility_name,df_sn$facility_choice_reason___2)
+df$facility_choice_reason___2 = as.factor(df$facility_choice_reason___2)
+describe(df$facility_choice_reason___2)
+tabpct(df$facility_name,df$facility_choice_reason___2)
 
-df_sn$facility_choice_reason___3 = as.factor(df_sn$facility_choice_reason___3)
-describe(df_sn$facility_choice_reason___3)
-tabpct(df_sn$facility_name,df_sn$facility_choice_reason___3)
+df$facility_choice_reason___3 = as.factor(df$facility_choice_reason___3)
+describe(df$facility_choice_reason___3)
+tabpct(df$facility_name,df$facility_choice_reason___3)
 
-df_sn$facility_choice_reason___4 = as.factor(df_sn$facility_choice_reason___4)
-describe(df_sn$facility_choice_reason___4)
-tabpct(df_sn$facility_name,df_sn$facility_choice_reason___4)
+df$facility_choice_reason___4 = as.factor(df$facility_choice_reason___4)
+describe(df$facility_choice_reason___4)
+tabpct(df$facility_name,df$facility_choice_reason___4)
 
-df_sn$facility_choice_reason___5 = as.factor(df_sn$facility_choice_reason___5)
-describe(df_sn$facility_choice_reason___5)
-tabpct(df_sn$facility_name,df_sn$facility_choice_reason___5)
+df$facility_choice_reason___5 = as.factor(df$facility_choice_reason___5)
+describe(df$facility_choice_reason___5)
+tabpct(df$facility_name,df$facility_choice_reason___5)
 
-df_sn$facility_choice_reason___8 = as.factor(df_sn$facility_choice_reason___8)
-describe(df_sn$facility_choice_reason___8)
-tabpct(df_sn$facility_name,df_sn$facility_choice_reason___8)
+df$facility_choice_reason___8 = as.factor(df$facility_choice_reason___8)
+describe(df$facility_choice_reason___8)
+tabpct(df$facility_name,df$facility_choice_reason___8)
 
 ## ## Mode of travel to clinic
 
-df_sn$travel_mode___1=as.factor(df_sn$travel_mode___1) 
-describe(df_sn$travel_mode___1)
-tabpct(df_sn$facility_name,df_sn$travel_mode___1)
+df$travel_mode___1=as.factor(df$travel_mode___1) 
+describe(df$travel_mode___1)
+tabpct(df$facility_name,df$travel_mode___1)
 
-df_sn$travel_mode___2=as.factor(df_sn$travel_mode___2)
-describe(df_sn$travel_mode___2)
+df$travel_mode___2=as.factor(df$travel_mode___2)
+describe(df$travel_mode___2)
 
-df_sn$travel_mode___3=as.factor(df_sn$travel_mode___3)
-describe(df_sn$travel_mode___3)
-tabpct(df_sn$facility_name,df_sn$travel_mode___3)
+df$travel_mode___3=as.factor(df$travel_mode___3)
+describe(df$travel_mode___3)
+tabpct(df$facility_name,df$travel_mode___3)
 
-df_sn$travel_mode___4=as.factor(df_sn$travel_mode___4)
-describe(df_sn$travel_mode___4)
+df$travel_mode___4=as.factor(df$travel_mode___4)
+describe(df$travel_mode___4)
 
-df_sn$travel_mode___5=as.factor(df_sn$travel_mode___5) 
-describe(df_sn$travel_mode___5)
+df$travel_mode___5=as.factor(df$travel_mode___5) 
+describe(df$travel_mode___5)
 
-df_sn$travel_mode___6=as.factor(df_sn$travel_mode___6)
-describe(df_sn$travel_mode___6)
-tabpct(df_sn$facility_name,df_sn$travel_mode___6)
+df$travel_mode___6=as.factor(df$travel_mode___6)
+describe(df$travel_mode___6)
+tabpct(df$facility_name,df$travel_mode___6)
 
-df_sn$travel_mode___7=as.factor(df_sn$travel_mode___7)
-describe(df_sn$travel_mode___7)
-tabpct(df_sn$facility_name,df_sn$travel_mode___7)
+df$travel_mode___7=as.factor(df$travel_mode___7)
+describe(df$travel_mode___7)
+tabpct(df$facility_name,df$travel_mode___7)
 
-df_sn$travel_mode___8=as.factor(df_sn$travel_mode___8)
-describe(df_sn$travel_mode___8)
-tabpct(df_sn$facility_name,df_sn$travel_mode___8)
+df$travel_mode___8=as.factor(df$travel_mode___8)
+describe(df$travel_mode___8)
+tabpct(df$facility_name,df$travel_mode___8)
 
-if( COUNTRY != "Tanzania") {
-  df_sn$travel_mode___9=as.factor(df_sn$travel_mode___9)
-  describe(df_sn$travel_mode___9)
-  tabpct(df_sn$facility_name,df_sn$travel_mode___9)
-  
-  df_sn$travel_mode___10=as.factor(df_sn$travel_mode___10)
-  describe(df_sn$travel_mode___10)
-  tabpct(df_sn$facility_name,df_sn$travel_mode___10)
-  
-  df_sn$travel_mode___999=as.factor(df_sn$travel_mode___999)
-  describe(df_sn$travel_mode___999)
-  tabpct(df_sn$facility_name,df_sn$travel_mode___999)
-}
-df_sn$travel_mode___11=as.factor(df_sn$travel_mode___11)
-describe(df_sn$travel_mode___11)
-tabpct(df_sn$facility_name,df_sn$travel_mode___11)
-
+df$travel_mode___11=as.factor(df$travel_mode___11)
+describe(df$travel_mode___11)
+tabpct(df$facility_name,df$travel_mode___11)
 
 
 ## Travel time to arrive at clinic
-
-df_sn$travel_time=as.factor(df_sn$travel_time)
-describe(df_sn$travel_time)
-tabpct(df_sn$facility_name,df_sn$travel_time)
-
-## Estimated amount of money spent for transport to arrive at clinic (USD)
-
-df_sn$travel_cost=as.factor(df_sn$travel_cost)
-describe(df_sn$travel_cost)
-tabpct(df_sn$facility_name,df_sn$travel_cost)
-```
-
-======= \## Age Category
-
-IS$visit_date=as.Date(IS$visit_date) IS$Birthday=as.Date(IS$Birthday)
-
-IS$Age_categ = difftime(IS$visit_date,IS$Birthday,units = "days") IS$age_categorie = IS$Age_categ/30 print(IS$age_categorie) IS$age_categorie=as.numeric(IS$age_categorie) summ(IS\$age_categorie)
-
-IS$age_categorie_1 = cut(IS$age_categorie, breaks = c(0,2,12,60,100), right = F, labels = c("0-1","2-11","12-59","60-66")) describe(IS$age_categorie_1) tabpct(IS$facility_name,IS\$age_categorie_1)
-
-## Sex
-
-IS$sex=as.factor(IS$sex) describe(IS$sex) tabpct(IS$facility_name,IS\$sex)
-
-## Relationship of caregiver to child
-
-IS$cg_relationship = as.factor(IS$cg_relationship) describe(IS$cg_relationship) tabpct(IS$facility_name,IS\$cg_relationship)
-
-## Maternal education
-
-IS$cg_edu_mother=as.factor(IS$cg_edu_mother) describe(IS$cg_edu_mother) tabpct(IS$facility_name,IS\$cg_edu_mother)
-
-## Household head
-
-IS$household_head=as.factor(IS$household_head) describe(IS$household_head) tabpct(IS$facility_name,IS\$household_head)
-
-## Household toilet
-
-IS$household_toilet=as.factor(IS$household_toilet) describe(IS$household_toilet) tabpct(IS$facility_name,IS\$household_toilet)
-
-## Household fuel
-
-IS$household_fuel=as.factor(IS$household_fuel) describe(IS$household_fuel) tabpct(IS$facility_name,IS\$household_fuel)
-
-## Household water located in house
-
-IS$household_water_loc=as.factor(IS$household_water_loc) describe(IS$household_water_loc) tabpct(IS$facility_name,IS\$household_water_loc)
-
-## Household floor
-
-IS$household_floor=as.factor(IS$household_floor) describe(IS$household_floor) tabpct(IS$facility_name,IS\$household_floor)
-
-# Table 2: Patient clinical and care seeking characteristics.
-
-```{r}
-
-## Reason for visit to clinic
-IS$facility_choice_reason___2 = as.factor(IS$facility_choice_reason___2)
-describe(IS$facility_choice_reason___2)
-tabpct(IS$facility_name,IS$facility_choice_reason___2)
-
-IS$facility_choice_reason___3 = as.factor(IS$facility_choice_reason___3)
-describe(IS$facility_choice_reason___3)
-tabpct(IS$facility_name,IS$facility_choice_reason___3)
-
-IS$facility_choice_reason___4 = as.factor(IS$facility_choice_reason___4)
-describe(IS$facility_choice_reason___4)
-tabpct(IS$facility_name,IS$facility_choice_reason___4)
-
-IS$facility_choice_reason___5 = as.factor(IS$facility_choice_reason___5)
-describe(IS$facility_choice_reason___5)
-tabpct(IS$facility_name,IS$facility_choice_reason___5)
-
-IS$facility_choice_reason___8 = as.factor(IS$facility_choice_reason___8)
-describe(IS$facility_choice_reason___8)
-tabpct(IS$facility_name,IS$facility_choice_reason___8)
-
-## ## Mode of travel to clinic
-
-IS$travel_mode___1=as.factor(IS$travel_mode___1)
-describe(IS$travel_mode___1)
-tabpct(IS$facility_name,IS$travel_mode___1)
-
-IS$travel_mode___2=as.factor(IS$travel_mode___2)
-describe(IS$travel_mode___2)
-
-IS$travel_mode___3=as.factor(IS$travel_mode___3)
-describe(IS$travel_mode___3)
-tabpct(IS$facility_name,IS$travel_mode___3)
-
-IS$travel_mode___4=as.factor(IS$travel_mode___4)
-describe(IS$travel_mode___4)
-
-IS$travel_mode___5=as.factor(IS$travel_mode___5)
-describe(IS$travel_mode___5)
-
-IS$travel_mode___6=as.factor(IS$travel_mode___6)
-describe(IS$travel_mode___6)
-tabpct(IS$facility_name,IS$travel_mode___6)
-
-IS$travel_mode___7=as.factor(IS$travel_mode___7)
-describe(IS$travel_mode___7)
-tabpct(IS$facility_name,IS$travel_mode___7)
-
-IS$travel_mode___8=as.factor(IS$travel_mode___8)
-describe(IS$travel_mode___8)
-tabpct(IS$facility_name,IS$travel_mode___8)
-
-IS$travel_mode___9=as.factor(IS$travel_mode___9)
-describe(IS$travel_mode___9)
-tabpct(IS$facility_name,IS$travel_mode___9)
-
-IS$travel_mode___10=as.factor(IS$travel_mode___10)
-describe(IS$travel_mode___10)
-tabpct(IS$facility_name,IS$travel_mode___10)
-
-IS$travel_mode___11=as.factor(IS$travel_mode___11)
-describe(IS$travel_mode___11)
-tabpct(IS$facility_name,IS$travel_mode___11)
-
-IS$travel_mode___999=as.factor(IS$travel_mode___999)
-describe(IS$travel_mode___999)
-tabpct(IS$facility_name,IS$travel_mode___999)
-
-## Travel time to arrive at clinic
-
-IS$travel_time=as.factor(IS$travel_time)
-describe(IS$travel_time)
-tabpct(IS$facility_name,IS$travel_time)
+df$travel_time[df$travel_time==999] = NA
+df$travel_time[df$travel_time==99] = NA
+df$travel_time=as.factor(df$travel_time)
+describe(df$travel_time)
+tabpct(df$facility_name,df$travel_time)
 
 ## Estimated amount of money spent for transport to arrive at clinic (USD)
+df$travel_cost[df$travel_cost==999] = NA
+df$travel_cost[df$travel_cost==99] = NA
+df$travel_cost=as.factor(df$travel_cost)
+describe(df$travel_cost)
+tabpct(df$facility_name,df$travel_cost)
 
-IS$travel_cost=as.factor(IS$travel_cost)
-describe(IS$travel_cost)
-tabpct(IS$facility_name,IS$travel_cost)
 ```
+
 
 # Table 3: Use of PO device across facilities.
 
-```{r}
+```{r,echo=FALSE,fig.show='hide'}
 
 ## PO device used during encounter
-
-df_sn$used_po_yn=as.factor(df_sn$used_po_yn)
-describe(df_sn$used_po_yn)
+df$used_po_yn=as.factor(df$used_po_yn)
+describe(df$used_po_yn)
 
 ## PO device used correctly
-
-df_sn$correct_use_yn=as.factor(df_sn$correct_use_yn)
-describe(df_sn$correct_use_yn)
-tabpct(df_sn$facility_name,df_sn$correct_use_yn)
+df$correct_use_yn=as.factor(df$correct_use_yn)
+describe(df$correct_use_yn)
+tabpct(df$facility_name,df$correct_use_yn)
 
 ## Duration of PO device use
-
-df_sn$duration_po =difftime(df_sn$po_stop,df_sn$po_start, units = "mins")
-print(df_sn$duration_po)
-df_sn$duration_po=as.numeric(df_sn$duration_po)
-summ(df_sn$duration_po)
-df_sn$duration_po_1 = cut(df_sn$duration_po,
+df$po_stop1 <- as.POSIXct(df$po_stop, format="%d/%m/%Y %H:%M")
+df$po_start1 <- as.POSIXct(df$po_start, format="%d/%m/%Y %H:%M")
+df$duration_po =difftime(df$po_stop1,df$po_start1, units = "mins")
+df$duration_po=as.numeric(df$duration_po)
+summ(df$duration_po)
+df$duration_po_1 = cut(df$duration_po,
                        breaks = c(0,1,3.1,5.1,10.1,30.1,60),
                        right = F,
                        labels = c("Moins une min","1 à 3 m","4-5m","6-10m","11-30","31-60"))
-describe(df_sn$duration_po_1)
-tabpct(df_sn$facility_name,df_sn$duration_po_1)
+describe(df$duration_po_1)
+tabpct(df$facility_name,df$duration_po_1)
 
 ## Consultation duration
-df_sn$consult_start=as.POSIXlt(df_sn$consult_start, format = "%H:%M")
-df_sn$consult_stop=as.POSIXct(df_sn$consult_stop, format = "%H:%M")
-df_sn$consultation_duration = difftime(df_sn$consult_stop,df_sn$consult_start,units = "mins")
-print(df_sn$consultation_duration)
-df_sn$consultation_duration=as.numeric(df_sn$consultation_duration)
-summ(df_sn$consultation_duration)
-df_sn$consultation_duration_1 = cut(df_sn$consultation_duration,
+df$consult_start=as.POSIXlt(df$consult_start, format = "%H:%M")
+df$consult_stop=as.POSIXct(df$consult_stop, format = "%H:%M")
+df$consultation_duration = difftime(df$consult_stop,df$consult_start,units = "mins")
+df$consultation_duration=as.numeric(df$consultation_duration)
+summ(df$consultation_duration)
+df$consultation_duration_1 = cut(df$consultation_duration,
                        breaks = c(0,2.1,5.1,10.1,30.1,60.1,100),
                        right = F,
                        labels = c("2 min","3-5m","6-10m","11-30","31-60","Plus 60"))
-describe(df_sn$consultation_duration_1)
-tabpct(df_sn$facility_name,df_sn$consultation_duration_1)
+describe(df$consultation_duration_1)
+tabpct(df$facility_name,df$consultation_duration_1)
 
 ## Encounters where all clinical measurements were assessed
 
-df_sn$correct_use_measurements = df_sn$correct_use_measurements___1 + df_sn$correct_use_measurements___2 +
-  df_sn$correct_use_measurements___3 + df_sn$correct_use_measurements___4
-df_sn$correct_use_measurements=as.factor(df_sn$correct_use_measurements)
-describe(df_sn$correct_use_measurements)
-tabpct(df_sn$facility_name,df_sn$correct_use_measurements)
-
-IS$used_po_yn=as.factor(IS$used_po_yn)
-describe(IS$used_po_yn)
-
-## PO device used correctly
-
-IS$correct_use_yn=as.factor(IS$correct_use_yn)
-describe(IS$correct_use_yn)
-tabpct(IS$facility_name,IS$correct_use_yn)
-
-## Duration of PO device use
-
-IS$duration_po =difftime(IS$po_stop,IS$po_start, units = "mins")
-print(IS$duration_po)
-IS$duration_po=as.numeric(IS$duration_po)
-summ(IS$duration_po)
-IS$duration_po_1 = cut(IS$duration_po,
-                       breaks = c(0,1,3.1,5.1,10.1,30.1,60),
-                       right = F,
-                       labels = c("Moins une min","1 à 3 m","4-5m","6-10m","11-30","31-60"))
-describe(IS$duration_po_1)
-tabpct(IS$facility_name,IS$duration_po_1)
-
-## Consultation duration
-
-IS$consultation_duration = difftime(IS$consult_stop,IS$consult_start,units = "mins")
-print(IS$consultation_duration)
-IS$consultation_duration=as.numeric(IS$consultation_duration)
-summ(IS$consultation_duration)
-IS$consultation_duration_1 = cut(IS$consultation_duration,
-                       breaks = c(0,2.1,5.1,10.1,30.1,60.1,100),
-                       right = F,
-                       labels = c("2 min","3-5m","6-10m","11-30","31-60","Plus 60"))
-describe(IS$consultation_duration_1)
-tabpct(IS$facility_name,IS$consultation_duration_1)
-
-## Encounters where all clinical measurements were assessed
-
-IS$correct_use_measurements = IS$correct_use_measurements___1 + IS$correct_use_measurements___2 +
-  IS$correct_use_measurements___3 + IS$correct_use_measurements___4
-IS$correct_use_measurements=as.factor(IS$correct_use_measurements)
-describe(IS$correct_use_measurements)
-tabpct(IS$facility_name,IS$correct_use_measurements)
-
-
+df$correct_use_measurements = df$correct_use_measurements___1 + df$correct_use_measurements___2 +
+  df$correct_use_measurements___3 + df$correct_use_measurements___4
+df$correct_use_measurements=as.factor(df$correct_use_measurements)
+describe(df$correct_use_measurements)
+tabpct(df$facility_name,df$correct_use_measurements)
 ```
+
 
 # Table 4: Clinical outcomes following implementation of PO device.
