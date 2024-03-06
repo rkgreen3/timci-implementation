@@ -72,7 +72,7 @@ df$age_cat <- case_when(df$age_months<2 ~ "0-1 month",
                         df$age_months>=2 & df$age_months<12 ~ "2-11 months",
                          df$age_months>=12 ~ "12-59 months")
 df$age_months <- ifelse(df$age_months<0, 0.5, df$age_months)
-df <- subset(df, age_months>59) # remove participants >59 months, N = 
+df <- subset(df, age_months<60) # remove participants >59 months, N = 17
 df <- df %>% dplyr:::select(-c("bdate", "month_diff"))
 
 # Add cg relationship for codes
@@ -125,7 +125,21 @@ df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_days) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
 df$clinical_measures_complete <- ifelse(!is.na(df$spo2 & df$pr & df$rr & df$temp_po), 1, 0)
-
+df$travel_cost_usd <- case_when(df$travel_cost == "0" ~ "$0",
+                                df$travel_cost == "1-20 KSH" ~ "$0.01-0.14",
+                                df$travel_cost == "21-40 KSH" ~ "$0.15-0.28",
+                                df$travel_cost == "41-60 KSH" ~ "$0.29-0.42",
+                                df$travel_cost == "61-80 KSH" ~ "$0.43-0.56",
+                                df$travel_cost == "81-100 KSH" ~ "$0.57-0.70",
+                                df$travel_cost == ">100 KSH" ~ ">$0.70",
+                                df$travel_cost == "1-1000 TSH" ~ "<$0.40",
+                                df$travel_cost == "1001-5000 TSH" ~ "$0.40-2.00",
+                                df$travel_cost == "5001-10000 TSH" ~ "$2-3.92",
+                                df$travel_cost == ">10000 TSH" ~ ">$3.92",
+                                df$travel_cost == "< 500 CFA" ~ "<$0.83",
+                                df$travel_cost == "500-999 CFA" ~ "$0.83-1.66",
+                                df$travel_cost == "1000-3000 CFA" ~ "$1.66-4.98",
+                                df$travel_cost == ">3000 CFA" ~ ">$5")
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
@@ -136,8 +150,10 @@ df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
                               df$hb>=11.0 ~ "none")
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 
+# Create other clinical outcome variables
+
 # Remove caregiver interview variables
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-02-23.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-06.csv")
