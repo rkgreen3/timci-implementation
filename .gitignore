@@ -4,8 +4,12 @@
 .Ruserdata
 timci-implementation.Rproj
 .Renviron
+<<<<<<< Updated upstream
 country-results-template.Rmd
 Rapport.tex
 Rapport.html
 Rapport.docx
 Rapport.Rmd
+=======
+Rapport.tex
+>>>>>>> Stashed changes
