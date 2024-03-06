@@ -72,6 +72,7 @@ df$age_cat <- case_when(df$age_months<2 ~ "0-1 month",
                         df$age_months>=2 & df$age_months<12 ~ "2-11 months",
                          df$age_months>=12 ~ "12-59 months")
 df$age_months <- ifelse(df$age_months<0, 0.5, df$age_months)
+df <- subset(df, age_months>59) # remove participants >59 months, N = 
 df <- df %>% dplyr:::select(-c("bdate", "month_diff"))
 
 # Add cg relationship for codes
@@ -124,6 +125,7 @@ df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_days) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
 df$clinical_measures_complete <- ifelse(!is.na(df$spo2 & df$pr & df$rr & df$temp_po), 1, 0)
+
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
