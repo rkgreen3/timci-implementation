@@ -5,7 +5,7 @@ output:
   html_document:
     toc: TRUE
     toc_float: TRUE
-    theme: flatly 
+    theme: journal
 ---
 
 # Background
@@ -125,7 +125,7 @@ rownames(t1_overall) <- c(t1lab)
 t1 <- kable(t1_overall) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
   add_indent(c(3:5, 7:15, 18:26, 28:39, 41:51, 53:61, 64:83)) %>%
-  pack_rows("Demographic Characteristics)", 2, 26) %>%
+  pack_rows("Demographic Characteristics", 2, 26) %>%
   pack_rows("Household Characteristics", 27, 83)
 ```
 `r t1`
@@ -137,7 +137,7 @@ t1 <- kable(t1_overall) %>%
 factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "travel_mode", "travel_cost", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other")
 
 # Specify all the variables to include
-myVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "care_locations_num", "travel_mode", "travel_cost", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other")
+myVars <- c("cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other", "travel_mode", "travel_cost", "care_locations_num", "visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine")
 
 # CreateTableOne:
 out2 <- CreateTableOne(vars = myVars,
@@ -164,33 +164,11 @@ t2_overall <- print(out2)
 
 # Table formatting
 t2 <- kable(t2_overall) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
+  pack_rows("Symptoms reported by caregiver", 2, 7) %>%
+  pack_rows("Travel mode", 8, 16)
 ```
 `r t2`
-
-## Additional detail
-```{r include=FALSE}
-## Reason for visit to clinic
-df$facility_choice_reason___2 = as.factor(df$facility_choice_reason___2)
-describe(df$facility_choice_reason___2)
-tabpct(df$facility_name,df$facility_choice_reason___2)
-
-df$facility_choice_reason___3 = as.factor(df$facility_choice_reason___3)
-describe(df$facility_choice_reason___3)
-tabpct(df$facility_name,df$facility_choice_reason___3)
-
-df$facility_choice_reason___4 = as.factor(df$facility_choice_reason___4)
-describe(df$facility_choice_reason___4)
-tabpct(df$facility_name,df$facility_choice_reason___4)
-
-df$facility_choice_reason___5 = as.factor(df$facility_choice_reason___5)
-describe(df$facility_choice_reason___5)
-tabpct(df$facility_name,df$facility_choice_reason___5)
-
-df$facility_choice_reason___8 = as.factor(df$facility_choice_reason___8)
-describe(df$facility_choice_reason___8)
-tabpct(df$facility_name,df$facility_choice_reason___8)
-```
 
 # Table 3: Use of PO device across facilities. {.tabset}
 
@@ -214,11 +192,12 @@ rownames(out3_overall) <- c(t3lab) # Add row labels
 
 out3 <- kable(print(out3_overall)) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(3:5)
+  add_indent(4:6)
 ```
 `r out3`
 
 The PO device was used consistently across encounters except for:
+
 * `r sum(df_og$no_po_reason==1, na.rm = T)` instances where the device was broken
 * `r sum(df_og$no_po_reason==2, na.rm = T)` instances where the battery was not charged
 * `r sum(df_og$no_po_reason==3, na.rm = T)` instances where the device was being used in another part of the facility
@@ -230,7 +209,6 @@ The PO device was used consistently across encounters except for:
 # Table 4: IMCI classifications per treating provider.
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors
-
 factorVars <- c("cough_dx", "diarrhea_dx", "fever_dx", "ear_dx", "malnutrition_dx", "anemia_dx", "hiv_dx")
 
 # Specify all the variables to include in table (both continuous and categorical)
@@ -259,22 +237,57 @@ out4 <- kable(print(out4_overall)) %>%
 ```
 `r out4`
 
-# Table 5: Clinical outcomes following implementation of PO device.
+# Table 5: Clinical outcomes following implementation of PO device. {.tabset}
+Thresholds used are as follows (as defined in SAP):
 
+* Hypoxemia:
+* Fever:
+* Fast breathing:
+* Tachycardia:
+
+```{r include=FALSE}
+### CLINICAL OUTCOME VARS YET TO BE ADDED
+
+# Specify all the variables you want to treat as factors -- note: lab_yn and referral not collected in senegal but should be added in kenya and tanzania
+factorVars <- c("abx_yn", "rx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("abx_yn", "rx_yn")
+
+t5lab <- c("N", "Antibiotics given (N/Y, %)", "Other prescriptions given (N/Y, %)")
+
+out5 <- CreateTableOne(vars = myVars,
+               data = df,
+               factorVars = factorVars,
+               strata = "facility_name",
+               test = FALSE,
+               addOverall = TRUE)
+out5_overall <- print(out5,
+            cramVars = c("abx_yn", "rx_yn"))
+rownames(out5_overall) <- c(t5lab) # Add row labels
+
+out5 <- kable(print(out5_overall)) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r out5`
 
 # Boxplots of PO measures. {.tabset}
+
 ## SpO2
 ```{r}
 boxplot(spo2~age_cat, data=df, main = "Masimo SpO2 Measurement", ylab = "SpO2 (%)", xlab = "Measurement by Age Category")
 ```
+
 ## Pulse Rate
 ```{r}
 boxplot(pr~age_cat, data=df, main = "Masimo PR Measurement", ylab = "PR (beats per minute)", xlab = "Measurement by Age Category")
 ```
+
 ## Respiratory Rate
 ```{r}
 boxplot(rr~age_cat, data=df, main = "Masimo RR Measurement", ylab = "RR (breaths per minute)", xlab = "Measurement by Age Category")
 ```
+
 ## Temperature
 ```{r}
 boxplot(temp_po~age_cat, data=df, main = "Masimo Temperature Measurement", ylab = "Temperature (C)", xlab = "Measurement by Age Category")
