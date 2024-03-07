@@ -1,4 +1,4 @@
-# Version date: 2024-02-02
+# Version date: 2024-03-06
 
 # Load packages
 library(plyr)
@@ -11,12 +11,27 @@ df_og1 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation S
 df1 <- df_og1 %>% dplyr:::select(-c(grep("_complete", names(df_og1)))) 
 df1 <- df1 %>% dplyr:::select(-c(251:ncol(df1)), "visit_reason___5")
 colnames(df1)[colnames(df1) == "malnutrition"] = "malnutrition_dx"
+df1$travel_cost <- case_when(df1$travel_cost ==1 ~ "1-20 KSH",
+                             df1$travel_cost ==2 ~ "21-40 KSH",
+                             df1$travel_cost ==3 ~ "41-60 KSH",
+                             df1$travel_cost ==4 ~ "61-80 KSH",
+                             df1$travel_cost ==5 ~ "81-100 KSH",
+                             df1$travel_cost ==6 ~ ">100 KSH",
+                             df1$travel_cost ==7 ~ "1-1000 TSH",
+                             df1$travel_cost ==8 ~ "1001-5000 TSH",
+                             df1$travel_cost ==9 ~ "5001-10000 TSH",
+                             df1$travel_cost ==10 ~ ">10000 TSH",
+                             df1$travel_cost ==0 ~ "0")
 
 # Read in REDCap data for Senegal (saved in Box, from different REDCap project)
 df_og2 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-fr_2024-02-02.csv") #update file path to local machine
 df2 <- df_og2 %>% dplyr:::select(-c(grep("_complete", names(df_og2)))) 
 df2 <- df2 %>% dplyr:::select(-c(204:ncol(df2)))
 colnames(df2)[colnames(df2) == "visit_reason"] = "visit_reason___1"
+df2$travel_cost <- case_when(df2$travel_cost ==1 ~ "<500 CFA",
+                             df2$travel_cost ==2 ~ "500-999 CFA",
+                             df2$travel_cost ==3 ~ "1000-3000 CFA",
+                             df2$travel_cost ==4 ~ ">3000 CFA")
 
 # Cross check column names and add to respective df's
 new_columns1 <- setdiff(names(df2), names(df1)) # Identify columns in df2 that are not in df1
@@ -87,7 +102,7 @@ df$cg_relationship <- case_when(df$cg_relationship==1 ~ "Mother and father",
                                 df$cg_relationship==9 ~ "Community member",
                                 df$cg_relationship==10 ~ "Other")
 
-# Rename visit reason and symptoms variables
+# Rename visit reason and symptoms and travel mode variables
 colnames(df)[colnames(df) == "visit_reason___1"] = "visit_rsn_illness"
 colnames(df)[colnames(df) == "visit_reason___2"] = "visit_rsn_trauma"
 colnames(df)[colnames(df) == "visit_reason___3"] = "visit_rsn_immunize"
@@ -99,6 +114,18 @@ colnames(df)[colnames(df) == "reported_sxs___3"] = "cg_report_fever"
 colnames(df)[colnames(df) == "reported_sxs___4"] = "cg_report_diarrhea"
 colnames(df)[colnames(df) == "reported_sxs___5"] = "cg_report_vomit"
 colnames(df)[colnames(df) == "reported_sxs___6"] = "cg_report_other"
+
+colnames(df)[colnames(df) == "travel_mode___1"] = "travel_mode_walk"
+colnames(df)[colnames(df) == "travel_mode___2"] = "travel_mode_bicycle"
+colnames(df)[colnames(df) == "travel_mode___3"] = "travel_mode_motorcycle"
+colnames(df)[colnames(df) == "travel_mode___4"] = "travel_mode_bus"
+colnames(df)[colnames(df) == "travel_mode___5"] = "travel_mode_rickshaw"
+colnames(df)[colnames(df) == "travel_mode___6"] = "travel_mode_publictaxi"
+colnames(df)[colnames(df) == "travel_mode___7"] = "travel_mode_privatetaxi"
+colnames(df)[colnames(df) == "travel_mode___8"] = "travel_mode_privatecar"
+colnames(df)[colnames(df) == "travel_mode___9"] = "travel_mode_sharedcar"
+colnames(df)[colnames(df) == "travel_mode___10"] = "travel_mode_carriage"
+colnames(df)[colnames(df) == "travel_mode___11"] = "travel_mode_other"
 
 # Create duration variables
 df$po_start <- paste(df$po_start, ":00", sep = "")
@@ -140,6 +167,17 @@ df$travel_cost_usd <- case_when(df$travel_cost == "0" ~ "$0",
                                 df$travel_cost == "500-999 CFA" ~ "$0.83-1.66",
                                 df$travel_cost == "1000-3000 CFA" ~ "$1.66-4.98",
                                 df$travel_cost == ">3000 CFA" ~ ">$5")
+df$travel_mode <- case_when(df$travel_mode_bicycle==1 ~ "Bicycle",
+                            df$travel_mode_walk==1 ~ "Walk",
+                            df$travel_mode_motorcycle==1 ~ "Motorcycle",
+                            df$travel_mode_bus==1 ~ "Public mini-van/bus",
+                            df$travel_mode_rickshaw==1 ~ "Rickshaw",
+                            df$travel_mode_publictaxi==1 ~ "Public taxi",
+                            df$travel_mode_privatetaxi==1 ~ "Private taxi",
+                            df$travel_mode_privatecar==1 ~ "Own private car",
+                            df$travel_mode_sharedcar==1 ~ "Shared car",
+                            df$travel_mode_carriage==1 ~ "Pack animals/carriage",
+                            df$travel_mode_other==1 ~ "Other")
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
