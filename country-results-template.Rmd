@@ -189,7 +189,6 @@ tabpct(df$facility_name,df$household_floor)
 # Table 2: Patient clinical and care seeking characteristics. {.tabset}
 
 ```{r}
-### TO BE UPDATED
 # Specify all the variables you want to treat as factors
 factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "travel_mode", "travel_cost", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other")
 
@@ -217,14 +216,11 @@ t2_overall <- print(out2)
 
 
 # Add row labels
-rownames(t2_overall) <- c(t2lab)
+#rownames(t2_overall) <- c(t2lab)
 
 # Table formatting
 t2 <- kable(t2_overall) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent() %>%
-  pack_rows("Reason for visit to clinic (%)") %>%
-  pack_rows("Main mode of travel to this health facility (%)")
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
 `r t2`
 
@@ -313,123 +309,6 @@ df$travel_cost=as.factor(df$travel_cost)
 describe(df$travel_cost)
 tabpct(df$facility_name,df$travel_cost)
 
-# ## Sex
-# 
-# IS$sex=as.factor(IS$sex) describe(IS$sex) tabpct(IS$facility_name,IS$sex)
-# 
-# ## Relationship of caregiver to child
-# 
-# IS$cg_relationship = as.factor(IS$cg_relationship) describe(IS$cg_relationship) tabpct(IS$facility_name,IS$cg_relationship)
-# 
-# ## Maternal education
-# 
-# IS$cg_edu_mother=as.factor(IS$cg_edu_mother) describe(IS$cg_edu_mother) tabpct(IS$facility_name,IS$cg_edu_mother)
-# 
-# ## Household head
-# 
-# IS$household_head=as.factor(IS$household_head) describe(IS$household_head) tabpct(IS$facility_name,IS$household_head)
-# 
-# ## Household toilet
-# 
-# IS$household_toilet=as.factor(IS$household_toilet) describe(IS$household_toilet) tabpct(IS$facility_name,IS$household_toilet)
-# 
-# ## Household fuel
-# 
-# IS$household_fuel=as.factor(IS$household_fuel) describe(IS$household_fuel) tabpct(IS$facility_name,IS$household_fuel)
-# 
-# ## Household water located in house
-# 
-# IS$household_water_loc=as.factor(IS$household_water_loc) describe(IS$household_water_loc) tabpct(IS$facility_name,IS$household_water_loc)
-# 
-# ## Household floor
-# 
-# IS$household_floor=as.factor(IS$household_floor) describe(IS$household_floor) tabpct(IS$facility_name,IS$household_floor)
-```
-
-
-# Table 2: Patient clinical and care seeking characteristics.
-
-```{r}
-
-## Reason for visit to clinic
-IS$facility_choice_reason___2 = as.factor(IS$facility_choice_reason___2)
-describe(IS$facility_choice_reason___2)
-tabpct(IS$facility_name,IS$facility_choice_reason___2)
-
-IS$facility_choice_reason___3 = as.factor(IS$facility_choice_reason___3)
-describe(IS$facility_choice_reason___3)
-tabpct(IS$facility_name,IS$facility_choice_reason___3)
-
-IS$facility_choice_reason___4 = as.factor(IS$facility_choice_reason___4)
-describe(IS$facility_choice_reason___4)
-tabpct(IS$facility_name,IS$facility_choice_reason___4)
-
-IS$facility_choice_reason___5 = as.factor(IS$facility_choice_reason___5)
-describe(IS$facility_choice_reason___5)
-tabpct(IS$facility_name,IS$facility_choice_reason___5)
-
-IS$facility_choice_reason___8 = as.factor(IS$facility_choice_reason___8)
-describe(IS$facility_choice_reason___8)
-tabpct(IS$facility_name,IS$facility_choice_reason___8)
-
-## ## Mode of travel to clinic
-
-IS$travel_mode___1=as.factor(IS$travel_mode___1)
-describe(IS$travel_mode___1)
-tabpct(IS$facility_name,IS$travel_mode___1)
-
-IS$travel_mode___2=as.factor(IS$travel_mode___2)
-describe(IS$travel_mode___2)
-
-IS$travel_mode___3=as.factor(IS$travel_mode___3)
-describe(IS$travel_mode___3)
-tabpct(IS$facility_name,IS$travel_mode___3)
-
-IS$travel_mode___4=as.factor(IS$travel_mode___4)
-describe(IS$travel_mode___4)
-
-IS$travel_mode___5=as.factor(IS$travel_mode___5)
-describe(IS$travel_mode___5)
-
-IS$travel_mode___6=as.factor(IS$travel_mode___6)
-describe(IS$travel_mode___6)
-tabpct(IS$facility_name,IS$travel_mode___6)
-
-IS$travel_mode___7=as.factor(IS$travel_mode___7)
-describe(IS$travel_mode___7)
-tabpct(IS$facility_name,IS$travel_mode___7)
-
-IS$travel_mode___8=as.factor(IS$travel_mode___8)
-describe(IS$travel_mode___8)
-tabpct(IS$facility_name,IS$travel_mode___8)
-
-IS$travel_mode___9=as.factor(IS$travel_mode___9)
-describe(IS$travel_mode___9)
-tabpct(IS$facility_name,IS$travel_mode___9)
-
-IS$travel_mode___10=as.factor(IS$travel_mode___10)
-describe(IS$travel_mode___10)
-tabpct(IS$facility_name,IS$travel_mode___10)
-
-IS$travel_mode___11=as.factor(IS$travel_mode___11)
-describe(IS$travel_mode___11)
-tabpct(IS$facility_name,IS$travel_mode___11)
-
-IS$travel_mode___999=as.factor(IS$travel_mode___999)
-describe(IS$travel_mode___999)
-tabpct(IS$facility_name,IS$travel_mode___999)
-
-## Travel time to arrive at clinic
-
-IS$travel_time=as.factor(IS$travel_time)
-describe(IS$travel_time)
-tabpct(IS$facility_name,IS$travel_time)
-
-## Estimated amount of money spent for transport to arrive at clinic (USD)
-
-IS$travel_cost=as.factor(IS$travel_cost)
-describe(IS$travel_cost)
-tabpct(IS$facility_name,IS$travel_cost)
 ```
 
 # Table 3: Use of PO device across facilities. {.tabset}
@@ -441,8 +320,6 @@ factorVars <- c("used_po_yn", "correct_use_yn", "clinical_measures_complete")
 
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("used_po_yn", "correct_use_yn", "po_duration_min", "consult_duration_min", "clinical_measures_complete")
-
-## issue identified w/duration variables, troubleshooting in progress in cleaning file
 
 t3lab <- c("N", "Used PO device during encounter (%)", "PO device used correctly (%)", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)")
 
@@ -562,4 +439,55 @@ The PO device was used consistently across encounters except for:
 * `r sum(df_og$no_po_reason==6, na.rm = T)` instances where the caregiver did not want it
 * `r sum(df_og$no_po_reason==7, na.rm = T)` instances where the provider decided it was not needed
 
-# Table 4: Clinical outcomes following implementation of PO device.
+# Table 4: IMCI classifications per treating provider.
+```{r}
+# Specify all the variables you want to treat as factors
+
+factorVars <- c("cough_dx", "diarrhea_dx", "fever_dx", "ear_dx", "malnutrition_dx", "anemia_dx", "hiv_dx")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("cough_dx", "diarrhea_dx", "fever_dx", "ear_dx", "malnutrition_dx", "anemia_dx", "hiv_dx")
+
+t4lab <- c("N", "Cough or shortness of breath (%)", "Green", "Yellow", "Red",
+           "Diarrhea (%)", "Green", "Yellow", "Red",
+           "Fever (%)", "Green", "Yellow", "Red",
+           "Ear problem (%)", "Green", "Yellow", "Red",
+           "Malnutrition (%)", "Green", "Yellow", "Red",
+           "Anemia (%)", "Green", "Yellow", "Red",
+           "HIV - Green (%)")
+
+out4 <- CreateTableOne(vars = myVars,
+               data = df,
+               factorVars = factorVars,
+               strata = "facility_name",
+               test = FALSE,
+               addOverall = TRUE)
+out4_overall <- print(out4)
+rownames(out4_overall) <- c(t4lab) # Add row labels
+
+out4 <- kable(print(out4_overall)) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
+  add_indent(c(3:5, 7:9, 11:13, 15:17, 19:21, 23:25))
+```
+`r out4`
+
+# Table 5: Clinical outcomes following implementation of PO device.
+
+
+# Boxplots of PO measures. {.tabset}
+## SpO2
+```{r}
+boxplot(spo2~age_cat, data=df, main = "Masimo SpO2 Measurement", ylab = "SpO2 (%)", xlab = "Measurement by Age Category")
+```
+## Pulse Rate
+```{r}
+boxplot(pr~age_cat, data=df, main = "Masimo PR Measurement", ylab = "PR (beats per minute)", xlab = "Measurement by Age Category")
+```
+## Respiratory Rate
+```{r}
+boxplot(rr~age_cat, data=df, main = "Masimo RR Measurement", ylab = "RR (breaths per minute)", xlab = "Measurement by Age Category")
+```
+## Temperature
+```{r}
+boxplot(temp_po~age_cat, data=df, main = "Masimo Temperature Measurement", ylab = "Temperature (C)", xlab = "Measurement by Age Category")
+```
