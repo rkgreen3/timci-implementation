@@ -47,25 +47,19 @@ df_og$cg_relationship <- factor(df_og$cg_relationship,
 df_og$age_cat <- factor(df_og$age_cat, labels=c("0-1 month", "2-11 months", "12-59 months"))
 
 ## Factor clinical variables
-df_og$weight_yn <- factor(df_og$weight_yn, labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
-df_og$height_yn <- factor(df_og$height_yn, labels = c("Unknown/not recorded", "Yes"))
-df_og$muac_yn <- factor(df_og$muac_yn, labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
-df_og$wfh_yn <- factor(df_og$wfh_yn, labels = c("Unknown/not recorded", "Yes"))
-df_og$temp_yn <- factor(df_og$temp_yn, labels = c("Unknown/not recorded", "Yes"))
-df_og$hb_yn <- factor(df_og$hb_yn, labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
-
-df_og$hypoxia_severe <- as.factor(df_og$hypoxia_severe)
-df_og$hypoxia_moderate <- as.factor(df_og$hypoxia_moderate)
-df_og$fever <- as.factor(df_og$fever)
-df_og$fast_breathing <- as.factor(df_og$fast_breathing)
-df_og$tachycardia <- as.factor(df_og$tachycardia)
+df_og$weight_yn <- factor(df_og$weight_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
+df_og$height_yn <- factor(df_og$height_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
+df_og$muac_yn <- factor(df_og$muac_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
+df_og$wfh_yn <- factor(df_og$wfh_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
+df_og$temp_yn <- factor(df_og$temp_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
+df_og$hb_yn <- factor(df_og$hb_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
 
 ## Travel mode 
-df_og$travel_mode <- factor(df_og$travel_mode,
+df_og$travel_mode <- factor(df_og$travel_mode, 
                                   labels = c("Walk","Bicycle","Motorcycle", "Public mini-van/bus", "Public taxi","Private taxi", "Own private car","Shared car", "Pack animals/carriage", "Other"))
 
 ## Referral
-df_og$refferal <- factor(df_og$refferal, labels = c("Urgent", "Non-urgent", "Recorded, not readable", "Recorded as not referred"))
+df_og$refferal <- factor(df_og$refferal, levels = c(1,2,4,5), labels = c("Urgent", "Non-urgent", "Recorded, not readable", "Recorded as not referred"))
                             
 ## Sex - omitted since data collected on 'sex' was that of the providers and not the caregiver/child
 
@@ -101,9 +95,13 @@ COUNTRY <- Sys.getenv("COUNTRY")
 df <- subset(df_og, df_og$country==COUNTRY)
 ```
 
+This report contains data from **`r COUNTRY`**.
+
 # Table 1: Patient demographic and household characteristics. {.tabset}
 
 ```{r include=FALSE}
+# TO ADD: household_children, shared_toilet_yn, household_water_time
+
 # Specify all the variables you want to treat as factors
 factorVars <- c("age_cat")
 
@@ -139,7 +137,7 @@ t1lab <- c("N",
 rownames(t1_overall) <- c(t1lab)
 
 # Table formatting
-t1 <- kable(t1_overall) %>%
+t1 <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
   add_indent(c(3:5, 7:15, 18:26, 28:39, 41:51, 53:61, 64:83)) %>%
   pack_rows("Demographic Characteristics", 2, 26) %>%
@@ -150,8 +148,11 @@ t1 <- kable(t1_overall) %>%
 # Table 2: Patient clinical and care seeking characteristics. {.tabset}
 
 ```{r include=FALSE}
+# TO ADD: travel_time, ?medical_hx + fix travel_cost
+# NEED TO WORK ON TIGHTENING UP THIS TABLE
+
 # Specify all the variables you want to treat as factors
-factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "travel_mode", "travel_cost", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other")
+factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other")
 
 # Specify all the variables to include
 myVars <- c("cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other", "travel_mode", "travel_cost", "care_locations_num", "visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine")
@@ -169,10 +170,10 @@ t2_overall <- print(out2)
 # Create row labels -- to be done individually
 # t2lab <- c("N",
 #            "Illness", "Trauma (burns, injuries, wounds)", "Immunization", "Routine monitoring (growth, chronic conditions)",
-#             "Number of locations visited for this illness (mean (SD))", 
-#             "Walking", "Bicycle", "Motorcycle", "Public mini-van/bus", "Rickshaw", "Pulbic taxi", "Private taxi", "Own private car", "Shared car", "Pack animals/carriage", "Other",  
+#             "Number of locations visited for this illness (mean (SD))",
+#             "Walking", "Bicycle", "Motorcycle", "Public mini-van/bus", "Rickshaw", "Pulbic taxi", "Private taxi", "Own private car", "Shared car", "Pack animals/carriage", "Other",
 #             "Travel time to arrive at clinic (%)", "<30 minutes", "30-60 minutes", "1-2 hours", ">2 hours",
-#             "Estimated amount of money spent for transport to arrive at clinic (%)", 
+#             "Estimated amount of money spent for transport to arrive at clinic (%)",
 #             "Symptoms reported by caregiver (%)", "Cough", "Difficulty/rapid breathing", "Fever", "Diarrhea", "Vomiting", "Other")
 
 
@@ -190,8 +191,8 @@ t2 <- kable(t2_overall) %>%
 # Table 2a: Basic measurements and physical exam. {.tabset}
 
 ```{r include=FALSE}
-# Specify all the variables you want to treat as factors
-factorVars <- c("weight_yn", "height_yn", "muac_yn", "wfh_yn", "temp_yn", "hb_yn")
+# Specify all the variables you want to treat as factors -- already factored, no need to pass through factor argument
+#factorVars <- c()
 
 # Specify all the variables to include
 myVars <- c("weight_yn", "weight", "height_yn", "height", "muac_yn", "muac", "wfh_yn", "wfh", "temp_yn", "temp", "hb_yn", "hb")
@@ -199,22 +200,22 @@ myVars <- c("weight_yn", "weight", "height_yn", "height", "muac_yn", "muac", "wf
 # CreateTableOne:
 out2a <- CreateTableOne(vars = myVars,
                        data = df,
-                       factorVars = factorVars,
+                      # factorVars = factorVars,
                        strata = "facility_name",
                        test = FALSE,
                        addOverall = TRUE) 
 
-t2a_overall <- print(out2a)
+t2a_overall <- print(out2a, showAllLevels = TRUE)
 
-# Create row labels -- to be done individually
-#t2alab <- c("N")
+# Create row labels
+t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Height recorded (%)", "", "Height (cm, mean (SD))", "MUAC recorded (%)", "", "", "MUAC (cm, mean (SD))", "Weight-for-height recorded (%)", "", "WFH (mean (SD))", "Temperature recorded (%)", "", "Temperature (C, mean (SD))", "Hb recorded (%)", "", "", "Hb (g/dL, mean (SD))")
 
 
 # Add row labels
-#rownames(t2a_overall) <- c(t2alab)
+rownames(t2a_overall) <- c(t2alab)
 
 # Table formatting
-t2a <- kable(t2a_overall) %>%
+t2a <- kable(t2a_overall, col.names = c(" ", " ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
 `r t2a`
@@ -239,7 +240,7 @@ out3 <- CreateTableOne(vars = myVars,
 out3_overall <- print(out3)
 rownames(out3_overall) <- c(t3lab) # Add row labels
 
-out3 <- kable(print(out3_overall)) %>%
+out3 <- kable(print(out3_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(4:6)
 ```
@@ -282,7 +283,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-out4 <- kable(print(out4_overall)) %>%
+out4 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 35)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -317,7 +318,7 @@ out4 <- kable(print(out4_overall)) %>%
 # Table 5: Clinical outcomes following implementation of PO device. {.tabset}
 Thresholds used are as follows (as defined in SAP):
 
-- Hypoxemia:
+- Hypoxia:
   +	≤90% (severe)
   +	≤92% (moderate)
   
@@ -339,13 +340,14 @@ Thresholds used are as follows (as defined in SAP):
 
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn", "refferal")
+factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "refferal")
 
-#t5lab <- c("N", "Antibiotics given (N/Y, %)", "Other prescriptions given (N/Y, %)",
-#           "Referral advice (%)", )
+t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+           "Antibiotics given (%)", "Other prescriptions given (%)",
+           "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
 out5 <- CreateTableOne(vars = myVars,
                data = df,
@@ -354,10 +356,13 @@ out5 <- CreateTableOne(vars = myVars,
                test = FALSE,
                addOverall = TRUE)
 out5_overall <- print(out5)
-#rownames(out5_overall) <- c(t5lab) # Add row labels
+rownames(out5_overall) <- c(t5lab) # Add row labels
 
-out5 <- kable(print(out5_overall)) %>%
-  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+out5 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
+  add_indent(10:13) %>%
+  pack_rows("Clinical outcomes identified", 2, 6) %>%
+  pack_rows("Treatment and referrals", 7, 13)
 ```
 `r out5`
 
