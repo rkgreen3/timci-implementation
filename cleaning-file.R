@@ -1,4 +1,4 @@
-# Version date: 2024-03-06
+# Version date: 2024-03-08
 
 # Load packages
 library(plyr)
@@ -7,7 +7,7 @@ library(lubridate)
 `%!in%` = Negate(`%in%`)
 
 # Read in REDCap data for Kenya and Tanzania (saved in Box)
-df_og1 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-en_2024-02-02.csv") #update file path to local machine
+df_og1 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-en_2024-03-08.csv") #update file path to local machine
 df1 <- df_og1 %>% dplyr:::select(-c(grep("_complete", names(df_og1)))) 
 df1 <- df1 %>% dplyr:::select(-c(251:ncol(df1)), "visit_reason___5")
 colnames(df1)[colnames(df1) == "malnutrition"] = "malnutrition_dx"
@@ -24,7 +24,7 @@ df1$travel_cost <- case_when(df1$travel_cost ==1 ~ "1-20 KSH",
                              df1$travel_cost ==0 ~ "0")
 
 # Read in REDCap data for Senegal (saved in Box, from different REDCap project)
-df_og2 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-fr_2024-02-02.csv") #update file path to local machine
+df_og2 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-fr_2024-03-08.csv") #update file path to local machine
 df2 <- df_og2 %>% dplyr:::select(-c(grep("_complete", names(df_og2)))) 
 df2 <- df2 %>% dplyr:::select(-c(204:ncol(df2)))
 colnames(df2)[colnames(df2) == "visit_reason"] = "visit_reason___1"
@@ -150,7 +150,14 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
                         df$facility_name=="KYA01"|df$facility_name=="KYA02" ~ "Kenya")
 df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
-df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_days) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
+df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_yn) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
+df$cough_dx_yn <- ifelse(is.na(df$cough_dx), 0, 1)
+df$diarrhea_dx_yn <- ifelse(is.na(df$diarrhea_dx), 0, 1)
+df$fever_dx_yn <- ifelse(is.na(df$fever_dx), 0, 1)
+df$ear_dx_yn <- ifelse(is.na(df$ear_dx), 0, 1)
+df$malnutrition_dx_yn <- ifelse(is.na(df$malnutrition_dx), 0, 1)
+df$anemia_dx_yn <- ifelse(is.na(df$anemia_dx), 0, 1)
+df$hiv_dx_yn <- ifelse(is.na(df$hiv_dx), 0, 1)
 df$clinical_measures_complete <- ifelse(!is.na(df$spo2 & df$pr & df$rr & df$temp_po), 1, 0)
 df$travel_cost_usd <- case_when(df$travel_cost == "0" ~ "$0",
                                 df$travel_cost == "1-20 KSH" ~ "$0.01-0.14",
@@ -189,9 +196,22 @@ df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 
 # Create other clinical outcome variables
+df$hypoxia_severe <- ifelse(df$spo2<=90, 1, 0)
+df$hypoxia_moderate <- ifelse(df$spo2<=92, 1, 0)
+df$fever <- ifelse(df$temp_po>=38, 1, 0)
+df$fast_breathing <- case_when(df$age_months<12 & df$rr>50 ~ 1,
+                               df$age_months>11 & df$age_months<36 & df$rr>40 ~ 1,
+                               df$age_months>35 & df$rr>30 ~ 1)
+df$fast_breathing <- ifelse(is.na(df$fast_breathing), 0, df$fast_breathing)
+df$tachycardia <- case_when(df$age_months<12 & df$pr>180 ~ 1,
+                            df$age_months>11 & df$pr>140 ~ 1)
+df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
+
+#tdf <- df %>% dplyr::select(screening_id, country, age_months, spo2_yn, spo2, hypoxia_severe, hypoxia_moderate, temp_po_yn, temp_po, fever, rr_yn, rr, fast_breathing, pr_yn, pr, tachycardia)
+#tdf2 <- subset(tdf, temp_po_yn==1 & is.na(temp_po) | rr_yn==1 & is.na(rr) | pr_yn==1 & is.na(pr))
 
 # Remove caregiver interview variables
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-06.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-08.csv")
