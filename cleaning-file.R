@@ -51,6 +51,10 @@ df2$redcap_data_access_group <- ifelse(df2$facility_name=="SEN02", "senegal_mbor
 # Join df's together
 df <- rbind(df1, df2)
 
+# Correct misspelled variable names
+colnames(df)[colnames(df) == "houshold_children"] = "household_children"
+colnames(df)[colnames(df) == "refferal"] = "referral"
+
 # Basic cleaning (exclude ineligible records)
 df <- subset(df, is.na(exclude_data_rsn) | exclude_data_rsn!=2) # remove duplicates, N = 25
 df <- subset(df, cg_consent_yn==1) # remove non-consented, N = 1
@@ -77,7 +81,7 @@ df$weight <- ifelse(df$weight>=999, NA, df$weight)
 df$height <- ifelse(df$height>=999, NA, df$height)
 df$muac <- ifelse(df$muac>=999, NA, df$muac)
 df$hb <- ifelse(df$hb>=999, NA, df$hb)
-df$refferal <- ifelse(df$refferal>=99, NA, df$refferal)
+df$referral <- ifelse(df$referral>=99, NA, df$referral)
 
 # Calculate age
 df$bdate <- paste(df$birth_year, df$birth_month, "15", sep = "-")
