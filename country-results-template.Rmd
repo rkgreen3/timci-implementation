@@ -54,15 +54,16 @@ df_og$wfh_yn <- factor(df_og$wfh_yn, levels = c(0,1), labels = c("Unknown/not re
 df_og$temp_yn <- factor(df_og$temp_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
 df_og$hb_yn <- factor(df_og$hb_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
 
-## Travel mode 
+## Factor pulse ox variables
+df_og$correct_use_yn <- factor(df_og$correct_use_yn, levels = c(0,1,2), labels = c("No", "Yes", "Yes for some measurements but not all"))
+df_og$used_po_yn <- factor(df_og$used_po_yn, levels = c(0,1), labels = c("No", "Yes"))
+df_og$clinical_measures_complete <- factor(df_og$clinical_measures_complete, levels = c(0,1), labels = c("No", "Yes"))
+
+## Travel variables
 df_og$travel_mode <- factor(df_og$travel_mode, 
                                   labels = c("Walk","Bicycle","Motorcycle", "Public mini-van/bus", "Public taxi","Private taxi", "Own private car","Shared car", "Pack animals/carriage", "Other"))
-
-## Travel time
 df_og$travel_time <- factor(df_og$travel_time, levels= c(1,2,3,4),
                                     labels = c("<30 minutes", "30-60 minutes", "60-120 minutes", ">120 minutes"))
-
-## Travel cost
 # df_og$travel_cost <- factor(df_og$travel_cost, labels = c("0", "1-20 KSH","21-40 KSH", "41-60 KSH", "61-80 KSH","81-100 KSH",">100 KSH","1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH", "<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA"))
 
 ## Referral
@@ -221,7 +222,9 @@ out2a <- CreateTableOne(vars = myVars,
 t2a_overall <- print(out2a, showAllLevels = TRUE)
 
 # Create row labels
-t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Height recorded (%)", "", "Height (cm, mean (SD))", "MUAC recorded (%)", "", "", "MUAC (cm, mean (SD))", "Weight-for-height recorded (%)", "", "WFH (mean (SD))", "Temperature recorded (%)", "", "Temperature (C, mean (SD))", "Hb recorded (%)", "", "", "Hb (g/dL, mean (SD))")
+t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Height recorded (%)", "", "Height (cm, mean (SD))", "MUAC recorded (%)", "", "", "MUAC (cm, mean (SD))", 
+            "Weight-for-height recorded (%)", "", #"WFH (mean (SD))", 
+            "Temperature recorded (%)", "", "Temperature (C, mean (SD))", "Hb recorded (%)", "", "", "Hb (g/dL, mean (SD))")
 
 
 # Add row labels
@@ -236,13 +239,15 @@ t2a <- kable(t2a_overall, col.names = c(" ", " ", "Overall", "Facility 1", "Faci
 # Table 3: Use of PO device across facilities. {.tabset}
 
 ```{r include=FALSE}
+# NEED TO FIX FORMATTING
+
 # Specify all the variables you want to treat as factors
-factorVars <- c("used_po_yn", "correct_use_yn", "clinical_measures_complete")
+factorVars <- c("used_po_yn", "clinical_measures_complete")
 
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("used_po_yn", "correct_use_yn", "po_duration_min", "consult_duration_min", "clinical_measures_complete")
 
-t3lab <- c("N", "Used PO device during encounter (%)", "PO device used correctly (%)", "No", "Yes", "Yes for some measures but not all", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)")
+#t3lab <- c("N", "Used PO device during encounter (%)", "", "PO device used correctly (%)", "", "", "", "Duration of PO device use, minutes (mean (SD))", "Consult duration, minutes (mean (SD))", "All clinical measures (SpO2, PR, RR, Temp) collected (%)", "")
 
 out3 <- CreateTableOne(vars = myVars,
                data = df,
@@ -250,14 +255,14 @@ out3 <- CreateTableOne(vars = myVars,
                strata = "facility_name",
                test = FALSE,
                addOverall = TRUE)
-out3_overall <- print(out3)
-rownames(out3_overall) <- c(t3lab) # Add row labels
+out3_overall <- print(out3, showAllLevels = TRUE)
+#rownames(out3_overall) <- c(t3lab) # Add row labels
 
-out3 <- kable(print(out3_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t3 <- kable(out3_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(4:6)
 ```
-`r out3`
+`r t3`
 
 The PO device was used consistently across encounters except for:
 
@@ -293,7 +298,7 @@ out4 <- CreateTableOne(vars = myVars,
                strata = "facility_name",
                test = FALSE,
                addOverall = TRUE)
-out4_overall <- print(out4)
+out4_overall <- print(out4, showAllLevels = TRUE)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
 out4 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
