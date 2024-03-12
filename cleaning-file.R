@@ -96,8 +96,7 @@ df$bdate <- paste(df$birth_year, df$birth_month, "15", sep = "-")
 df$month_diff <- interval(as.Date(df$bdate), as.Date(df$visit_date)) %/% days(1) / (365/12)
 df$age_months <- round(df$month_diff, 2)
 df$age_cat <- case_when(df$age_months<2 ~ "0-1 month",
-                        df$age_months>=2 & df$age_months<12 ~ "2-11 months",
-                         df$age_months>=12 ~ "12-59 months")
+                        df$age_months>=2 ~ "2-59 months")
 df$age_months <- ifelse(df$age_months<0, 0.5, df$age_months)
 df <- subset(df, age_months<60) # remove participants >59 months, N = 17
 df <- df %>% dplyr:::select(-c("bdate", "month_diff"))
@@ -208,15 +207,16 @@ df$anemia_status <- case_when(df$hb<7.0 ~ "severe",
 df$anemia_status <- ifelse(df$age_months<6, NA, df$anemia_status)
 
 # Create other clinical outcome variables
-df$hypoxia_severe <- ifelse(df$spo2<=90, 1, 0)
-df$hypoxia_moderate <- ifelse(df$spo2<=92, 1, 0)
-df$fever <- ifelse(df$temp_po>=38, 1, 0)
-df$fast_breathing <- case_when(df$age_months<12 & df$rr>50 ~ 1,
-                               df$age_months>11 & df$age_months<36 & df$rr>40 ~ 1,
-                               df$age_months>35 & df$rr>30 ~ 1)
+df$hypoxia_severe <- ifelse(df$spo2<=88, 1, 0)
+df$hypoxia_moderate <- ifelse(df$spo2>88 & df$spo2<=90, 1, 0)
+df$hypoxia_mild <- ifelse(df$spo2>90 & df$spo2<92, 1, 0)
+df$fever <- ifelse(df$temp_po>37.5, 1, 0)
+df$fast_breathing <- case_when(df$age_months<12 & df$rr>49 ~ 1,
+                               df$age_months>11 & df$age_months<36 & df$rr>39 ~ 1,
+                               df$age_months>35 & df$rr>29 ~ 1)
 df$fast_breathing <- ifelse(is.na(df$fast_breathing), 0, df$fast_breathing)
-df$tachycardia <- case_when(df$age_months<12 & df$pr>180 ~ 1,
-                            df$age_months>11 & df$pr>140 ~ 1)
+df$tachycardia <- case_when(df$age_months<12 & df$pr>179 ~ 1,
+                            df$age_months>11 & df$pr>139 ~ 1)
 df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
 
 #tdf <- df %>% dplyr::select(screening_id, country, age_months, spo2_yn, spo2, hypoxia_severe, hypoxia_moderate, temp_po_yn, temp_po, fever, rr_yn, rr, fast_breathing, pr_yn, pr, tachycardia)
