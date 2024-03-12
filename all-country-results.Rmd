@@ -1008,12 +1008,12 @@ Thresholds used are as follows (as defined in SAP):
 ### 0-1 month
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia - NONE (%)", "Fever", "Fast breathing (%)", "Tachycardia - NONE (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1028,21 +1028,21 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_sn_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_sn_cat1`
 
 ### 2-59 months
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1057,9 +1057,9 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_sn_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_sn_cat2`
 
@@ -1068,12 +1068,12 @@ t5_sn_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility
 ### 0-1 month
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)","Fever", "Fast breathing - NONE (%)", "Tachycardia - NONE (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1088,21 +1088,21 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_tz_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_tz_cat1`
 
 ### 2-59 months
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe","fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1117,9 +1117,9 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_tz_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_tz_cat2`
 
@@ -1128,12 +1128,12 @@ t5_tz_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility
 ### 0-1 month
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia - NONE (%)", "Fever", "Fast breathing - NONE (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1148,21 +1148,21 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_ka_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_ka_cat1`
 
 ### 2-59 months
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors -- note: lab_yn not collected in senegal but should be added in kenya and tanzania
-factorVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia", "abx_yn", "rx_yn")
 
 # Specify all the variables to include in table (both continuous and categorical)
-myVars <- c("hypoxia_severe", "hypoxia_moderate", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Severe hypoxia (%)", "Moderate hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1177,9 +1177,9 @@ rownames(out5_overall) <- c(t5lab) # Add row labels
 
 t5_ka_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(10:13) %>%
-  pack_rows("Clinical outcomes identified", 2, 6) %>%
-  pack_rows("Treatment and referrals", 7, 13)
+  add_indent(11:14) %>%
+  pack_rows("Clinical outcomes identified", 2, 7) %>%
+  pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_ka_cat2`
 
