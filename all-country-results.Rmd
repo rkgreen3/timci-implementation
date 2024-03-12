@@ -39,9 +39,9 @@ df_og <- read.csv(Sys.getenv("filename"))
 
 ## Relationship of caregiver to child 
 df_og$cg_relationship <- factor(df_og$cg_relationship,
-                                  labels = c("Mother and Father","Mother and Grandmother","Mother only",
-                                             "Father only", "Grandmother only","Grandfather only","Sibling",
-                                             "Other family member","Community member"))
+                                  labels = c("Community member","Father only","Grandfather only",
+                                             "Grandmother only", "Mother and father","Mother and grandmother","Mother only",
+                                             "Other family member","Sibling"))
 
 ## Convert categorical variables into factors
 df_og$age_cat <- factor(df_og$age_cat, labels=c("0-1 month", "2-59 months"))
@@ -114,14 +114,14 @@ df_og$household_floor <- factor(df_og$household_floor,
 # Define country and subset
 #COUNTRY <- Sys.getenv("COUNTRY")
 df_sn <- subset(df_og, df_og$country=="Senegal")
-df_sn_cat1 <- susbset(df_sn, age_cat=="0-1 month")
-df_sn_cat2 <- susbset(df_sn, age_cat=="2-59 months")
+df_sn_cat1 <- subset(df_sn, age_cat=="0-1 month")
+df_sn_cat2 <- subset(df_sn, age_cat=="2-59 months")
 df_tz <- subset(df_og, df_og$country=="Tanzania")
-df_tz_cat1 <- susbset(df_tz, age_cat=="0-1 month")
-df_tz_cat2 <- susbset(df_tz, age_cat=="2-59 months")
+df_tz_cat1 <- subset(df_tz, age_cat=="0-1 month")
+df_tz_cat2 <- subset(df_tz, age_cat=="2-59 months")
 df_ka <- subset(df_og, df_og$country=="Kenya")
-df_ka_cat1 <- susbset(df_ka, age_cat=="0-1 month")
-df_ka_cat2 <- susbset(df_ka, age_cat=="2-59 months")
+df_ka_cat1 <- subset(df_ka, age_cat=="0-1 month")
+df_ka_cat2 <- subset(df_ka, age_cat=="2-59 months")
 ```
 
 # Table 1: Patient demographic and household characteristics. {.tabset}
@@ -147,8 +147,8 @@ t1_overall <- print(out1,
 
 # Create row labels
 t1lab <- c("N",
-           "Age Category (%)", "0-1 month", "2-59 months",
-            "Caregiver Relationship (%)", "Mother and father", "Mother and grandmother", "Mother only", "Father only", "Grandmother only", "Grandfather only", "Sibling", "Other family member", "Community member", "Caregiver Age (mean (SD))", 
+           "Age Category: 2-59 months (%)",
+            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
@@ -167,9 +167,9 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_sn <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(3:5, 7:15, 18:25, 27:36, 39:47, 50:56, 59:63, 65:84)) %>%
-  pack_rows("Demographic Characteristics", 2, 25) %>%
-  pack_rows("Household Characteristics", 26, 84)
+  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
+  pack_rows("Demographic Characteristics", 2, 22) %>%
+  pack_rows("Household Characteristics", 23, 81)
 ```
 `r t1_sn`
 
@@ -194,8 +194,8 @@ t1_overall <- print(out1,
 
 # Create row labels
 t1lab <- c("N",
-           "Age Category (%)", "0-1 month", "2-59 months",
-            "Caregiver Relationship (%)", "Mother and father", "Mother and grandmother", "Mother only", "Father only", "Grandmother only", "Grandfather only", "Sibling", "Other family member", "Community member", "Caregiver Age (mean (SD))", 
+           "Age Category: 2-59 months (%)",
+            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
@@ -214,9 +214,9 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_tz <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(3:5, 7:15, 18:25, 27:36, 39:47, 50:56, 59:63, 65:84)) %>%
-  pack_rows("Demographic Characteristics", 2, 25) %>%
-  pack_rows("Household Characteristics", 26, 84)
+  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
+  pack_rows("Demographic Characteristics", 2, 22) %>%
+  pack_rows("Household Characteristics", 23, 81)
 ```
 `r t1_tz`
 
@@ -241,8 +241,8 @@ t1_overall <- print(out1,
 
 # Create row labels
 t1lab <- c("N",
-           "Age Category (%)", "0-1 month", "2-59 months",
-            "Caregiver Relationship (%)", "Mother and father", "Mother and grandmother", "Mother only", "Father only", "Grandmother only", "Grandfather only", "Sibling", "Other family member", "Community member", "Caregiver Age (mean (SD))", 
+           "Age Category: 2-59 months (%)",
+            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
@@ -261,9 +261,9 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_ka <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(3:5, 7:15, 18:25, 27:36, 39:47, 50:56, 59:63, 65:84)) %>%
-  pack_rows("Demographic Characteristics", 2, 25) %>%
-  pack_rows("Household Characteristics", 26, 84)
+  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
+  pack_rows("Demographic Characteristics", 2, 22) %>%
+  pack_rows("Household Characteristics", 23, 81)
 ```
 `r t1_ka`
 
@@ -885,9 +885,9 @@ t4lab <- c("N", "All main symptoms assessed by provider (%)",
            "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
            "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
            "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
-           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
-           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
-           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx NOT GIVEN for ear problem (%)",
+           "Dx NOT GIVEN for malnutrition (%)",
+           "Dx NOT GIVEN for anemia (%)",
            "Dx NOT GIVEN for HIV (%)")
 
 out4 <- CreateTableOne(vars = myVars,
@@ -901,14 +901,14 @@ rownames(out4_overall) <- c(t4lab) # Add row labels
 
 t4_ka_cat1 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
-  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33)) %>%
+  add_indent(c(6:8, 11:13, 16:18)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
   pack_rows("Diarrhea", 9, 13) %>%
   pack_rows("Fever", 14, 18) %>%
-  pack_rows("Ear problem", 19, 23) %>%
-  pack_rows("Malnutrition", 24, 28) %>%
-  pack_rows("Anemia", 29, 33) %>%
-  pack_rows("HIV", 34, 34) %>%
+  pack_rows("Ear problem", 19, 19) %>%
+  pack_rows("Malnutrition", 20, 20) %>%
+  pack_rows("Anemia", 21, 21) %>%
+  pack_rows("HIV", 22, 22) %>%
   row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
   row_spec(7, bold = T, color = "#eda702", background = "white") %>%
   row_spec(8, bold = T,color = "salmon", background = "white") %>%
@@ -917,16 +917,7 @@ t4_ka_cat1 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility
   row_spec(13, bold = T,color = "salmon", background = "white") %>%
   row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
   row_spec(17, bold = T, color = "#eda702", background = "white") %>%
-  row_spec(18, bold = T,color = "salmon", background = "white") %>%
-  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
-  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
-  row_spec(23, bold = T,color = "salmon", background = "white") %>%
-  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
-  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
-  row_spec(28, bold = T,color = "salmon", background = "white") %>%
-  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
-  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
-  row_spec(33, bold = T,color = "salmon", background = "white")
+  row_spec(18, bold = T,color = "salmon", background = "white") 
 ```
 `r t4_ka_cat1`
 
