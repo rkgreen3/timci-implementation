@@ -223,7 +223,7 @@ t2a_overall <- print(out2a, showAllLevels = TRUE)
 
 # Create row labels
 t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Height recorded (%)", "", "Height (cm, mean (SD))", "MUAC recorded (%)", "", "", "MUAC (cm, mean (SD))", 
-            "Weight-for-height recorded (%)", "", #"WFH (mean (SD))", 
+            "Weight-for-height recorded (%)", "", "WFH (mean (SD))", 
             "Temperature recorded (%)", "", "Temperature (C, mean (SD))", "Hb recorded (%)", "", "", "Hb (g/dL, mean (SD))")
 
 
