@@ -7,7 +7,7 @@ library(lubridate)
 `%!in%` = Negate(`%in%`)
 
 # Read in REDCap data for Kenya and Tanzania (saved in Box)
-df_og1 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-en_2024-03-08.csv") #update file path to local machine
+df_og1 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-en_2024-03-12.csv") #update file path to local machine
 df1 <- df_og1 %>% dplyr:::select(-c(grep("_complete", names(df_og1)))) 
 df1 <- df1 %>% dplyr:::select(-c(251:ncol(df1)), "visit_reason___5")
 colnames(df1)[colnames(df1) == "malnutrition"] = "malnutrition_dx"
@@ -24,7 +24,7 @@ df1$travel_cost <- case_when(df1$travel_cost ==1 ~ "1-20 KSH",
                              df1$travel_cost ==0 ~ "0")
 
 # Read in REDCap data for Senegal (saved in Box, from different REDCap project)
-df_og2 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-fr_2024-03-08.csv") #update file path to local machine
+df_og2 <- read.csv("C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data-fr_2024-03-12.csv") #update file path to local machine
 df2 <- df_og2 %>% dplyr:::select(-c(grep("_complete", names(df_og2)))) 
 df2 <- df2 %>% dplyr:::select(-c(204:ncol(df2)))
 colnames(df2)[colnames(df2) == "visit_reason"] = "visit_reason___1"
@@ -74,13 +74,21 @@ df$travel_time <- ifelse(df$travel_time>=99, NA, df$travel_time)
 df$travel_cost <- ifelse(df$travel_cost>=99, NA, df$travel_cost)
 
 df$spo2 <- ifelse(df$spo2>=999, NA, df$spo2)
+df$spo2_yn <- ifelse(is.na(df$spo2), 0, df$spo2_yn)
 df$pr <- ifelse(df$pr>=999, NA, df$pr)
+df$pr_yn <- ifelse(is.na(df$pr), 0, df$pr_yn)
 df$rr <- ifelse(df$rr>=999, NA, df$rr)
+df$rr_yn <- ifelse(is.na(df$rr), 0, df$rr_yn)
 df$temp_po <- ifelse(df$temp_po>=999, NA, df$temp_po)
+df$temp_po_yn <- ifelse(is.na(df$temp_po), 0, df$temp_po_yn)
 df$weight <- ifelse(df$weight>=999, NA, df$weight)
+df$weight_yn <- ifelse(is.na(df$weight), 0, df$weight_yn)
 df$height <- ifelse(df$height>=999, NA, df$height)
+df$height_yn <- ifelse(is.na(df$height), 0, df$height_yn)
 df$muac <- ifelse(df$muac>=999, NA, df$muac)
+df$muac_yn <- ifelse(is.na(df$muac), 0, df$muac_yn)
 df$hb <- ifelse(df$hb>=999, NA, df$hb)
+df$hb_yn <- ifelse(is.na(df$hb), 0, df$hb_yn)
 df$referral <- ifelse(df$referral>=99, NA, df$referral)
 
 # Calculate age
@@ -218,4 +226,4 @@ df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-08.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-12.csv")
