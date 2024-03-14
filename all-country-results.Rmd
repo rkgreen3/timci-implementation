@@ -303,7 +303,7 @@ t2lab <- c("N", "Visit reason illness (%)",
 rownames(t2_overall) <- c(t2lab)
 
 # Table formatting
-t2_sn <- kable(t2_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t2_sn <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(c(11:20, 22:25, 27:30)) %>%
   pack_rows("Symptoms reported by caregiver (%)", 3, 8) %>%
