@@ -165,7 +165,7 @@ t1lab <- c("N",
 rownames(t1_overall) <- c(t1lab)
 
 # Table formatting
-t1_sn <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t1_sn <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
   add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
   pack_rows("Demographic Characteristics", 2, 22) %>%
@@ -212,7 +212,7 @@ t1lab <- c("N",
 rownames(t1_overall) <- c(t1lab)
 
 # Table formatting
-t1_tz <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t1_tz <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
   add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
   pack_rows("Demographic Characteristics", 2, 22) %>%
@@ -259,7 +259,7 @@ t1lab <- c("N",
 rownames(t1_overall) <- c(t1lab)
 
 # Table formatting
-t1_ka <- kable(t1_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t1_ka <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
   add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
   pack_rows("Demographic Characteristics", 2, 22) %>%
@@ -346,7 +346,7 @@ t2lab <- c("N", "Illness", "Trauma", "Routine",
 rownames(t2_overall) <- c(t2lab)
 
 # Table formatting
-t2_tz <- kable(t2_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t2_tz <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(c(13:22, 24:27, 29:33)) %>%
   pack_rows("Visit reason (%)", 2, 4) %>%
@@ -390,7 +390,7 @@ t2lab <- c("N", "Illness", "Trauma", "Immunization", "Routine",
 rownames(t2_overall) <- c(t2lab)
 
 # Table formatting
-t2_ka <- kable(t2_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t2_ka <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(c(14:23, 25:28, 30:36)) %>%
   pack_rows("Visit reason (%)", 2, 5) %>%
@@ -430,7 +430,7 @@ t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Heigh
 rownames(t2a_overall) <- c(t2alab)
 
 # Table formatting
-t2a_sn <- kable(t2a_overall, col.names = c(" ", " ", "Overall", "Facility 1", "Facility 2")) %>%
+t2a_sn <- kable(t2a_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
 `r t2a_sn`
@@ -463,7 +463,7 @@ t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Heigh
 rownames(t2a_overall) <- c(t2alab)
 
 # Table formatting
-t2a_tz <- kable(t2a_overall, col.names = c(" ", " ", "Overall", "Facility 1", "Facility 2")) %>%
+t2a_tz <- kable(t2a_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
 `r t2a_tz`
@@ -496,7 +496,7 @@ t2alab <- c("N", "Weight recorded (%)", "", "", "Weight (kg, mean (SD))", "Heigh
 rownames(t2a_overall) <- c(t2alab)
 
 # Table formatting
-t2a_ka <- kable(t2a_overall, col.names = c(" ", " ", "Overall", "Facility 1", "Facility 2")) %>%
+t2a_ka <- kable(t2a_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
 ```
 `r t2a_ka`
@@ -526,7 +526,7 @@ out3 <- CreateTableOne(vars = myVars,
 out3_overall <- print(out3)
 rownames(out3_overall) <- c(t3lab) # Add row labels
 
-t3_sn <- kable(out3_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t3_sn <- kable(out3_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(4:6)
 ```
@@ -565,7 +565,7 @@ out3 <- CreateTableOne(vars = myVars,
 out3_overall <- print(out3)
 rownames(out3_overall) <- c(t3lab) # Add row labels
 
-t3_tz <- kable(out3_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t3_tz <- kable(out3_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(4:6)
 ```
@@ -604,7 +604,7 @@ out3 <- CreateTableOne(vars = myVars,
 out3_overall <- print(out3)
 rownames(out3_overall) <- c(t3lab) # Add row labels
 
-t3_ka <- kable(out3_overall, col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t3_ka <- kable(out3_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(4:6)
 ```
@@ -651,7 +651,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_sn_cat1 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_sn_cat1 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -712,7 +712,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_sn_cat2 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_sn_cat2 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -775,7 +775,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_tz_cat1 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_tz_cat1 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -836,7 +836,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_tz_cat2 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_tz_cat2 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -899,7 +899,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_ka_cat1 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_ka_cat1 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -948,7 +948,7 @@ out4 <- CreateTableOne(vars = myVars,
 out4_overall <- print(out4)
 rownames(out4_overall) <- c(t4lab) # Add row labels
 
-t4_ka_cat2 <- kable(print(out4_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t4_ka_cat2 <- kable(print(out4_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
   add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33)) %>%
   pack_rows("Cough/Shortness of breath", 4, 8) %>%
@@ -1026,7 +1026,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_sn_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_sn_cat1 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
@@ -1055,7 +1055,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_sn_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_sn_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
@@ -1086,7 +1086,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_tz_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_tz_cat1 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
@@ -1115,7 +1115,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_tz_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_tz_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
@@ -1146,7 +1146,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_ka_cat1 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_ka_cat1 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
@@ -1175,7 +1175,7 @@ out5 <- CreateTableOne(vars = myVars,
 out5_overall <- print(out5)
 rownames(out5_overall) <- c(t5lab) # Add row labels
 
-t5_ka_cat2 <- kable(print(out5_overall), col.names = c(" ", "Overall", "Facility 1", "Facility 2")) %>%
+t5_ka_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
   add_indent(11:14) %>%
   pack_rows("Clinical outcomes identified", 2, 7) %>%
