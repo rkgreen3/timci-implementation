@@ -22,7 +22,7 @@ library(plyr)
 library(dplyr)
 library(tableone)
 library(kableExtra)
-library(epiDisplay)
+library(epiDisplay)  
 library(Hmisc)
 
 

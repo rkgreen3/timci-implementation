@@ -2,7 +2,7 @@
 title: "Rapport Etude implementation"
 author: "Senegal data manager"
 date: "2024-02-28"
-output: word_document
+output: html_document
 ---
 
 Resultats 
@@ -27,70 +27,6 @@ library(Hmisc)
 
 ```{r,echo=FALSE,fig.show='hide'}
  
-## Age
-df1$birthday<-as.Date(paste(df1$birth_year,df1$birth_month,"15",sep = "-"),format = "%Y-%m-%d")
-df1$visit_date_1=as.Date(df1$visit_date,format = "%d/%m/%Y")
-df1$visit_date_2=format(df1$visit_date_1,"%Y-%m-%d")
-df1$Age_categ = difftime(df1$visit_date_2,df1$birthday,units = "days")
-df1$age_m = df1$Age_categ/30
-df1$age_m=as.numeric(df1$age_m)
-df1$age_m_1 = cut(df1$age_m,
-             breaks = c(0,2,12,60),
-             right = F,
-             labels = c("0-1","2-11","12-59"))
-describe(df1$age_m_1)
-tabpct(df1$facility_name,df1$age_m_1)
-
-## Sex
-
-df1$sex=as.factor(df1$sex)
-describe(df1$sex)
-tabpct(df1$facility_name,df1$sex)
-
-## Relationship of caregiver to child
-
-describe(df1$cg_relationship)
-tabpct(df1$facility_name,df1$cg_relationship)
-
-## Caregiver age
-summ(df1$cg_age)
- tapply(df1$cg_age, df1$facility_name, mean,na.rm=T)
-
-## Maternal education
-df1$cg_edu_mother[df1$cg_edu_mother==999] = NA
-df1$cg_edu_mother=as.factor(df1$cg_edu_mother)
-describe(df1$cg_edu_mother)
-tabpct(df1$facility_name,df1$cg_edu_mother)
-
-## Household head
-df1$household_head[df1$household_head==99] = NA
-df1$household_head=as.factor(df1$household_head)
-describe(df1$household_head)
-tabpct(df1$facility_name,df1$household_head)
-
-## Household toilet
-df1$household_toilet[df1$household_toilet==999] = NA
-df1$household_toilet=as.factor(df1$household_toilet)
-describe(df1$household_toilet)
-tabpct(df1$facility_name,df1$household_toilet)
-
-## Household fuel
-
-df1$household_fuel=as.factor(df1$household_fuel)
-describe(df1$household_fuel)
-tabpct(df1$facility_name,df1$household_fuel)
-
-## Household water located in house
-
-df1$household_water_loc=as.factor(df1$household_water_loc)
-describe(df1$household_water_loc)
-tabpct(df1$facility_name,df1$household_water_loc)
-
-## Household floor
-
-df1$household_floor=as.factor(df1$household_floor)
-describe(df1$household_floor)
-tabpct(df1$facility_name,df1$household_floor)
 
 ```
 
