@@ -33,7 +33,11 @@ library(Hmisc)
 # After adding the file and content restart R session and you are good to go
 # The Renviron will be ignored when pushing changes to Github
 
+<<<<<<< HEAD
 df_og <- read.csv("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Documents/GitHub/timci-implementation/implementation-data_clean_2024-03-12.csv")
+=======
+df_og <- read.csv(Sys.getenv("filename"))
+>>>>>>> 1a84e90b5d566927377fc8b13f62ea474340b2f1
 
 # Basic data cleaning/formatting -- do this before subset so all levels are present
 
@@ -1062,7 +1066,11 @@ t5_sn_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", 
   pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_sn_cat2`
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 1a84e90b5d566927377fc8b13f62ea474340b2f1
 ## Tanzania {.tabset}
 
 ### 0-1 month
