@@ -1,4 +1,4 @@
-# Version date: 2024-03-08
+# Version date: 2024-03-20
 
 # Load packages
 library(plyr)
@@ -227,4 +227,4 @@ df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-12.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-20.csv")
