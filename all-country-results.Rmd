@@ -33,11 +33,8 @@ library(Hmisc)
 # After adding the file and content restart R session and you are good to go
 # The Renviron will be ignored when pushing changes to Github
 
-<<<<<<< HEAD
-df_og <- read.csv("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Documents/GitHub/timci-implementation/implementation-data_clean_2024-03-12.csv")
-=======
+#df_og <- read.csv("C:/Users/user/Dropbox/Mon PC (DESKTOP-OMJATUN)/Documents/GitHub/timci-implementation/implementation-data_clean_2024-03-12.csv")
 df_og <- read.csv(Sys.getenv("filename"))
->>>>>>> 1a84e90b5d566927377fc8b13f62ea474340b2f1
 
 # Basic data cleaning/formatting -- do this before subset so all levels are present
 
@@ -79,8 +76,10 @@ df_og$travel_time <- factor(df_og$travel_time, levels= c(1,2,3,4),
                                     labels = c("<30 minutes", "30-60 minutes", "60-120 minutes", ">120 minutes"))
 # df_og$travel_cost <- factor(df_og$travel_cost, labels = c("0", "1-20 KSH","21-40 KSH", "41-60 KSH", "61-80 KSH","81-100 KSH",">100 KSH","1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH", "<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA"))
 
-## Referral
-df_og$referral <- factor(df_og$referral, levels = c(1,2,4,5), labels = c("Urgent", "Non-urgent", "Recorded, not readable", "Recorded as not referred"))
+## Referral and abx
+df_og$referral2 <- factor(df_og$referral, levels = c(1,2,5), labels = c("Urgent", "Non-urgent", "Recorded as not referred"))
+df_og$referral <- factor(df_og$referral, levels = c(1,2,4,5), labels = c("Urgent", "Non-urgent", "Recorded, not readable","Recorded as not referred"))
+df_og$abx_yn <- factor(df_og$abx_yn, levels = c(0,1), labels = c("No", "Yes"))
                             
 ## Sex - omitted since data collected on 'sex' was that of the providers and not the caregiver/child
 
@@ -1017,7 +1016,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia - NONE (%)", "Fever", "Fast breathing (%)", "Tachycardia - NONE (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia - NONE (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia - NONE (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1046,7 +1045,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia - NONE (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1066,11 +1065,7 @@ t5_sn_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", 
   pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_sn_cat2`
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> 1a84e90b5d566927377fc8b13f62ea474340b2f1
 ## Tanzania {.tabset}
 
 ### 0-1 month
@@ -1081,7 +1076,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)","Fever", "Fast breathing - NONE (%)", "Tachycardia - NONE (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)","Fever (%)", "Fast breathing - NONE (%)", "Tachycardia - NONE (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1110,7 +1105,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe","fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1141,7 +1136,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia - NONE (%)", "Fever", "Fast breathing - NONE (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia - NONE (%)", "Moderate hypoxia (%)", "Severe hypoxia - NONE (%)", "Fever (%)", "Fast breathing - NONE (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1170,7 +1165,7 @@ factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "
 # Specify all the variables to include in table (both continuous and categorical)
 myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia","abx_yn", "rx_yn", "referral")
 
-t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever", "Fast breathing (%)", "Tachycardia (%)", 
+t5lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)", 
            "Antibiotics given (%)", "Other prescriptions given (%)",
            "Referral advice (%)", "Urgent", "Non-urgent", "Recorded, not readable", "Recorded, no referral")
 
@@ -1190,6 +1185,558 @@ t5_ka_cat2 <- kable(print(out5_overall), col.names = c("Overall", "Facility 1", 
   pack_rows("Treatment and referrals", 8, 14)
 ```
 `r t5_ka_cat2`
+
+# Table 6: Antibiotic prescribed by IMCI classifcations. {.tabset}
+## Senegal
+```{r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn", "hiv_dx")
+
+t6lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx given for HIV (%)", "HIV classification (%)", "Green", "Yellow", "Red")
+
+out6 <- CreateTableOne(vars = myVars,
+               data = df_sn,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out6_overall <- print(out6)
+rownames(out6_overall) <- c(t6lab) # Add row labels
+
+t6_sn <- kable(print(out6_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 38) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white") %>%
+  row_spec(36, bold = T, color = "#0cbd06", background = "white")  %>%
+  row_spec(37, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(38, bold = T,color = "salmon", background = "white")
+```
+`r t6_sn`
+
+## Tanzania
+```{r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn", "hiv_dx")
+
+t6lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx given for HIV (%)", "HIV classification (%)", "Green", "Yellow", "Red")
+
+out6 <- CreateTableOne(vars = myVars,
+               data = df_tz,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out6_overall <- print(out6)
+rownames(out6_overall) <- c(t6lab) # Add row labels
+
+t6_tz <- kable(print(out6_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 38) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white") %>%
+  row_spec(36, bold = T, color = "#0cbd06", background = "white")  %>%
+  row_spec(37, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(38, bold = T,color = "salmon", background = "white")
+```
+`r t6_tz`
+
+## Kenya
+``` {r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn")
+
+t6lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx NOT GIVEN for HIV (%)")
+
+out6 <- CreateTableOne(vars = myVars,
+               data = df_ka,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out6_overall <- print(out6)
+rownames(out6_overall) <- c(t6lab) # Add row labels
+
+t6_ka <- kable(print(out6_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 34) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white")
+```
+`r t6_ka`
+
+# Table 7: Referral by IMCI classifications. {.tabset}
+## Senegal
+```{r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn", "hiv_dx")
+
+t7lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx given for HIV (%)", "HIV classification (%)", "Green", "Yellow", "Red")
+
+out7 <- CreateTableOne(vars = myVars,
+               data = df_sn,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out7_overall <- print(out7)
+rownames(out7_overall) <- c(t7lab) # Add row labels
+
+t7_sn <- kable(print(out7_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 38) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white") %>%
+  row_spec(36, bold = T, color = "#0cbd06", background = "white")  %>%
+  row_spec(37, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(38, bold = T,color = "salmon", background = "white")
+```
+`r t7_sn`
+
+## Tanzania
+```{r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn", "hiv_dx")
+
+t7lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx given for HIV (%)", "HIV classification (%)", "Green", "Yellow", "Red")
+
+out7 <- CreateTableOne(vars = myVars,
+               data = df_tz,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out7_overall <- print(out7)
+rownames(out7_overall) <- c(t7lab) # Add row labels
+
+t7_tz <- kable(print(out7_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33, 36:38)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 38) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white") %>%
+  row_spec(36, bold = T, color = "#0cbd06", background = "white")  %>%
+  row_spec(37, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(38, bold = T,color = "salmon", background = "white")
+```
+`r t7_tz`
+
+## Kenya
+``` {r include=FALSE}
+# Specify all the variables you want to treat as factors
+factorVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn", "diarrhea_dx_yn", "fever_dx_yn", "ear_dx_yn", "malnutrition_dx_yn", "anemia_dx_yn", "hiv_dx_yn")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("mainsxs_assessed_yn", "danger_assessed_yn", "cough_dx_yn","cough_dx", "diarrhea_dx_yn", "diarrhea_dx", "fever_dx_yn", "fever_dx", "ear_dx_yn", "ear_dx", "malnutrition_dx_yn", "malnutrition_dx", "anemia_dx_yn", "anemia_dx", "hiv_dx_yn")
+
+t7lab <- c("N", "All main symptoms assessed by provider (%)",
+           "All danger signs assessed by provider (%)",
+           "Dx given for cough/shortness of breath (%)", "Cough or shortness of breath classification (%)", "Green", "Yellow", "Red",
+           "Dx given for diarrhea (%)", "Diarrhea classification (%)", "Green", "Yellow", "Red",
+           "Dx given for fever (%)", "Fever classification(%)", "Green", "Yellow", "Red",
+           "Dx given for ear problem (%)", "Ear problem classification (%)", "Green", "Yellow", "Red",
+           "Dx given for malnutrition (%)", "Malnutrition classification (%)", "Green", "Yellow", "Red",
+           "Dx given for anemia (%)", "Anemia classification (%)", "Green", "Yellow", "Red",
+           "Dx NOT GIVEN for HIV (%)")
+
+out7 <- CreateTableOne(vars = myVars,
+               data = df_ka,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out7_overall <- print(out7)
+rownames(out7_overall) <- c(t7lab) # Add row labels
+
+t7_ka <- kable(print(out7_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("hover","condensed"), position = "center") %>%
+  add_indent(c(6:8, 11:13, 16:18, 21:23, 26:28, 31:33)) %>%
+  pack_rows("Cough/Shortness of breath", 4, 8) %>%
+  pack_rows("Diarrhea", 9, 13) %>%
+  pack_rows("Fever", 14, 18) %>%
+  pack_rows("Ear problem", 19, 23) %>%
+  pack_rows("Malnutrition", 24, 28) %>%
+  pack_rows("Anemia", 29, 33) %>%
+  pack_rows("HIV", 34, 34) %>%
+  row_spec(6, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(7, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(8, bold = T,color = "salmon", background = "white") %>%
+  row_spec(11, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(12, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(13, bold = T,color = "salmon", background = "white") %>%
+  row_spec(16, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(17, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(18, bold = T,color = "salmon", background = "white") %>%
+  row_spec(21, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(22, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(23, bold = T,color = "salmon", background = "white") %>%
+  row_spec(26, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(27, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(28, bold = T,color = "salmon", background = "white") %>%
+  row_spec(31, bold = T, color = "#0cbd06", background = "white") %>%
+  row_spec(32, bold = T, color = "#eda702", background = "white") %>%
+  row_spec(33, bold = T,color = "salmon", background = "white")
+```
+`r t7_ka`
+
+# Table 8: Antiobiotic prescribed by clinical outcomes. {.tabset}
+## Senegal
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t8lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out8 <- CreateTableOne(vars = myVars,
+               data = df_sn,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out8_overall <- print(out8)
+rownames(out8_overall) <- c(t8lab) # Add row labels
+
+t8_sn <- kable(print(out8_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t8_sn`
+
+## Tanzania
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t8lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out8 <- CreateTableOne(vars = myVars,
+               data = df_tz,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out8_overall <- print(out8)
+rownames(out8_overall) <- c(t8lab) # Add row labels
+
+t8_tz <- kable(print(out8_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t8_tz`
+
+## Kenya
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t8lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out8 <- CreateTableOne(vars = myVars,
+               data = df_ka,
+               factorVars = factorVars,
+               strata = "abx_yn",
+               test = FALSE,
+               addOverall = TRUE)
+out8_overall <- print(out8)
+rownames(out8_overall) <- c(t8lab) # Add row labels
+
+t8_ka <- kable(print(out8_overall), col.names = c("Overall", "Not prescribed abx", "Prescribed abx")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t8_ka`
+
+# Table 9: Referral by clincial outcomes. {.tabset}
+## Senegal
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t9lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out9 <- CreateTableOne(vars = myVars,
+               data = df_sn,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out9_overall <- print(out9)
+rownames(out9_overall) <- c(t9lab) # Add row labels
+
+t9_sn <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t9_sn`
+
+## Tanzania
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t9lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out9 <- CreateTableOne(vars = myVars,
+               data = df_tz,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out9_overall <- print(out9)
+rownames(out9_overall) <- c(t9lab) # Add row labels
+
+t9_tz <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t9_tz`
+
+## Kenya
+```{r include=FALSE}
+factorVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+# Specify all the variables to include in table (both continuous and categorical)
+myVars <- c("hypoxia_mild", "hypoxia_moderate", "hypoxia_severe", "fever", "fast_breathing", "tachycardia")
+
+t9lab <- c("N", "Mild hypoxia (%)", "Moderate hypoxia (%)", "Severe hypoxia (%)", "Fever (%)", "Fast breathing (%)", "Tachycardia (%)")
+
+out9 <- CreateTableOne(vars = myVars,
+               data = df_ka,
+               factorVars = factorVars,
+               strata = "referral2",
+               test = FALSE,
+               addOverall = TRUE)
+out9_overall <- print(out9)
+rownames(out9_overall) <- c(t9lab) # Add row labels
+
+t9_ka <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urgent", "No referral")) %>%
+  kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")
+```
+`r t9_ka`
+
+# Indicators of IMCI fidelity {.tabset}
+
+1. Red classification of cough/difficulty breathing receives a referral and antibiotics.
+2. Red classification of diarrhea receives treatment for dehydration.
+3. Red classification of diarrhea AND red classification of anything else receives a referral.
+4. Red classification of fever receives antimalarial or antibiotic treatment and a referral.
+
+## Indicator #1 {.tabset}
+### Senegal
+```{r include=FALSE}
+# relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
+```
+
+### Tanzania
+
+### Kenya
+
+## Indicator #2 {.tabset}
+### Senegal
+```{r include=FALSE}
+# relevant variables: diarrhea_dx==2 and rx___12==1
+```
+
+### Tanzania
+
+### Kenya
+
+## Indicator #3 {.tabset}
+### Senegal
+```{r include=FALSE}
+# relevant variables: diarrhea_dx==2 and (cough_dx==2 or fever_dx==2 or ear_dx==2 or malnutrition_dx==2 or anemia_dx==2 or hiv_dx==2) and referral==1 or 2
+```
+
+
+### Tanzania
+
+### Kenya
+
+## Indicator #4 {.tabset}
+### Senegal
+```{r include=FALSE}
+# relevant variables: fever_dx==2 and fever_tx==1 and referral==1 or 2
+```
+
+
+### Tanzania
+
+### Kenya
+
 
 # Boxplots of PO measures. {.tabset}
 

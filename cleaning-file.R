@@ -196,6 +196,7 @@ df$travel_mode <- case_when(df$travel_mode_bicycle==1 ~ "Bicycle",
                             df$travel_mode_sharedcar==1 ~ "Shared car",
                             df$travel_mode_carriage==1 ~ "Pack animals/carriage",
                             df$travel_mode_other==1 ~ "Other")
+df$fever_tx <- ifelse(df$rx___11==1 | df$abx_yn==1, 1, 0) #indicate abx or antimalarial was given
 
 # Calculate z-scores for nutrition metrics; use to create indicator variables -- not possible, sex of child not collected during study
 
