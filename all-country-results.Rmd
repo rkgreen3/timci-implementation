@@ -41,12 +41,12 @@ df_og <- read.csv(Sys.getenv("filename"))
 
 ## Relationship of caregiver to child 
 df_og$cg_relationship <- factor(df_og$cg_relationship,
-                                  labels = c("Community member","Father only","Grandfather only",
-                                             "Grandmother only", "Mother and father","Mother and grandmother","Mother only",
-                                             "Other family member","Sibling"))
+                                  levels = c("Mother only", "Father only", "Mother and father", "Mother and grandmother", "Grandmother only", "Grandfather only","Sibling", "Other family member", "Community member"))
 
 ## Convert categorical variables into factors
 df_og$age_cat <- factor(df_og$age_cat, labels=c("0-1 month", "2-59 months"))
+df_og$cg_age_cat <- factor(df_og$cg_age_cat, labels = c("18-21 years", "22-25 years", "26-29 years", "30-34 years", "35-40 years", "41-80 years"))
+df_og$household_children_cat <- factor(df_og$household_children_cat, labels = c("0-1", "2-3", "4-5", "6+"))
 
 ## Factor clinical variables
 df_og$weight_yn <- factor(df_og$weight_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
@@ -72,7 +72,7 @@ df_og$hiv_dx <- factor(df_og$hiv_dx, levels = c(0,1,2), labels = c("Green", "Yel
 
 ## Travel variables
 df_og$travel_mode <- factor(df_og$travel_mode, 
-                                  labels = c("Walk","Bicycle","Motorcycle", "Public mini-van/bus", "Public taxi","Private taxi", "Own private car","Shared car", "Pack animals/carriage", "Other"))
+                                  levels = c("Bicycle/Motorcycle","Bicycle/Motorcycle & Bus", "Bicycle/Motorcycle & Walk", "Bicycle/Motorcycle & Car", "Car & Walk", "Other", "Private or Shared car", "Public mini-van/bus", "Public or Private taxi",  "Taxi & Bicycle/Motorcycle", "Taxi & Walk", "Walk", "Walk & Bus"))
 df_og$travel_time <- factor(df_og$travel_time, levels= c(1,2,3,4),
                                     labels = c("<30 minutes", "30-60 minutes", "60-120 minutes", ">120 minutes"))
 # df_og$travel_cost <- factor(df_og$travel_cost, labels = c("0", "1-20 KSH","21-40 KSH", "41-60 KSH", "61-80 KSH","81-100 KSH",">100 KSH","1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH", "<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA"))
@@ -133,10 +133,10 @@ df_ka_cat2 <- subset(df_ka, age_cat=="2-59 months")
 ## Senegal
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors
-factorVars <- c("age_cat", "shared_toilet_yn")
+factorVars <- c("shared_toilet_yn")
 
 # Specify all the variables to include
-myVars <- c("age_cat", "cg_relationship", "cg_age", "cg_edu_mother", "household_head", "household_children", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
+myVars <- c("age_cat", "cg_relationship", "cg_age_cat", "cg_edu_mother", "household_head", "household_children_cat", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
 
 # CreateTableOne:
 out1 <- CreateTableOne(vars = myVars,
@@ -152,11 +152,12 @@ t1_overall <- print(out1,
 # Create row labels
 t1lab <- c("N",
            "Age Category: 2-59 months (%)",
-            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
+            "Caregiver Relationship (%)", "Mother only","Father only","Mother and father","Mother and grandmother","Grandmother only","Grandfather only","Sibling","Other family member", "Community member", 
+           "Caregiver Age (%)", "18-21 years", "22-25 years", "26-29 years", "30-34 years", "35-40 years", "41-80 years",
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
-           "Number of children under 5y living in household (mean (SD))",
+           "Number of children under 5y living in household (%)", "0-1", "2-3", "4-5", "6+",
             "What kind of toilet facility do members of your household usually use? (%)", "Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other",
            "Household toilet shared w/another household (%)",
             "What type of fuel is mainly used for cooking in the household? (%)", "Firewood","Charcoal", "Solar",  "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other",
@@ -171,19 +172,19 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_sn <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
-  pack_rows("Demographic Characteristics", 2, 22) %>%
-  pack_rows("Household Characteristics", 23, 81)
+  add_indent(c(4:12, 14:19, 21:28, 30:39, 41:44, 46:54, 57:63, 66:70, 72:91)) %>%
+  pack_rows("Demographic Characteristics", 2, 28) %>%
+  pack_rows("Household Characteristics", 29, 91)
 ```
 `r t1_sn`
 
 ## Tanzania
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors
-factorVars <- c("age_cat", "shared_toilet_yn")
+factorVars <- c("shared_toilet_yn")
 
 # Specify all the variables to include
-myVars <- c("age_cat", "cg_relationship", "cg_age", "cg_edu_mother", "household_head", "household_children", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
+myVars <- c("age_cat", "cg_relationship", "cg_age_cat", "cg_edu_mother", "household_head", "household_children_cat", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
 
 # CreateTableOne:
 out1 <- CreateTableOne(vars = myVars,
@@ -199,11 +200,12 @@ t1_overall <- print(out1,
 # Create row labels
 t1lab <- c("N",
            "Age Category: 2-59 months (%)",
-            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
+            "Caregiver Relationship (%)", "Mother only","Father only","Mother and father","Mother and grandmother","Grandmother only","Grandfather only","Sibling","Other family member", "Community member",  
+           "Caregiver Age (%)", "18-21 years", "22-25 years", "26-29 years", "30-34 years", "35-40 years", "41-80 years",
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
-           "Number of children under 5y living in household (mean (SD))",
+           "Number of children under 5y living in household (%)", "0-1", "2-3", "4-5", "6+",
             "What kind of toilet facility do members of your household usually use? (%)", "Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other",
            "Household toilet shared w/another household (%)",
             "What type of fuel is mainly used for cooking in the household? (%)", "Firewood","Charcoal", "Solar",  "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other",
@@ -218,19 +220,19 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_tz <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
-  pack_rows("Demographic Characteristics", 2, 22) %>%
-  pack_rows("Household Characteristics", 23, 81)
+  add_indent(c(4:12, 14:19, 21:28, 30:39, 41:44, 46:54, 57:63, 66:70, 72:91)) %>%
+  pack_rows("Demographic Characteristics", 2, 28) %>%
+  pack_rows("Household Characteristics", 29, 91)
 ```
 `r t1_tz`
 
 ## Kenya
 ```{r include=FALSE}
 # Specify all the variables you want to treat as factors
-factorVars <- c("age_cat", "shared_toilet_yn")
+factorVars <- c("shared_toilet_yn")
 
 # Specify all the variables to include
-myVars <- c("age_cat", "cg_relationship", "cg_age", "cg_edu_mother", "household_head", "household_children", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
+myVars <- c("age_cat", "cg_relationship", "cg_age_cat", "cg_edu_mother", "household_head", "household_children_cat", "household_toilet", "shared_toilet_yn", "household_fuel", "household_water_loc", "household_water_time", "household_floor")
 
 # CreateTableOne:
 out1 <- CreateTableOne(vars = myVars,
@@ -246,11 +248,12 @@ t1_overall <- print(out1,
 # Create row labels
 t1lab <- c("N",
            "Age Category: 2-59 months (%)",
-            "Caregiver Relationship (%)", "Community member", "Father only", "Grandfather only", "Grandmother only", "Mother and father", "Mother and grandmother", "Mother only", "Other family member", "Sibling", "Caregiver Age (mean (SD))", 
+            "Caregiver Relationship (%)", "Mother only","Father only","Mother and father","Mother and grandmother","Grandmother only","Grandfather only","Sibling","Other family member", "Community member",  
+           "Caregiver Age (%)", "18-21 years", "22-25 years", "26-29 years", "30-34 years", "35-40 years", "41-80 years",
             "Maternal Education (highest level attended) (%)", "Primary", "Post-Primary/Vocational", "Secondary", "Diploma/Certificate", "Bachelors degree or equivalent", "Masters degree or equivalent", 
               "Other", "Never attended any formal schooling", 
             "Household head (%)", "Female", "Mother of sick child", "Grandmother (maternal)", "Grandmother (paternal)", "Other female", "Male", "Father of sick child", "Grandfather (maternal)", "Grandfather (paternal)", "Other male", 
-           "Number of children under 5y living in household (mean (SD))",
+           "Number of children under 5y living in household (%)", "0-1", "2-3", "4-5", "6+",
             "What kind of toilet facility do members of your household usually use? (%)", "Flush or pour-flush toilet", "Ventilated improved pit latrine", "Pit latrine with slab", "Pit latrine without slab/open pit", "Composting toilet", "Bucket", "Hanging toilet", "No facility/bush", "Other",
            "Household toilet shared w/another household (%)",
             "What type of fuel is mainly used for cooking in the household? (%)", "Firewood","Charcoal", "Solar",  "Biomass fuel", "Cooking gas (LPG fuel)", "Electricity", "Other",
@@ -265,9 +268,9 @@ rownames(t1_overall) <- c(t1lab)
 # Table formatting
 t1_ka <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center")  %>%
-  add_indent(c(4:12, 15:22, 24:33, 36:44, 47:53, 56:60, 62:81)) %>%
-  pack_rows("Demographic Characteristics", 2, 22) %>%
-  pack_rows("Household Characteristics", 23, 81)
+  add_indent(c(4:12, 14:19, 21:28, 30:39, 41:44, 46:54, 57:63, 66:70, 72:91)) %>%
+  pack_rows("Demographic Characteristics", 2, 28) %>%
+  pack_rows("Household Characteristics", 29, 91)
 ```
 `r t1_ka`
 
@@ -275,7 +278,7 @@ t1_ka <- kable(t1_overall, col.names = c("Overall", "Facility 1", "Facility 2"))
 
 ## Senegal
 ```{r include=FALSE}
-df_sn$travel_cost <- factor(df_sn$travel_cost, labels = c("<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA"))
+df_sn$travel_cost <- factor(df_sn$travel_cost, levels = c("<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA"))
 
 # Specify all the variables you want to treat as factors
 factorVars <- c("visit_rsn_illness", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other", "medical_hx___1", "medical_hx___2", "medical_hx___6", "medical_hx___7", "medical_hx___9", "medical_hx___10", "medical_hx___11", "medical_hx___12", "medical_hx___13")
@@ -297,7 +300,8 @@ t2_overall <- print(out2)
 t2lab <- c("N", "Visit reason illness (%)",
            "Cough", "Rapid breathing", "Fever", "Diarrhea", "Vomiting", "Other",
            "Number of locations visited for this illness (mean (SD))",
-            "Travel mode", "Walking", "Bicycle", "Motorcycle", "Public mini-van/bus", "Public taxi", "Private taxi", "Own private car", "Shared car", "Pack animals/carriage", "Other",
+            "Travel mode", "Bicycle/Motorcycle", "Bicycle/Motorcycle & Bus", "Bicycle/Motorcycle & Walk", "Bicycle/Motorcycle & Car", "Car & Walk", "Other", "Private or Shared car", "Public mini-van/bus", 
+                "Public or private taxi", "Taxi & Bicycle/Motorcycle", "Taxi & Walk", "Walk", "Walk & Bus",
             "Travel time to arrive at clinic ", "<30 minutes", "30-60 minutes", "1-2 hours", ">2 hours",
             "Estimated amount of money spent for transport to arrive at clinic", "<500 CFA", "500-999 CFA", "1000-3000 CFA", ">3000 CFA",
             "Asthma", "Chicken pox", "Diptheria", "Jaundice", "Malnutrition", "Pneumonia", "TB", "Diarrhea", "Malaria")
@@ -309,16 +313,16 @@ rownames(t2_overall) <- c(t2lab)
 # Table formatting
 t2_sn <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(c(11:20, 22:25, 27:30)) %>%
+  add_indent(c(11:23, 25:28, 30:33)) %>%
   pack_rows("Symptoms reported by caregiver (%)", 3, 8) %>%
-  pack_rows("Travel to clinic (%)", 9, 30) %>%
-  pack_rows("Medical history (%)", 31, 39)
+  pack_rows("Travel to clinic (%)", 9, 33) %>%
+  pack_rows("Medical history (%)", 34, 42)
 ```
 `r t2_sn`
 
 ## Tanzania
 ```{r include=FALSE}
-df_tz$travel_cost <- factor(df_tz$travel_cost, labels = c("0", "1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH"))
+df_tz$travel_cost <- factor(df_tz$travel_cost, levels = c("0", "1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH"))
 
 # Specify all the variables you want to treat as factors
 factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_routine", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other", "medical_hx___1", "medical_hx___9", "medical_hx___10", "medical_hx___12", "medical_hx___13")
@@ -340,9 +344,10 @@ t2_overall <- print(out2)
 t2lab <- c("N", "Illness", "Trauma", "Routine",
            "Cough", "Rapid breathing", "Fever", "Diarrhea", "Vomiting", "Other",
            "Number of locations visited for this illness (mean (SD))",
-            "Travel mode (%)", "Walking", "Bicycle", "Motorcycle", "Public mini-van/bus", "Public taxi", "Private taxi", "Own private car", "Shared car", "Pack animals/carriage", "Other",
-            "Travel time to arrive at clinic (%)", "<30 minutes", "30-60 minutes", "1-2 hours", ">2 hours",
-            "Estimated amount of money spent for transport to arrive at clinic (%)", "0 TSH", "1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH",
+            "Travel mode", "Bicycle/Motorcycle", "Bicycle/Motorcycle & Bus", "Bicycle/Motorcycle & Walk", "Bicycle/Motorcycle & Car", "Car & Walk", "Other", "Private or Shared car", "Public mini-van/bus", 
+                "Public or private taxi", "Taxi & Bicycle/Motorcycle", "Taxi & Walk", "Walk", "Walk & Bus",
+            "Travel time to arrive at clinic", "<30 minutes", "30-60 minutes", "1-2 hours", ">2 hours",
+            "Estimated amount of money spent for transport to arrive at clinic", "0 TSH", "1-1000 TSH", "1001-5000 TSH", "5001-10000 TSH", ">10000 TSH",
             "Asthma", "Malnutrition", "Pneumonia", "Diarrhea", "Malaria")
 
 
@@ -352,17 +357,17 @@ rownames(t2_overall) <- c(t2lab)
 # Table formatting
 t2_tz <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(c(13:22, 24:27, 29:33)) %>%
+  add_indent(c(13:25, 27:30, 32:36)) %>%
   pack_rows("Visit reason (%)", 2, 4) %>%
   pack_rows("Symptoms reported by caregiver (%)", 5, 10) %>%
-  pack_rows("Travel to clinic (%)", 11, 33) %>%
-  pack_rows("Medical history (%)", 34, 38)
+  pack_rows("Travel to clinic (%)", 11, 36) %>%
+  pack_rows("Medical history (%)", 37, 41)
 ```
 `r t2_tz`
 
 ## Kenya
 ```{r include=FALSE}
-df_ka$travel_cost <- factor(df_ka$travel_cost, labels = c("0", "1-20 KSH", "21-40 KSH", "41-60 KSH", "61-80 KSH", "81-100 KSH", ">100 KSH"))
+df_ka$travel_cost <- factor(df_ka$travel_cost, levels = c("0", "1-20 KSH", "21-40 KSH", "41-60 KSH", "61-80 KSH", "81-100 KSH", ">100 KSH"))
 
 # Specify all the variables you want to treat as factors
 factorVars <- c("visit_rsn_illness", "visit_rsn_trauma", "visit_rsn_immunize", "visit_rsn_routine", "cg_report_cough", "cg_report_rapidbreathing", "cg_report_fever", "cg_report_diarrhea", "cg_report_vomit", "cg_report_other", "medical_hx___1", "medical_hx___7", "medical_hx___8", "medical_hx___9", "medical_hx___10", "medical_hx___12", "medical_hx___13", "medical_hx___14")
@@ -384,7 +389,8 @@ t2_overall <- print(out2)
 t2lab <- c("N", "Illness", "Trauma", "Immunization", "Routine",
            "Cough", "Rapid breathing", "Fever", "Diarrhea", "Vomiting", "Other",
            "Number of locations visited for this illness (mean (SD))",
-            "Travel mode", "Walking", "Bicycle", "Motorcycle", "Public mini-van/bus", "Public taxi", "Private taxi", "Own private car", "Shared car", "Pack animals/carriage", "Other",
+            "Travel mode", "Bicycle/Motorcycle", "Bicycle/Motorcycle & Bus", "Bicycle/Motorcycle & Walk", "Bicycle/Motorcycle & Car", "Car & Walk", "Other", "Private or Shared car", "Public mini-van/bus", 
+                "Public or private taxi", "Taxi & Bicycle/Motorcycle", "Taxi & Walk", "Walk", "Walk & Bus",
             "Travel time to arrive at clinic", "<30 minutes", "30-60 minutes", "1-2 hours", ">2 hours",
             "Estimated amount of money spent for transport to arrive at clinic", "0 KSH", "1-20 KSH", "21-40 KSH", "41-60 KSH", "61-80 KSH", "81-100 KSH", ">100 KSH",
             "Asthma", "Jaundice", "HIV", "Malnutrition", "Pneumonia", "Diarrhea", "Malaria", "Convulsions/Meningitis")
@@ -396,11 +402,11 @@ rownames(t2_overall) <- c(t2lab)
 # Table formatting
 t2_ka <- kable(t2_overall, col.names = c("Overall", "Facility 1", "Facility 2")) %>%
   kable_styling(bootstrap_options=c("striped","hover","condensed"), position = "center") %>%
-  add_indent(c(14:23, 25:28, 30:36)) %>%
+  add_indent(c(14:26, 28:31, 33:39)) %>%
   pack_rows("Visit reason (%)", 2, 5) %>%
   pack_rows("Symptoms reported by caregiver (%)", 6, 11) %>%
-  pack_rows("Travel to clinic (%)", 12, 36) %>%
-  pack_rows("Medical history (%)", 37, 44)
+  pack_rows("Travel to clinic (%)", 12, 39) %>%
+  pack_rows("Medical history (%)", 40, 47)
 ```
 `r t2_ka`
 
@@ -1699,25 +1705,34 @@ t9_ka <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urge
 ## Indicator #1 {.tabset}
 ### Senegal
 ```{r}
+### this version excludes red classifications too early - will attempt to convert this flow to a sankey and revert to original consort starting at severe imci dx
+
 # relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
-tdf <- df_sn %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
-tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_cough_dyspnea, cough_yn, dyspnea_yn, cough_dx, abx_yn, referral2)
+tdf$drop0 <- ifelse(tdf$cg_report_cough_dyspnea==0, "No cough or difficulty/rapid breathing", NA)
+tdf$drop1 <- case_when(tdf$cough_yn==0 ~ "Did not assess cough",
+                       tdf$dyspnea_yn==0 ~ "Did not assess difficulty/rapid breathing")
+tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
                         tdf$cough_dx=="Green" ~ "Green",
                         tdf$cough_dx=="Yellow" ~ "Yellow")
-tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
-tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
-tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
 consort1_sn <- consort_plot(data = tdf,
                             orders = c(screening_id = "Observed population",
-                                       drop1 = "Non-severe IMCI classification",
+                                       drop0 = "No reported symptom",
+                                       screening_id = "Reported cough or difficulty breathing",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed cough and difficulty breathing",
+                                       drop2 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe cough/difficulty breathing",
-                                       drop2 = "Antibiotic status",
+                                       drop3 = "Antibiotic status",
                                        screening_id = "Prescribed antibiotic",
-                                       drop3 = "Referral status",
+                                       drop4 = "Referral status",
                                        screening_id = "Referred"),
-                            side_box = c("drop1", "drop2", "drop3"),
-                            cex = 0.9)
+                            side_box = c("drop0", "drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.7)
 plot(consort1_sn)
 ```
 

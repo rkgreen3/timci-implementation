@@ -1,4 +1,4 @@
-# Version date: 2024-03-20
+# Version date: 2024-03-21
 
 # Load packages
 library(plyr)
@@ -101,6 +101,19 @@ df$age_months <- ifelse(df$age_months<0, 0.5, df$age_months)
 df <- subset(df, age_months<60) # remove participants >59 months, N = 17
 df <- df %>% dplyr:::select(-c("bdate", "month_diff"))
 
+# Add age category for caregivers and children in home
+df$cg_age <- ifelse(df$cg_age>100 | df$cg_age<18, NA, df$cg_age)
+df$cg_age_cat <- case_when(df$cg_age<22 ~ "18-21",
+                           df$cg_age>21 & df$cg_age<26 ~ "22-25",
+                           df$cg_age>25 & df$cg_age<30 ~ "26-29",
+                           df$cg_age>29 & df$cg_age<35 ~ "30-34",
+                           df$cg_age>34 & df$cg_age<41 ~ "35-40",
+                           df$cg_age>40 ~ "41-80")
+df$household_children_cat <- case_when(df$household_children==0 | df$household_children==1 ~ "0-1",
+                                       df$household_children==2 | df$household_children==3 ~ "2-3",
+                                       df$household_children==4 | df$household_children==5 ~ "4-5",
+                                       df$household_children>5 ~ "6+")
+
 # Add cg relationship for codes
 df$cg_relationship <- case_when(df$cg_relationship==1 ~ "Mother and father",
                                 df$cg_relationship==2 ~ "Mother and grandmother",
@@ -162,6 +175,7 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
 df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_yn) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
+df$cg_report_cough_dyspnea <- ifelse(df$cg_report_cough==1 | df$cg_report_rapidbreathing==1, 1, 0)
 df$cough_dx_yn <- ifelse(is.na(df$cough_dx), 0, 1)
 df$diarrhea_dx_yn <- ifelse(is.na(df$diarrhea_dx), 0, 1)
 df$fever_dx_yn <- ifelse(is.na(df$fever_dx), 0, 1)
@@ -185,16 +199,23 @@ df$travel_cost_usd <- case_when(df$travel_cost == "0" ~ "$0",
                                 df$travel_cost == "500-999 CFA" ~ "$0.83-1.66",
                                 df$travel_cost == "1000-3000 CFA" ~ "$1.66-4.98",
                                 df$travel_cost == ">3000 CFA" ~ ">$5")
-df$travel_mode <- case_when(df$travel_mode_bicycle==1 ~ "Bicycle",
+df$travel_mode <- case_when((df$travel_mode_bicycle==1 | df$travel_mode_motorcycle==1) & df$travel_mode_bus==1 ~ "Bicycle/Motorcycle & Bus",
+                            (df$travel_mode_bicycle==1 | df$travel_mode_motorcycle==1) & df$travel_mode_walk==1 ~ "Bicycle/Motorcycle & Walk",
+                            (df$travel_mode_publictaxi==1 | df$travel_mode_privatetaxi==1) & df$travel_mode_walk==1 ~ "Taxi & Walk",
+                            (df$travel_mode_publictaxi==1 | df$travel_mode_privatetaxi==1) & df$travel_mode_motorcycle==1 ~ "Taxi & Bicycle/Motorcycle",
+                            (df$travel_mode_privatecar==1 | df$travel_mode_sharedcar==1) & df$travel_mode_walk==1 ~ "Car & Walk",
+                            (df$travel_mode_privatecar==1 | df$travel_mode_sharedcar==1) & df$travel_mode_motorcycle==1 ~ "Car & Bicycle/Motorcycle",
+                            df$travel_mode_walk==1 & df$travel_mode_bus==1 ~ "Walk & Bus",
+                            df$travel_mode_bicycle==1 ~ "Bicycle/Motorcycle",
                             df$travel_mode_walk==1 ~ "Walk",
-                            df$travel_mode_motorcycle==1 ~ "Motorcycle",
+                            df$travel_mode_motorcycle==1 ~ "Bicycle/Motorcycle",
                             df$travel_mode_bus==1 ~ "Public mini-van/bus",
                             df$travel_mode_rickshaw==1 ~ "Rickshaw",
-                            df$travel_mode_publictaxi==1 ~ "Public taxi",
-                            df$travel_mode_privatetaxi==1 ~ "Private taxi",
-                            df$travel_mode_privatecar==1 ~ "Own private car",
-                            df$travel_mode_sharedcar==1 ~ "Shared car",
-                            df$travel_mode_carriage==1 ~ "Pack animals/carriage",
+                            df$travel_mode_publictaxi==1 ~ "Public or Private taxi",
+                            df$travel_mode_privatetaxi==1 ~ "Public or Private taxi",
+                            df$travel_mode_privatecar==1 ~ "Private or Shared car",
+                            df$travel_mode_sharedcar==1 ~ "Private or Shared car",
+                            df$travel_mode_carriage==1 ~ "Other",
                             df$travel_mode_other==1 ~ "Other")
 df$fever_tx <- ifelse(df$rx___11==1 | df$abx_yn==1, 1, 0) #indicate abx or antimalarial was given
 
@@ -227,4 +248,4 @@ df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-20.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-21.csv")
