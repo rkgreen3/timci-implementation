@@ -1745,6 +1745,7 @@ plot(consort1_tz)
 ```
 
 ### Kenya
+Order switched for abx and referral here because N referred is larger.
 ``` {r}
 tdf <- df_ka %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
 tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
@@ -1758,11 +1759,11 @@ consort1_ka <- consort_plot(data = tdf,
                             orders = c(screening_id = "Observed population",
                                        drop1 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe cough/difficulty breathing",
-                                       drop2 = "Antibiotic status",
-                                       screening_id = "Prescribed antibiotic",
                                        drop3 = "Referral status",
-                                       screening_id = "Referred"),
-                            side_box = c("drop1", "drop2", "drop3"),
+                                       screening_id = "Referred",
+                                       drop2 = "Antibiotic status",
+                                       screening_id = "Prescribed antibiotic"),
+                            side_box = c("drop1", "drop3", "drop2"),
                             cex = 0.9)
 plot(consort1_ka)
 ```
