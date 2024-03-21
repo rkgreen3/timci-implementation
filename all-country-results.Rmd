@@ -24,6 +24,7 @@ library(tableone)
 library(kableExtra)
 library(epiDisplay)
 library(Hmisc)
+library(consort)
 
 
 # Read in (cleaned) data
@@ -1697,13 +1698,74 @@ t9_ka <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urge
 
 ## Indicator #1 {.tabset}
 ### Senegal
-```{r include=FALSE}
+```{r}
 # relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
+tdf <- df_sn %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
+tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+                        tdf$cough_dx=="Green" ~ "Green",
+                        tdf$cough_dx=="Yellow" ~ "Yellow")
+tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
+tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort1_sn <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Observed population",
+                                       drop1 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe cough/difficulty breathing",
+                                       drop2 = "Antibiotic status",
+                                       screening_id = "Prescribed antibiotic",
+                                       drop3 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort1_sn)
 ```
 
 ### Tanzania
+``` {r}
+tdf <- df_tz %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
+tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+                        tdf$cough_dx=="Green" ~ "Green",
+                        tdf$cough_dx=="Yellow" ~ "Yellow")
+tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
+tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort1_tz <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Observed population",
+                                       drop1 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe cough/difficulty breathing",
+                                       drop2 = "Antibiotic status",
+                                       screening_id = "Prescribed antibiotic",
+                                       drop3 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort1_tz)
+```
 
 ### Kenya
+``` {r}
+tdf <- df_ka %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
+tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+                        tdf$cough_dx=="Green" ~ "Green",
+                        tdf$cough_dx=="Yellow" ~ "Yellow")
+tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
+tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort1_ka <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Observed population",
+                                       drop1 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe cough/difficulty breathing",
+                                       drop2 = "Antibiotic status",
+                                       screening_id = "Prescribed antibiotic",
+                                       drop3 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort1_ka)
+```
 
 ## Indicator #2 {.tabset}
 ### Senegal
