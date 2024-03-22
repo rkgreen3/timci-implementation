@@ -2020,6 +2020,8 @@ plot(consort1_ka)
 tdf <- df_ka %>% dplyr::select(cough_dyspnea_assessed, cough_dx)
 tdf$cough_dx <- ifelse(is.na(tdf$cough_dx), "Not rated", as.character(tdf$cough_dx))
 tdf$cough_dx <- factor(tdf$cough_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+tdf$cough_dyspnea_assessed <- ifelse(is.na(tdf$cough_dyspnea_assessed), "Neither assessed", as.character(tdf$cough_dyspnea_assessed))
+tdf$cough_dyspnea_assessed <- factor(tdf$cough_dyspnea_assessed, levels = c("Cough and dyspnea assessed", "Cough only assessed", "Dyspnea only assessed", "Neither assessed"))
 
 s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
 s1 <- s1 %>% hc_title(text = "Cough and difficulty breathing") %>%
@@ -2033,6 +2035,8 @@ hc_add_theme(s1, my_theme1)
 tdf <- df_ka %>% dplyr::select(cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
 tdf$cg_report_cough_dyspnea <- ifelse(tdf$cg_report_cough_dyspnea==1, "Cough/dyspnea reported", "Cough/dyspnea not reported")
 tdf$cg_report_cough_dyspnea <- factor(tdf$cg_report_cough_dyspnea, levels = c("Cough/dyspnea reported", "Cough/dyspnea not reported"))
+tdf$cough_dyspnea_assessed <- ifelse(is.na(tdf$cough_dyspnea_assessed), "Neither assessed", as.character(tdf$cough_dyspnea_assessed))
+tdf$cough_dyspnea_assessed <- factor(tdf$cough_dyspnea_assessed, levels = c("Cough and dyspnea assessed", "Cough only assessed", "Dyspnea only assessed", "Neither assessed"))
 tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
                            tdf$referral2=="Non-urgent" ~ "Referral given",
                            tdf$referral2=="Recorded as not referred" ~ "No referral given",
@@ -2055,6 +2059,7 @@ hc_add_theme(s2, my_theme2)
 ```
 
 ## Indicator #2 {.tabset}
+
 ### Senegal
 ```{r}
 tdf <- df_sn %>% dplyr::select(diarrhea_yn, diarrhea_dx)
@@ -2125,7 +2130,8 @@ hc_add_theme(s2, my_theme4)
 ### Kenya
 ```{r}
 tdf <- df_ka %>% dplyr::select(diarrhea_yn, diarrhea_dx)
-tdf$diarrhea_yn <- ifelse(tdf$diarrhea_yn==1, "Provider assessed diarrhea", "Provider did not assess diarrhea")
+tdf$diarrhea_yn <- case_when(tdf$diarrhea_yn==1 ~ "Provider assessed diarrhea",
+                             tdf$diarrhea_yn==0 | is.na(tdf$diarrhea_yn) ~ "Provider did not assess diarrhea")
 tdf$diarrhea_dx <- ifelse(is.na(tdf$diarrhea_dx), "Not rated", as.character(tdf$diarrhea_dx))
 tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
 
