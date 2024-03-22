@@ -1,4 +1,4 @@
-# Version date: 2024-03-21
+# Version date: 2024-03-22
 
 # Load packages
 library(plyr)
@@ -175,6 +175,10 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
 df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_yn) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
+df$cough_dyspnea_assessed <- case_when(df$cough_yn==1 & df$dyspnea_yn==1 ~ "Cough and dyspnea assessed",
+                                        df$cough_yn==1 & df$dyspnea_yn==0 ~ "Cough only assessed",
+                                        df$cough_yn==0 & df$dyspnea_yn==1 ~ "Dyspnea only assessed",
+                                        df$cough_yn==0 & df$dyspnea_yn==0 ~ "Neither assessed") # cough/dyspnea assessed by provider
 df$cg_report_cough_dyspnea <- ifelse(df$cg_report_cough==1 | df$cg_report_rapidbreathing==1, 1, 0)
 df$cough_dx_yn <- ifelse(is.na(df$cough_dx), 0, 1)
 df$diarrhea_dx_yn <- ifelse(is.na(df$diarrhea_dx), 0, 1)
@@ -248,4 +252,4 @@ df$tachycardia <- ifelse(is.na(df$tachycardia), 0, df$tachycardia)
 #df <- df %>% dplyr:::select(-c("cg_interview_yn", "cg_sex", "cg_overall_comfort", "cg_like_most", "cg_like_least", "cg_prov_challenges_yn", "cg_prov_challenges", "cg_overall_satisfied", "cg_confident_use", "cg_confident_performance", "cg_adequate_assess_yn", "cg_adequate_assess_rsn", "cg_advantage", "cg_concerns", "cg_compare_assess", "cg_compare_assess_rsn", "cg_useful", "cg_useful_rsn", "cg_rec_device", "cg_rec_facility", "cg_rec_facility_rsn", "cg_overall_impression", "cg_time_change_yn", "cg_time_change", "cg_understand_purpose", "cg_dx_confidence", "cg_discomfort", "cg_discomfort_des", "cg_recommend", "cg_change_desire", "cg_othe_comments", "caregiver_interview_complete"))
 
 # Write file as .csv to shared Box folder
-write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-21.csv")
+write.csv(df, "C:/Users/rgreen/Box/3_Output 3/Hybrid study/Implementation Study Analysis/implementation-data_clean_2024-03-22.csv")
