@@ -175,10 +175,7 @@ df$country <- case_when(df$facility_name=="TZN01"|df$facility_name=="TZN02" ~ "T
 df$bmi <- (df$weight/(df$height^2))*10000
 df$danger_assessed_yn <- ifelse(!is.na(df$drink_yn) & !is.na(df$vomit_yn) & !is.na(df$convulsions_yn), 1, 0) # all danger signs assessed by provider
 df$mainsxs_assessed_yn <- ifelse(!is.na(df$cough_yn) & !is.na(df$dyspnea_yn) & !is.na(df$diarrhea_yn) & !is.na(df$fever_yn) & !is.na(df$earproblem_yn) & !is.na(df$anemia_yn), 1, 0) # all main sxs assessed by provider
-df$cough_dyspnea_assessed <- case_when(df$cough_yn==1 & df$dyspnea_yn==1 ~ "Cough and dyspnea assessed",
-                                        df$cough_yn==1 & df$dyspnea_yn==0 ~ "Cough only assessed",
-                                        df$cough_yn==0 & df$dyspnea_yn==1 ~ "Dyspnea only assessed",
-                                        df$cough_yn==0 & df$dyspnea_yn==0 ~ "Neither assessed") # cough/dyspnea assessed by provider
+df$cough_dyspnea_assessed <- ifelse(df$dyspnea_yn==1 | df$cough_yn==1, "Cough or dyspnea assessed", "Neither assessed") # cough/dyspnea assessed by provider
 df$cg_report_cough_dyspnea <- ifelse(df$cg_report_cough==1 | df$cg_report_rapidbreathing==1, 1, 0)
 df$cough_dx_yn <- ifelse(is.na(df$cough_dx), 0, 1)
 df$diarrhea_dx_yn <- ifelse(is.na(df$diarrhea_dx), 0, 1)

@@ -56,7 +56,7 @@ df_og$muac_yn <- factor(df_og$muac_yn, levels = c(0,1,2), labels = c("Unknown/no
 df_og$wfh_yn <- factor(df_og$wfh_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
 df_og$temp_yn <- factor(df_og$temp_yn, levels = c(0,1), labels = c("Unknown/not recorded", "Yes"))
 df_og$hb_yn <- factor(df_og$hb_yn, levels = c(0,1,2), labels = c("Unknown/not recorded", "Yes", "Recorded, not readable"))
-df_og$cough_dyspnea_assessed <- factor(df_og$cough_dyspnea_assessed, levels = c("Cough and dyspnea assessed", "Cough only assessed", "Dyspnea only assessed", "Neither assessed"))
+df_og$cough_dyspnea_assessed <- factor(df_og$cough_dyspnea_assessed, levels = c("Cough or dyspnea assessed", "Neither assessed"))
 
 ## Factor pulse ox variables
 df_og$correct_use_yn <- factor(df_og$correct_use_yn, levels = c(0,1,2), labels = c("No", "Yes", "Yes for some measurements but not all"))
@@ -129,127 +129,6 @@ df_ka <- subset(df_og, df_og$country=="Kenya")
 df_ka_cat1 <- subset(df_ka, age_cat=="0-1 month")
 df_ka_cat2 <- subset(df_ka, age_cat=="2-59 months")
 ```
-
-```{r include=FALSE}
-# Create Sankey themes
-
-## For cough - simple
-my_theme1 <- hc_theme(
-  colors = c( "#33CC99", "#FF3333", "#FFFF66", "#33CC33", "darkgray", "#CCFF33", "#FF9966", "#CC3333"),
-  chart = list(
-    backgroundColor = NULL
-  ),
-  title = list(
-    style = list(
-      color = "#333333",
-      fontFamily = "Lato"
-    )
-  ),
-  subtitle = list(
-    style = list(
-      color = "#666666",
-      fontFamily = "Lato"
-    )
-  ),
-  legend = list(
-    itemStyle = list(
-      fontFamily = "Lato",
-      color = "black"
-    ),
-    itemHoverStyle = list(
-      color = "gray"
-    )
-  )
-)
-
-## For cough - care pathway
-my_theme2 <- hc_theme(
-  colors = c("#CC6699", "#33CC99", "#CCFF33", "#FF9966", "#CC3333", "#33CCCC", "#FF3333", "#FFFF66", "#33CC33", "darkgray", "#00FF99", "#FF9999", "#33CC66", "#CC6666", "darkgrey"),
-  chart = list(
-    backgroundColor = NULL
-  ),
-  title = list(
-    style = list(
-      color = "#333333",
-      fontFamily = "Lato"
-    )
-  ),
-  subtitle = list(
-    style = list(
-      color = "#666666",
-      fontFamily = "Lato"
-    )
-  ),
-  legend = list(
-    itemStyle = list(
-      fontFamily = "Lato",
-      color = "black"
-    ),
-    itemHoverStyle = list(
-      color = "gray"
-    )
-  )
-)
-
-## For diarrhea - simple
-my_theme3 <- hc_theme(
-  colors = c( "#33CC99", "#FF3333", "#FFFF66", "#33CC33", "darkgray", "#FF9966"),
-  chart = list(
-    backgroundColor = NULL
-  ),
-  title = list(
-    style = list(
-      color = "#333333",
-      fontFamily = "Lato"
-    )
-  ),
-  subtitle = list(
-    style = list(
-      color = "#666666",
-      fontFamily = "Lato"
-    )
-  ),
-  legend = list(
-    itemStyle = list(
-      fontFamily = "Lato",
-      color = "black"
-    ),
-    itemHoverStyle = list(
-      color = "gray"
-    )
-  )
-)
-
-## For diarrhea - care pathway
-my_theme4 <- hc_theme(
-  colors = c("#CC6699", "#33CC99","#33CCCC", "#FF9966",  "#FF3333", "#FFFF66", "#33CC33", "darkgrey", "#CC99CC", "#FF9999"),
-  chart = list(
-    backgroundColor = NULL
-  ),
-  title = list(
-    style = list(
-      color = "#333333",
-      fontFamily = "Lato"
-    )
-  ),
-  subtitle = list(
-    style = list(
-      color = "#666666",
-      fontFamily = "Lato"
-    )
-  ),
-  legend = list(
-    itemStyle = list(
-      fontFamily = "Lato",
-      color = "black"
-    ),
-    itemHoverStyle = list(
-      color = "gray"
-    )
-  )
-)
-```
-
 
 # Table 1: Patient demographic and household characteristics. {.tabset}
 
@@ -1826,38 +1705,13 @@ t9_ka <- kable(print(out9_overall), col.names = c("Overall", "Urgent", "Non-urge
 4. Red classification of fever receives antimalarial or antibiotic treatment and a referral.
 
 ## Indicator #1 {.tabset}
-### Senegal {.tabset}
-#### Option 1: Simple consort
-``` {r}
-tdf <- df_sn %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
-tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
-                        tdf$cough_dx=="Green" ~ "Green",
-                        tdf$cough_dx=="Yellow" ~ "Yellow")
-tdf$drop1 <- factor(tdf$drop1, levels = c("Green", "Yellow", "Not rated"))
-tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
-tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
-
-consort1_sn <- consort_plot(data = tdf,
-                            orders = c(screening_id = "Observed population",
-                                       drop1 = "Non-severe IMCI classification",
-                                       screening_id = "Rated severe cough/difficulty breathing",
-                                       drop2 = "Antibiotic status",
-                                       screening_id = "Prescribed antibiotic",
-                                       drop3 = "Referral status",
-                                       screening_id = "Referred"),
-                            side_box = c("drop1", "drop2", "drop3"),
-                            cex = 0.9)
-plot(consort1_sn)
-```
-
-#### Option 2: Care pathway consort
-N of red is less because some individuals who were classified as red either did not report or the provider did not assess cough/difficulty breathing, so they are excluded upstream.
+### Senegal
 ```{r}
+# Consort
 # relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
-tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_cough_dyspnea, cough_yn, dyspnea_yn, cough_dx, abx_yn, referral2)
-tdf$drop0 <- ifelse(tdf$cg_report_cough_dyspnea==0, "No cough or difficulty/rapid breathing", NA)
-tdf$drop1 <- case_when(tdf$cough_yn==0 ~ "Did not assess cough",
-                       tdf$dyspnea_yn==0 ~ "Did not assess difficulty/rapid breathing")
+tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
+tdf <- subset(tdf, cg_report_cough_dyspnea==1)
+tdf$drop1 <- ifelse(tdf$cough_dyspnea_assessed=="Neither assessed", "Cough/dyspnea not assessed", NA)
 tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
                         tdf$cough_dx=="Green" ~ "Green",
                         tdf$cough_dx=="Yellow" ~ "Yellow")
@@ -1866,37 +1720,22 @@ tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
 consort1_sn <- consort_plot(data = tdf,
-                            orders = c(screening_id = "Observed population",
-                                       drop0 = "No reported symptom",
-                                       screening_id = "Reported cough or difficulty breathing",
+                            orders = c(screening_id = "Reported cough or difficulty breathing",
                                        drop1 = "Provider assessment",
-                                       screening_id = "Provider assessed cough and difficulty breathing",
+                                       screening_id = "Provider assessed cough or difficulty breathing",
                                        drop2 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe cough/difficulty breathing",
                                        drop3 = "Antibiotic status",
                                        screening_id = "Prescribed antibiotic",
                                        drop4 = "Referral status",
                                        screening_id = "Referred"),
-                            side_box = c("drop0", "drop1", "drop2", "drop3", "drop4"),
-                            cex = 0.7)
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
 plot(consort1_sn)
 ```
 
-#### Option 3: Simple Sankey
 ```{r}
-tdf <- df_sn %>% dplyr::select(cough_dyspnea_assessed, cough_dx)
-tdf$cough_dx <- ifelse(is.na(tdf$cough_dx), "Not rated", as.character(tdf$cough_dx))
-tdf$cough_dx <- factor(tdf$cough_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
-
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-s1 <- s1 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptoms and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Senegal</b>")
-hc_add_theme(s1, my_theme1)
-```
-
-#### Option 4: Care pathway Sankey
-```{r}
+# Sankey
 tdf <- df_sn %>% dplyr::select(cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
 tdf$cg_report_cough_dyspnea <- ifelse(tdf$cg_report_cough_dyspnea==1, "Cough/dyspnea reported", "Cough/dyspnea not reported")
 tdf$cg_report_cough_dyspnea <- factor(tdf$cg_report_cough_dyspnea, levels = c("Cough/dyspnea reported", "Cough/dyspnea not reported"))
@@ -1911,58 +1750,58 @@ tdf$abx_yn <- case_when(tdf$abx_yn=="Yes" ~ "Antibiotics given",
                         is.na(tdf$abx_yn) ~ "No antibiotics given")
 tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-
-s2 <- s2 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
-        hc_caption(text = "<b/>Data from Senegal</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme2)
+s1_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Cough/dyspnea reported'  , color = "#CC6699"),
+                                 list(id = 'Cough/dyspnea not reported' , color = "#33CC99"),
+                                 list(id = 'Cough or dyspnea assessed' , color = "#33CCCC"),
+                                 list(id = 'Neither assessed'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotics given"    , color = "#00FF99"),
+                                 list(id = "No antibiotics given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Cough and Dyspnea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
+                      hc_caption(text = "<b/>Data from Senegal</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s1_sn
 ```
 
-
-### Tanzania {.tabset}
-#### Option 1: Simple consort
-``` {r}
-tdf <- df_tz %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
-tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+### Tanzania 
+```{r}
+# Consort
+# relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
+tdf <- df_tz %>% dplyr:::select(screening_id, cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
+tdf <- subset(tdf, cg_report_cough_dyspnea==1)
+tdf$drop1 <- ifelse(tdf$cough_dyspnea_assessed=="Neither assessed", "Cough/dyspnea not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
                         tdf$cough_dx=="Green" ~ "Green",
                         tdf$cough_dx=="Yellow" ~ "Yellow")
-tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
-tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
-tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
 consort1_tz <- consort_plot(data = tdf,
-                            orders = c(screening_id = "Observed population",
-                                       drop1 = "Non-severe IMCI classification",
+                            orders = c(screening_id = "Reported cough or difficulty breathing",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed cough or difficulty breathing",
+                                       drop2 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe cough/difficulty breathing",
-                                       drop2 = "Antibiotic status",
+                                       drop3 = "Antibiotic status",
                                        screening_id = "Prescribed antibiotic",
-                                       drop3 = "Referral status",
+                                       drop4 = "Referral status",
                                        screening_id = "Referred"),
-                            side_box = c("drop1", "drop2", "drop3"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
                             cex = 0.9)
 plot(consort1_tz)
 ```
 
-#### Option 2: Care pathway consort
-
-#### Option 3: Simple Sankey
 ```{r}
-tdf <- df_tz %>% dplyr::select(cough_dyspnea_assessed, cough_dx)
-tdf$cough_dx <- ifelse(is.na(tdf$cough_dx), "Not rated", as.character(tdf$cough_dx))
-tdf$cough_dx <- factor(tdf$cough_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
-
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-s1 <- s1 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptoms and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Tanzania</b>")
-hc_add_theme(s1, my_theme1)
-```
-
-#### Option 4: Care pathway Sankey
-```{r}
+# Sankey
 tdf <- df_tz %>% dplyr::select(cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
 tdf$cg_report_cough_dyspnea <- ifelse(tdf$cg_report_cough_dyspnea==1, "Cough/dyspnea reported", "Cough/dyspnea not reported")
 tdf$cg_report_cough_dyspnea <- factor(tdf$cg_report_cough_dyspnea, levels = c("Cough/dyspnea reported", "Cough/dyspnea not reported"))
@@ -1977,66 +1816,62 @@ tdf$abx_yn <- case_when(tdf$abx_yn=="Yes" ~ "Antibiotics given",
                         is.na(tdf$abx_yn) ~ "No antibiotics given")
 tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-
-s2 <- s2 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
-        hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme2)
+s1_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Cough/dyspnea reported'  , color = "#CC6699"),
+                                 list(id = 'Cough/dyspnea not reported' , color = "#33CC99"),
+                                 list(id = 'Cough or dyspnea assessed' , color = "#33CCCC"),
+                                 list(id = 'Neither assessed'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotics given"    , color = "#00FF99"),
+                                 list(id = "No antibiotics given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Cough and Dyspnea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
+                      hc_caption(text = "<b/>Data from Tanzania</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s1_tz
 ```
 
-### Kenya {.tabset}
-
-#### Option 1: Simple consort
-Order switched for abx and referral here because N referred is larger.
+### Kenya
+Referral/Antibiotic switched here because of N's.
 ``` {r}
-tdf <- df_ka %>% dplyr:::select(screening_id, cough_dx, abx_yn, referral2)
-tdf$drop1 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
+# Consort
+# relevant variables: cough_dx==2 and abx_yn==1 and referral==1 or 2
+tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
+tdf <- subset(tdf, cg_report_cough_dyspnea==1)
+tdf$drop1 <- ifelse(tdf$cough_dyspnea_assessed=="Neither assessed", "Cough/dyspnea not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
                         tdf$cough_dx=="Green" ~ "Green",
                         tdf$cough_dx=="Yellow" ~ "Yellow")
-tdf$drop1 <- relevel(as.factor(tdf$drop1), ref = "Not rated")
-tdf$drop2 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
-tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
 consort1_ka <- consort_plot(data = tdf,
-                            orders = c(screening_id = "Observed population",
-                                       drop1 = "Non-severe IMCI classification",
+                            orders = c(screening_id = "Reported cough or difficulty breathing",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed cough or difficulty breathing",
+                                       drop2 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe cough/difficulty breathing",
-                                       drop3 = "Referral status",
+                                       drop4 = "Referral status",
                                        screening_id = "Referred",
-                                       drop2 = "Antibiotic status",
+                                       drop3 = "Antibiotic status",
                                        screening_id = "Prescribed antibiotic"),
-                            side_box = c("drop1", "drop3", "drop2"),
+                            side_box = c("drop1", "drop2", "drop4", "drop3"),
                             cex = 0.9)
 plot(consort1_ka)
 ```
 
-#### Option 2: Care pathway consort
-
-#### Option 3: Simple Sankey
 ```{r}
-tdf <- df_ka %>% dplyr::select(cough_dyspnea_assessed, cough_dx)
-tdf$cough_dx <- ifelse(is.na(tdf$cough_dx), "Not rated", as.character(tdf$cough_dx))
-tdf$cough_dx <- factor(tdf$cough_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
-tdf$cough_dyspnea_assessed <- ifelse(is.na(tdf$cough_dyspnea_assessed), "Neither assessed", as.character(tdf$cough_dyspnea_assessed))
-tdf$cough_dyspnea_assessed <- factor(tdf$cough_dyspnea_assessed, levels = c("Cough and dyspnea assessed", "Cough only assessed", "Dyspnea only assessed", "Neither assessed"))
-
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-s1 <- s1 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptoms and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Kenya</b>")
-hc_add_theme(s1, my_theme1)
-```
-
-#### Option 4: Care pathway Sankey
-```{r}
+# Sankey
 tdf <- df_ka %>% dplyr::select(cg_report_cough_dyspnea, cough_dyspnea_assessed, cough_dx, abx_yn, referral2)
 tdf$cg_report_cough_dyspnea <- ifelse(tdf$cg_report_cough_dyspnea==1, "Cough/dyspnea reported", "Cough/dyspnea not reported")
 tdf$cg_report_cough_dyspnea <- factor(tdf$cg_report_cough_dyspnea, levels = c("Cough/dyspnea reported", "Cough/dyspnea not reported"))
-tdf$cough_dyspnea_assessed <- ifelse(is.na(tdf$cough_dyspnea_assessed), "Neither assessed", as.character(tdf$cough_dyspnea_assessed))
-tdf$cough_dyspnea_assessed <- factor(tdf$cough_dyspnea_assessed, levels = c("Cough and dyspnea assessed", "Cough only assessed", "Dyspnea only assessed", "Neither assessed"))
 tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
                            tdf$referral2=="Non-urgent" ~ "Referral given",
                            tdf$referral2=="Recorded as not referred" ~ "No referral given",
@@ -2048,33 +1883,56 @@ tdf$abx_yn <- case_when(tdf$abx_yn=="Yes" ~ "Antibiotics given",
                         is.na(tdf$abx_yn) ~ "No antibiotics given")
 tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea")
-
-s2 <- s2 %>% hc_title(text = "Cough and difficulty breathing") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
-        hc_caption(text = "<b/>Data from Kenya</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme2)
+s1_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Cough/Dyspnea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Cough/dyspnea reported'  , color = "#CC6699"),
+                                 list(id = 'Cough/dyspnea not reported' , color = "#33CC99"),
+                                 list(id = 'Cough or dyspnea assessed' , color = "#33CCCC"),
+                                 list(id = 'Neither assessed'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotics given"    , color = "#00FF99"),
+                                 list(id = "No antibiotics given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Cough and Dyspnea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
+                      hc_caption(text = "<b/>Data from Kenya</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s1_ka
 ```
 
 ## Indicator #2 {.tabset}
 
 ### Senegal
 ```{r}
-tdf <- df_sn %>% dplyr::select(diarrhea_yn, diarrhea_dx)
-tdf$diarrhea_yn <- ifelse(tdf$diarrhea_yn==1, "Provider assessed diarrhea", "Provider did not assess diarrhea")
-tdf$diarrhea_dx <- ifelse(is.na(tdf$diarrhea_dx), "Not rated", as.character(tdf$diarrhea_dx))
-tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+# Consort
+tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Provider did not assess diarrhea", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(is.na(tdf$rx___12), "Not given", NA)
 
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-s1 <- s1 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptom and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Senegal</b>")
-hc_add_theme(s1, my_theme3)
+consort2_sn <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported diarrhea",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed diarrhea",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe diarrhea",
+                                       drop3 = "Treatment status",
+                                       screening_id = "Given dehydration treatment"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort2_sn)
 ```
 
 ```{r}
+# Sankey
 tdf <- df_sn %>% dplyr::select(cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
 tdf$cg_report_diarrhea <- ifelse(tdf$cg_report_diarrhea==1, "Diarrhea reported", "Diarrhea not reported")
 tdf$cg_report_diarrhea <- factor(tdf$cg_report_diarrhea, levels = c("Diarrhea reported", "Diarrhea not reported"))
@@ -2084,31 +1942,50 @@ tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", 
 tdf$rx___12 <- ifelse(tdf$rx___12==1, "Dehydration treatment given", "No treatment given")
 tdf$rx___12 <- ifelse(is.na(tdf$rx___12), "No treatment given", tdf$rx___12)
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-
-s2 <- s2 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptom through treatment</em>") %>%
-        hc_caption(text = "<b/>Data from Senegal</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme4)
+s2_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Diarrhea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Diarrhea reported'  , color = "#CC6699"),
+                                 list(id = 'Diarrhea not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed diarrhea' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess diarrhea'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "No treatment given"    , color = "#FF9999"))) %>%
+                      hc_title(text = "Diarrhea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
+                      hc_caption(text = "<b/>Data from Senegal</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s2_sn
 ```
 
 ### Tanzania
 ```{r}
-tdf <- df_tz %>% dplyr::select(diarrhea_yn, diarrhea_dx)
-tdf$diarrhea_yn <- ifelse(tdf$diarrhea_yn==1, "Provider assessed diarrhea", "Provider did not assess diarrhea")
-tdf$diarrhea_dx <- ifelse(is.na(tdf$diarrhea_dx), "Not rated", as.character(tdf$diarrhea_dx))
-tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+# Consort
+tdf <- df_tz %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Provider did not assess diarrhea", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(is.na(tdf$rx___12), "Not given", NA)
 
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-s1 <- s1 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptom and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Tanzania</b>")
-hc_add_theme(s1, my_theme3)
+consort2_tz <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported diarrhea",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed diarrhea",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe diarrhea",
+                                       drop3 = "Treatment status",
+                                       screening_id = "Given dehydration treatment"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort2_tz)
 ```
 
 ```{r}
+# Sankey
 tdf <- df_tz %>% dplyr::select(cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
 tdf$cg_report_diarrhea <- ifelse(tdf$cg_report_diarrhea==1, "Diarrhea reported", "Diarrhea not reported")
 tdf$cg_report_diarrhea <- factor(tdf$cg_report_diarrhea, levels = c("Diarrhea reported", "Diarrhea not reported"))
@@ -2117,32 +1994,51 @@ tdf$diarrhea_dx <- ifelse(is.na(tdf$diarrhea_dx), "Not rated", as.character(tdf$
 tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
 tdf$rx___12 <- ifelse(tdf$rx___12==1, "Dehydration treatment given", "No treatment given")
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-
-s2 <- s2 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptom through treatment</em>") %>%
-        hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme4)
+s2_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Diarrhea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Diarrhea reported'  , color = "#CC6699"),
+                                 list(id = 'Diarrhea not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed diarrhea' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess diarrhea'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Dehydration treatment given"    , color = "#00FF99"),
+                                 list(id = "No treatment given"    , color = "#FF9999")))%>%
+                      hc_title(text = "Diarrhea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
+                      hc_caption(text = "<b/>Data from Tanzania</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s2_tz
 ```
 
 ### Kenya
 ```{r}
-tdf <- df_ka %>% dplyr::select(diarrhea_yn, diarrhea_dx)
-tdf$diarrhea_yn <- case_when(tdf$diarrhea_yn==1 ~ "Provider assessed diarrhea",
-                             tdf$diarrhea_yn==0 | is.na(tdf$diarrhea_yn) ~ "Provider did not assess diarrhea")
-tdf$diarrhea_dx <- ifelse(is.na(tdf$diarrhea_dx), "Not rated", as.character(tdf$diarrhea_dx))
-tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+# Consort
+tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Provider did not assess diarrhea", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(is.na(tdf$rx___12), "Not given", NA)
 
-s1 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-s1 <- s1 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Provider assessment of symptom and IMCI classification</em>") %>%
-        hc_caption(text = "<b/>Data from Kenya</b>")
-hc_add_theme(s1, my_theme3)
+consort2_ka <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported diarrhea",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed diarrhea",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe diarrhea",
+                                       drop3 = "Treatment status",
+                                       screening_id = "Given dehydration treatment"),
+                            side_box = c("drop1", "drop2", "drop3"),
+                            cex = 0.9)
+plot(consort2_ka)
 ```
 
 ```{r}
+# Sankey
 tdf <- df_ka %>% dplyr::select(cg_report_diarrhea, diarrhea_yn, diarrhea_dx, rx___12)
 tdf$cg_report_diarrhea <- ifelse(tdf$cg_report_diarrhea==1, "Diarrhea reported", "Diarrhea not reported")
 tdf$cg_report_diarrhea <- factor(tdf$cg_report_diarrhea, levels = c("Diarrhea reported", "Diarrhea not reported"))
@@ -2153,22 +2049,30 @@ tdf$diarrhea_dx <- factor(tdf$diarrhea_dx, levels = c("Red", "Yellow", "Green", 
 tdf$rx___12 <- ifelse(tdf$rx___12==1, "Dehydration treatment given", "No treatment given")
 tdf$rx___12 <- factor(tdf$rx___12, levels = c("Dehydration treatment given", "No treatment given"))
 
-s2 <- hchart(data_to_sankey(tdf), "sankey", name = "Diarrhea")
-
-s2 <- s2 %>% hc_title(text = "Diarrhea") %>%
-        hc_subtitle(text = "<em/>Care pathway from reported symptom through treatment</em>") %>%
-        hc_caption(text = "<b/>Data from Kenya</b>") %>%
-        hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
-
-hc_add_theme(s2, my_theme4)
+s2_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Diarrhea", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Diarrhea reported'  , color = "#CC6699"),
+                                 list(id = 'Diarrhea not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed diarrhea' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess diarrhea'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Dehydration treatment given"    , color = "#00FF99"),
+                                 list(id = "No treatment given"    , color = "#FF9999")))%>%
+                      hc_title(text = "Diarrhea") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
+                      hc_caption(text = "<b/>Data from Kenya</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s2_ka
 ```
+**I don't know why the order for treatment/no treatment given changed here...**
 
 ## Indicator #3 {.tabset}
 ### Senegal
 ```{r include=FALSE}
 # relevant variables: diarrhea_dx==2 and (cough_dx==2 or fever_dx==2 or ear_dx==2 or malnutrition_dx==2 or anemia_dx==2 or hiv_dx==2) and referral==1 or 2
 ```
-
 
 ### Tanzania
 
@@ -2178,13 +2082,199 @@ hc_add_theme(s2, my_theme4)
 ### Senegal
 ```{r include=FALSE}
 # relevant variables: fever_dx==2 and fever_tx==1 and referral==1 or 2
+# Consort
+tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf <- subset(tdf, cg_report_fever==1)
+tdf$drop1 <- ifelse(tdf$fever_yn==0, "Fever not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
+                        tdf$fever_dx=="Green" ~ "Green",
+                        tdf$fever_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
+
+consort4_sn <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Referral status",
+                                       screening_id = "Referred",
+                                       drop4 = "Treatment status",
+                                       screening_id = "Given antibiotic or antimalarial"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort4_sn)
 ```
 
+```{r}
+# Sankey
+tdf <- df_sn %>% dplyr::select(cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf$cg_report_fever <- ifelse(tdf$cg_report_fever==1, "Fever reported", "Fever not reported")
+tdf$cg_report_fever <- factor(tdf$cg_report_fever, levels = c("Fever reported", "Fever not reported"))
+tdf$fever_yn <- ifelse(tdf$fever_yn==1, "Provider assessed fever", "Provider did not assess fever")
+tdf$fever_dx <- ifelse(is.na(tdf$fever_dx), "Not rated", as.character(tdf$fever_dx))
+tdf$fever_dx <- factor(tdf$fever_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+tdf$fever_tx <- ifelse(tdf$fever_tx==1, "Antibiotic or antimalarial given", "No treatment given")
+tdf$fever_tx <- ifelse(is.na(tdf$fever_tx), "No treatment given", tdf$fever_tx)
+tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
+                           tdf$referral2=="Non-urgent" ~ "Referral given",
+                           tdf$referral2=="Recorded as not referred" ~ "No referral given",
+                           is.na(tdf$referral2) ~ "Unknown")
+tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
+
+s4_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fever", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Fever reported'  , color = "#CC6699"),
+                                 list(id = 'Fever not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed Fever' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess Fever'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotic or antimalarial given"    , color = "#00FF99"),
+                                 list(id = "No treatment given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Fever") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
+                      hc_caption(text = "<b/>Data from Senegal</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s4_sn
+```
 
 ### Tanzania
+Fever treatment and referral switched due to N's.
+```{r}
+# Consort
+tdf <- df_tz %>% dplyr:::select(screening_id, cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf <- subset(tdf, cg_report_fever==1)
+tdf$drop1 <- ifelse(tdf$fever_yn==0, "Fever not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
+                        tdf$fever_dx=="Green" ~ "Green",
+                        tdf$fever_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort4_tz <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Treatment status",
+                                       screening_id = "Given antibiotic or antimalarial",
+                                       drop4 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort4_tz)
+```
+
+```{r}
+# Sankey
+tdf <- df_tz %>% dplyr::select(cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf$cg_report_fever <- ifelse(tdf$cg_report_fever==1, "Fever reported", "Fever not reported")
+tdf$cg_report_fever <- factor(tdf$cg_report_fever, levels = c("Fever reported", "Fever not reported"))
+tdf$fever_yn <- ifelse(tdf$fever_yn==1, "Provider assessed fever", "Provider did not assess fever")
+tdf$fever_dx <- ifelse(is.na(tdf$fever_dx), "Not rated", as.character(tdf$fever_dx))
+tdf$fever_dx <- factor(tdf$fever_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+tdf$fever_tx <- ifelse(tdf$fever_tx==1, "Antibiotic or antimalarial given", "No treatment given")
+tdf$fever_tx <- ifelse(is.na(tdf$fever_tx), "No treatment given", tdf$fever_tx)
+tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
+                           tdf$referral2=="Non-urgent" ~ "Referral given",
+                           tdf$referral2=="Recorded as not referred" ~ "No referral given",
+                           is.na(tdf$referral2) ~ "Unknown")
+tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
+
+s4_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fever", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Fever reported'  , color = "#CC6699"),
+                                 list(id = 'Fever not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed Fever' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess Fever'   , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotic or antimalarial given"    , color = "#00FF99"),
+                                 list(id = "No treatment given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Fever") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
+                      hc_caption(text = "<b/>Data from Tanzania</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s4_tz
+```
 
 ### Kenya
+```{r}
+# Consort
+tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf <- subset(tdf, cg_report_fever==1)
+tdf$drop1 <- ifelse(tdf$fever_yn==0, "Fever not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
+                        tdf$fever_dx=="Green" ~ "Green",
+                        tdf$fever_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
+consort4_ka <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Treatment status",
+                                       screening_id = "Given antibiotic or antimalarial",
+                                       drop4 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort4_ka)
+```
+
+```{r}
+# Sankey
+tdf <- df_ka %>% dplyr::select(cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf$cg_report_fever <- ifelse(tdf$cg_report_fever==1, "Fever reported", "Fever not reported")
+tdf$cg_report_fever <- factor(tdf$cg_report_fever, levels = c("Fever reported", "Fever not reported"))
+tdf$fever_yn <- ifelse(tdf$fever_yn==1, "Provider assessed fever", "Provider did not assess fever")
+tdf$fever_dx <- ifelse(is.na(tdf$fever_dx), "Not rated", as.character(tdf$fever_dx))
+tdf$fever_dx <- factor(tdf$fever_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+tdf$fever_tx <- ifelse(tdf$fever_tx==1, "Antibiotic or antimalarial given", "No treatment given")
+tdf$fever_tx <- ifelse(is.na(tdf$fever_tx), "No treatment given", tdf$fever_tx)
+tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
+                           tdf$referral2=="Non-urgent" ~ "Referral given",
+                           tdf$referral2=="Recorded as not referred" ~ "No referral given",
+                           is.na(tdf$referral2) ~ "Unknown")
+tdf$referral2 <- factor(tdf$referral2, levels = c("Referral given", "No referral given", "Unknown"))
+
+s4_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fever", hcaes(from = from, to = to, weight = weight),
+                      nodes = list(list(id = 'Fever reported'  , color = "#CC6699"),
+                                 list(id = 'Fever not reported' , color = "#33CC99"),
+                                 list(id = 'Provider assessed Fever' , color = "#33CCCC"),
+                                 list(id = 'Provider did not assess Fever' , color = "#CC3333"),
+                                 list(id = "Red"  , color = "#FF3333"),
+                                 list(id = "Yellow"  , color = "#FFFF66"),
+                                 list(id = "Green"    , color = "#33CC33"),
+                                 list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Antibiotic or antimalarial given"    , color = "#00FF99"),
+                                 list(id = "No treatment given"    , color = "#FF9999"),
+                                 list(id = "Referral given"    , color = "#33CC66"),
+                                 list(id = "No referral given"    , color = "#CC6666"),
+                                 list(id = "Unknown"    , color = "darkgray")))%>%
+                      hc_title(text = "Fever") %>%
+                      hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
+                      hc_caption(text = "<b/>Data from Kenya</b>") %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+s4_ka
+```
 
 # Boxplots of PO measures. {.tabset}
 
