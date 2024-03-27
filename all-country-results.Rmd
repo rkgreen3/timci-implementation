@@ -117,6 +117,9 @@ df_og$household_floor <- factor(df_og$household_floor,
                                             "Palm", "Bamboo", "Mat", "Adobe", "Finished", "Parquet", "Vinyl", "Linoleum", "Ceramic,tile",
                                             "Carpet", "Stone, cement", "Bricks"))
 
+# Create any other sxs red variable for use in indicator three
+df_og$any_other_red <- ifelse(df_og$cough_dx==2 | df_og$fever_dx==2 | df_og$ear_dx==2 | df_og$malnutrition_dx==2 | df_og$anemia_dx==2 | df_og$hiv_dx==2, 1, 0)
+
 # Define country and subset
 #COUNTRY <- Sys.getenv("COUNTRY")
 df_sn <- subset(df_og, df_og$country=="Senegal")
@@ -2069,14 +2072,92 @@ s2_ka
 **I don't know why the order for treatment/no treatment given changed here...**
 
 ## Indicator #3 {.tabset}
+**The consorts for this indicator show no children needing to complete the specified care pathway, so no Sankey diagrams have been built.**
 ### Senegal
 ```{r include=FALSE}
-# relevant variables: diarrhea_dx==2 and (cough_dx==2 or fever_dx==2 or ear_dx==2 or malnutrition_dx==2 or anemia_dx==2 or hiv_dx==2) and referral==1 or 2
+# relevant variables: diarrhea_dx==2 and any_other_red==1 and referral==1 or 2
+# Consort
+tdf <- df_sn %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, any_other_red, referral2)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Diarrhea not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort3_sn <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Other red ratings",
+                                       screening_id = "Rated red on something else",
+                                       drop4 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort3_sn)
 ```
 
 ### Tanzania
+```{r}
+# Consort
+tdf <- df_tz %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, any_other_red, referral2)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Diarrhea not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort3_tz <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Other red ratings",
+                                       screening_id = "Rated red on something else",
+                                       drop4 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort3_tz)
+```
+
 
 ### Kenya
+```{r}
+# Consort
+tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_diarrhea, diarrhea_yn, diarrhea_dx, any_other_red, referral2)
+tdf <- subset(tdf, cg_report_diarrhea==1)
+tdf$drop1 <- ifelse(tdf$diarrhea_yn==0, "Diarrhea not assessed", NA)
+tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
+                        tdf$diarrhea_dx=="Green" ~ "Green",
+                        tdf$diarrhea_dx=="Yellow" ~ "Yellow")
+tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
+tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
+tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+
+consort3_ka <- consort_plot(data = tdf,
+                            orders = c(screening_id = "Reported fever",
+                                       drop1 = "Provider assessment",
+                                       screening_id = "Provider assessed fever",
+                                       drop2 = "Non-severe IMCI classification",
+                                       screening_id = "Rated severe fever",
+                                       drop3 = "Other red ratings",
+                                       screening_id = "Rated red on something else",
+                                       drop4 = "Referral status",
+                                       screening_id = "Referred"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            cex = 0.9)
+plot(consort3_ka)
+```
 
 ## Indicator #4 {.tabset}
 ### Senegal
