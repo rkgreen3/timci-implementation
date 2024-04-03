@@ -2423,15 +2423,16 @@ s4_tz
 #### Patient flow through indicator
 ```{r}
 # Consort
-tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf <- df_ka %>% dplyr:::select(screening_id, cg_report_fever, fever_yn, fever_dx, lab_tests___1, fever_tx, referral2)
 tdf <- subset(tdf, cg_report_fever==1)
 tdf$drop1 <- ifelse(tdf$fever_yn==0, "Fever not assessed", NA)
 tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
                         tdf$fever_dx=="Green" ~ "Green",
                         tdf$fever_dx=="Yellow" ~ "Yellow")
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
-tdf$drop3 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
-tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop3 <- ifelse(is.na(tdf$lab_tests___1), "Not tested for malaria", NA)
+tdf$drop4 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
+tdf$drop5 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
 
 consort4_ka <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported fever",
@@ -2439,23 +2440,27 @@ consort4_ka <- consort_plot(data = tdf,
                                        screening_id = "Provider assessed fever",
                                        drop2 = "Non-severe IMCI classification",
                                        screening_id = "Rated severe fever",
-                                       drop3 = "Treatment status",
+                                       drop3 = "Malaria test",
+                                       screening_id = "Tested for malaria",
+                                       drop4 = "Treatment status",
                                        screening_id = "Given antibiotic or antimalarial",
-                                       drop4 = "Referral status",
+                                       drop5 = "Referral status",
                                        screening_id = "Referred"),
-                            side_box = c("drop1", "drop2", "drop3", "drop4"),
+                            side_box = c("drop1", "drop2", "drop3", "drop4", "drop5"),
                             cex = 0.9)
 plot(consort4_ka)
 ```
 
 ```{r}
 # Sankey
-tdf <- df_ka %>% dplyr::select(cg_report_fever, fever_yn, fever_dx, fever_tx, referral2)
+tdf <- df_ka %>% dplyr::select(cg_report_fever, fever_yn, fever_dx, lab_tests___1, fever_tx, referral2)
 tdf$cg_report_fever <- ifelse(tdf$cg_report_fever==1, "Fever reported", "Fever not reported")
 tdf$cg_report_fever <- factor(tdf$cg_report_fever, levels = c("Fever reported", "Fever not reported"))
 tdf$fever_yn <- ifelse(tdf$fever_yn==1, "Provider assessed fever", "Provider did not assess fever")
 tdf$fever_dx <- ifelse(is.na(tdf$fever_dx), "Not rated", as.character(tdf$fever_dx))
 tdf$fever_dx <- factor(tdf$fever_dx, levels = c("Red", "Yellow", "Green", "Not rated"))
+tdf$lab_tests___1 <- ifelse(tdf$lab_tests___1==1, "Tested for malaria", "Not tested for malaria")
+tdf$lab_tests___1 <- factor(tdf$lab_tests___1, levels = c("Tested for malaria", "Not tested for malaria"))
 tdf$fever_tx <- ifelse(tdf$fever_tx==1, "Antibiotic or antimalarial given", "No treatment given")
 tdf$fever_tx <- ifelse(is.na(tdf$fever_tx), "No treatment given", tdf$fever_tx)
 tdf$referral2 <- case_when(tdf$referral2=="Urgent" ~ "Referral given",
@@ -2473,6 +2478,8 @@ s4_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fe
                                  list(id = "Yellow"  , color = "#FFFF66"),
                                  list(id = "Green"    , color = "#33CC33"),
                                  list(id = "Not rated"    , color = "darkgrey"),
+                                 list(id = "Tested for malaria"    , color = "#33CC66"),
+                                 list(id = "Not tested for malaria"    , color = "#CC6666"),
                                  list(id = "Antibiotic or antimalarial given"    , color = "#00FF99"),
                                  list(id = "No treatment given"    , color = "#FF9999"),
                                  list(id = "Referral given"    , color = "#33CC66"),
