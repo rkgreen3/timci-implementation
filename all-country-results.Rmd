@@ -133,6 +133,14 @@ df_ka_cat1 <- subset(df_ka, age_cat=="0-1 month")
 df_ka_cat2 <- subset(df_ka, age_cat=="2-59 months")
 ```
 
+```{r}
+# Add highchart theme
+plosgph_theme <- hc_theme(chart = list(
+                            style = list(fontFamily = "Arial, sans-serif")
+                                  ))
+```
+
+
 # Table 1: Patient demographic and household characteristics. {.tabset}
 
 ## Senegal
@@ -1772,7 +1780,8 @@ s1_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Co
                       hc_title(text = "Cough and Dyspnea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
                       hc_caption(text = "<b/>Data from Senegal</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s1_sn
 ```
 
@@ -1839,7 +1848,8 @@ s1_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Co
                       hc_title(text = "Cough and Dyspnea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
                       hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s1_tz
 ```
 
@@ -1907,7 +1917,8 @@ s1_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Co
                       hc_title(text = "Cough and Dyspnea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral</em>") %>%
                       hc_caption(text = "<b/>Data from Kenya</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s1_ka
 ```
 
@@ -1963,7 +1974,8 @@ s2_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
                       hc_caption(text = "<b/>Data from Senegal</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s2_sn
 ```
 
@@ -2017,7 +2029,8 @@ s2_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
                       hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s2_tz
 ```
 
@@ -2073,7 +2086,8 @@ s2_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment</em>") %>%
                       hc_caption(text = "<b/>Data from Kenya</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s2_ka
 ```
 *I think the order of treatment/no treatment given changed here because there is no Red->Treatment given. The one Red classification did not report diarrhea, so is not included in the consort.*
@@ -2144,7 +2158,8 @@ s3_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea and Other Severe Problems") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through referral</em>") %>%
                       hc_caption(text = "<b/>Data from Senegal</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s3_sn
 ```
 
@@ -2212,7 +2227,8 @@ s3_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea and Other Severe Problems") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through referral</em>") %>%
                       hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s3_tz
 ```
 
@@ -2279,7 +2295,8 @@ s3_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Di
                       hc_title(text = "Diarrhea and Other Severe Problems") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through referral</em>") %>%
                       hc_caption(text = "<b/>Data from Kenya</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s3_ka
 ```
 
@@ -2348,7 +2365,8 @@ s4_sn <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fe
                       hc_title(text = "Fever") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
                       hc_caption(text = "<b/>Data from Senegal</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s4_sn
 ```
 
@@ -2415,7 +2433,8 @@ s4_tz <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fe
                       hc_title(text = "Fever") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
                       hc_caption(text = "<b/>Data from Tanzania</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s4_tz
 ```
 
@@ -2488,7 +2507,8 @@ s4_ka <- highchart() %>% hc_add_series(data_to_sankey(tdf), "sankey", name = "Fe
                       hc_title(text = "Fever") %>%
                       hc_subtitle(text = "<em/>Care pathway from reported symptoms through treatment and referral </em>") %>%
                       hc_caption(text = "<b/>Data from Kenya</b>") %>%
-                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "9px"))))
+                      hc_add_theme(plosgph_theme) %>%
+                      hc_plotOptions(series = list(dataLabels = list(style = list(fontSize = "11px"))))
 s4_ka
 ```
 
