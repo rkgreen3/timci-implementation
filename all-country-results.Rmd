@@ -1731,6 +1731,7 @@ tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort1_sn <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported cough or difficulty breathing",
@@ -1799,6 +1800,7 @@ tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort1_tz <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported cough or difficulty breathing",
@@ -1868,6 +1870,7 @@ tdf$drop2 <- case_when(is.na(tdf$cough_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$abx_yn=="No", "Not prescribed", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort1_ka <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported cough or difficulty breathing",
@@ -1879,8 +1882,7 @@ consort1_ka <- consort_plot(data = tdf,
                                        screening_id = "Referred",
                                        drop3 = "Antibiotic status",
                                        screening_id = "Prescribed antibiotic"),
-                            side_box = c("drop1", "drop2", "drop4", "drop3"),
-                            cex = 0.9)
+                            side_box = c("drop1", "drop2", "drop4", "drop3"), cex = 0.9)
 plot(consort1_ka)
 ```
 
@@ -2108,6 +2110,8 @@ tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
+
 
 consort3_sn <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported diarrhea",
@@ -2177,6 +2181,7 @@ tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort3_tz <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported diarrhea",
@@ -2245,6 +2250,7 @@ tdf$drop2 <- case_when(is.na(tdf$diarrhea_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$any_other_red==0, "Not rated red for anything else", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort3_ka <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported diarrhea",
@@ -2315,6 +2321,7 @@ tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
                         tdf$fever_dx=="Yellow" ~ "Yellow")
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop3 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop3)
 tdf$drop4 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
 
 consort4_sn <- consort_plot(data = tdf,
@@ -2384,6 +2391,7 @@ tdf$drop2 <- case_when(is.na(tdf$fever_dx) ~ "Not rated",
 tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
 tdf$drop4 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop4 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop4)
 
 consort4_tz <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported fever",
@@ -2452,6 +2460,7 @@ tdf$drop2 <- factor(tdf$drop2, levels = c("Green", "Yellow", "Not rated"))
 tdf$drop3 <- ifelse(is.na(tdf$lab_tests___1), "Not tested for malaria", NA)
 tdf$drop4 <- ifelse(is.na(tdf$fever_tx), "No treatment given", NA)
 tdf$drop5 <- ifelse(tdf$referral2=="Recorded as not referred", "Not referred", NA)
+tdf$drop5 <- ifelse(is.na(tdf$referral2), "Unknown", tdf$drop5)
 
 consort4_ka <- consort_plot(data = tdf,
                             orders = c(screening_id = "Reported fever",
